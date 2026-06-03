@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: #8fc5b4;
+    color: #0e2220;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-lago-700 text-white px-6 py-3 rounded-lg font-body font-medium text-sm tracking-wide hover:bg-lago-800 transition-colors duration-200;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border border-lago-700 text-lago-700 px-6 py-3 rounded-lg font-body font-medium text-sm tracking-wide hover:bg-lago-50 transition-colors duration-200;
+  }
+
+  .section-title {
+    @apply font-display text-4xl md:text-5xl text-lago-900 font-light leading-tight;
+  }
+
+  .card-shadow {
+    box-shadow: 0 2px 8px rgba(27, 59, 50, 0.08), 0 0 1px rgba(27, 59, 50, 0.12);
+  }
+
+  .input-field {
+    @apply w-full border border-volcán-300 rounded-lg px-4 py-3 text-sm font-body text-lago-900 bg-white placeholder-volcán-400 focus:outline-none focus:border-lago-500 focus:ring-2 focus:ring-lago-100 transition-colors;
+  }
+
+  .label-text {
+    @apply block text-xs font-medium tracking-wide text-volcán-600 mb-1 uppercase;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+}
