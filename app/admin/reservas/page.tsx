@@ -51,7 +51,7 @@ export default async function AdminReservasPage() {
                       <p className="text-xs text-volcán-500">{r.client_email}</p>
                       <p className="text-xs text-volcán-500">{r.client_telefono}</p>
                     </td>
-                    <td className="px-4 py-4 text-lago-700">{r.cabana_nombre}</td>
+                    <td className="px-4 py-4 text-lago-700">{r.cabana_nombre ?? r.notas ?? 'Cabana solicitada'}</td>
                     <td className="px-4 py-4">
                       <p>{fmt(r.check_in)}</p>
                       <p className="text-volcán-400">→ {fmt(r.check_out)}</p>

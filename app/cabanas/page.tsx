@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
 import { logSupabaseError } from '@/lib/supabase-errors'
+import { DEFAULT_CABANAS } from '@/lib/default-cabanas'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CabanaReservationForm from '@/components/CabanaReservationForm'
@@ -9,19 +10,25 @@ import { TreePine } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
 async function getCabanas(): Promise<Cabana[]> {
-  const supabaseAdmin = getSupabaseAdmin()
-  const { data, error } = await supabaseAdmin
-    .from('cabanas')
-    .select('*')
-    .eq('activa', true)
-    .order('orden')
+  try {
+    const supabaseAdmin = getSupabaseAdmin()
+    const { data, error } = await supabaseAdmin
+      .from('cabanas')
+      .select('*')
+      .eq('activa', true)
+      .order('orden')
 
-  if (error) {
-    logSupabaseError('cabanas.list', error)
-    return []
+    if (error) {
+      logSupabaseError('cabanas.list', error)
+      return DEFAULT_CABANAS
+    }
+
+    const cabanas = (data as Cabana[]) ?? []
+    return cabanas.length > 0 ? cabanas : DEFAULT_CABANAS
+  } catch (error) {
+    console.error('[cabanas.list]', error)
+    return DEFAULT_CABANAS
   }
-
-  return (data as Cabana[]) ?? []
 }
 
 export default async function CabanasPage() {

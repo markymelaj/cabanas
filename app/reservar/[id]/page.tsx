@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
 import { logSupabaseError, normalizeRpcDates } from '@/lib/supabase-errors'
+import { getDefaultCabanaByIdOrSlug } from '@/lib/default-cabanas'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ReservationCalendar from '@/components/ReservationCalendar'
@@ -18,7 +19,7 @@ async function getCabana(slug: string): Promise<Cabana | null> {
 
   if (error) logSupabaseError('cabanas.by_slug', error)
 
-  return data as Cabana | null
+  return (data as Cabana | null) ?? getDefaultCabanaByIdOrSlug(slug)
 }
 
 async function getOccupiedDates(cabanaId: string): Promise<string[]> {

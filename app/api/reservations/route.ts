@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
 import { getOrCreateClientId, logSupabaseError } from '@/lib/supabase-errors'
+import { getDefaultCabanaByIdOrSlug } from '@/lib/default-cabanas'
 import { sendAdminNotification } from '@/lib/resend'
 import { calcCabanaPrice } from '@/lib/pricing'
 
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Las fechas seleccionadas ya no estan disponibles.' }, { status: 409 })
     }
 
-    const { data: cabana, error: cabanaError } = await supabaseAdmin
+    const { data: dbCabana, error: cabanaError } = await supabaseAdmin
       .from('cabanas')
       .select('*')
       .eq('id', cabanaId)
@@ -37,9 +38,14 @@ export async function POST(req: NextRequest) {
 
     if (cabanaError) logSupabaseError('cabanas.single', cabanaError)
 
+    const fallbackCabana = getDefaultCabanaByIdOrSlug(cabanaId)
+    const cabana = dbCabana ?? fallbackCabana
+
     if (!cabana) {
       return NextResponse.json({ error: 'Cabana no encontrada' }, { status: 404 })
     }
+
+    const dbCabanaId = dbCabana?.id ?? null
 
     if (Number(guests) < 1 || Number(guests) > Number(cabana.capacidad)) {
       return NextResponse.json({ error: 'Cantidad de huespedes invalida' }, { status: 400 })
@@ -64,7 +70,7 @@ export async function POST(req: NextRequest) {
       .insert({
         id: reservationId,
         tipo: 'cabana',
-        cabana_id: cabanaId,
+        cabana_id: dbCabanaId,
         client_id: clientId,
         check_in: checkIn,
         check_out: checkOut,
@@ -75,6 +81,7 @@ export async function POST(req: NextRequest) {
         anticipo_monto: pricing.anticipo,
         status: 'pending',
         payment_status: 'pending',
+        notas: dbCabanaId ? null : `Solicitud para ${cabana.nombre} (${cabana.slug})`,
       })
 
     if (reservationError) {
