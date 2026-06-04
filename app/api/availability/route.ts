@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase-server'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
+  const supabaseAdmin = getSupabaseAdmin()
   const { searchParams } = new URL(req.url)
   const cabanaId = searchParams.get('cabana_id')
   const type = searchParams.get('type') ?? 'cabana' // 'cabana' | 'salon'

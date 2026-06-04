@@ -1,6 +1,32 @@
-import MercadoPago from 'mercadopago'
+import MercadoPago, { Payment, Preference } from 'mercadopago'
 
-const mp = new MercadoPago({ accessToken: process.env.MP_ACCESS_TOKEN! })
+let mercadoPagoClient: MercadoPago | null = null
+let preferenceClient: Preference | null = null
+let paymentClient: Payment | null = null
+
+function getMercadoPagoClient() {
+  if (!mercadoPagoClient) {
+    mercadoPagoClient = new MercadoPago({ accessToken: process.env.MP_ACCESS_TOKEN! })
+  }
+
+  return mercadoPagoClient
+}
+
+function getPreferenceClient() {
+  if (!preferenceClient) {
+    preferenceClient = new Preference(getMercadoPagoClient())
+  }
+
+  return preferenceClient
+}
+
+function getPaymentClient() {
+  if (!paymentClient) {
+    paymentClient = new Payment(getMercadoPagoClient())
+  }
+
+  return paymentClient
+}
 
 export interface CreatePreferenceInput {
   reservationId: string
@@ -14,7 +40,7 @@ export interface CreatePreferenceInput {
 export async function createPreference(input: CreatePreferenceInput) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!
 
-  const preference = await mp.preference.create({
+  const preference = await getPreferenceClient().create({
     body: {
       items: [
         {
@@ -44,7 +70,7 @@ export async function createPreference(input: CreatePreferenceInput) {
 }
 
 export async function getPayment(paymentId: string) {
-  return await mp.payment.get({ id: Number(paymentId) })
+  return await getPaymentClient().get({ id: Number(paymentId) })
 }
 
-export default mp
+export default getMercadoPagoClient

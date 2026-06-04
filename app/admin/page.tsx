@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase-server'
 import { formatCLP } from '@/lib/pricing'
 import { Calendar, PartyPopper, TrendingUp, Clock } from 'lucide-react'
 import Link from 'next/link'
@@ -8,6 +8,7 @@ import { es } from 'date-fns/locale'
 export const revalidate = 0
 
 async function getStats() {
+  const supabaseAdmin = getSupabaseAdmin()
   const [
     { count: totalReservas },
     { count: reservasPendientes },

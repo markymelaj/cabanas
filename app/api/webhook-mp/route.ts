@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase-server'
 import { getPayment } from '@/lib/mercadopago'
 import { sendReservationConfirmation, sendAdminNotification } from '@/lib/resend'
 import { buildReservationMessage } from '@/lib/whatsapp'
 
 export async function POST(req: NextRequest) {
   try {
+    const supabaseAdmin = getSupabaseAdmin()
     const body = await req.json()
 
     // MP envía distintos tipos de notificación

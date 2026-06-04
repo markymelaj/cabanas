@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { supabaseAdmin, type Cabana } from '@/lib/supabase'
+import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ReservationCalendar from '@/components/ReservationCalendar'
@@ -7,6 +7,7 @@ import ReservationCalendar from '@/components/ReservationCalendar'
 export const revalidate = 0
 
 async function getCabana(slug: string): Promise<Cabana | null> {
+  const supabaseAdmin = getSupabaseAdmin()
   const { data } = await supabaseAdmin
     .from('cabanas')
     .select('*')
@@ -17,6 +18,7 @@ async function getCabana(slug: string): Promise<Cabana | null> {
 }
 
 async function getOccupiedDates(cabanaId: string): Promise<string[]> {
+  const supabaseAdmin = getSupabaseAdmin()
   const { data } = await supabaseAdmin.rpc('get_occupied_dates', {
     p_cabana_id: cabanaId,
   })

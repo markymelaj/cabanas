@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase-server'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { CheckCircle, XCircle, Clock } from 'lucide-react'
@@ -14,6 +14,7 @@ export default async function ConfirmacionPage({
 
   let reservation: any = null
   if (reservaId) {
+    const supabaseAdmin = getSupabaseAdmin()
     const { data } = await supabaseAdmin
       .from('reservations_full')
       .select('*')

@@ -1,8 +1,16 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+let resendClient: Resend | null = null
 const FROM = process.env.RESEND_FROM || 'reservas@cabanaspuertovaras.cl'
 const ADMIN = process.env.RESEND_ADMIN_EMAIL || 'contacto@cabanaspuertovaras.cl'
+
+function getResend() {
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY)
+  }
+
+  return resendClient
+}
 
 export async function sendReservationConfirmation({
   to,
@@ -28,7 +36,7 @@ export async function sendReservationConfirmation({
   const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
   const clp = (n: number) => n.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `✅ Reserva confirmada — ${cabanaNombre}`,
@@ -105,7 +113,7 @@ export async function sendAdminNotification({
     ? `🏡 Nueva reserva cabaña — ${nombre}`
     : `🎉 Nueva cotización salón — ${nombre}`
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to: ADMIN,
     subject,
@@ -143,7 +151,7 @@ export async function sendSalonQuoteConfirmation({
   const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
   const clp = (n: number) => n.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `📋 Cotización recibida — Salón de Eventos Puerto Varas`,
@@ -164,4 +172,4 @@ export async function sendSalonQuoteConfirmation({
   })
 }
 
-export default resend
+export default getResend

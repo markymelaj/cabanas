@@ -1,9 +1,10 @@
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase-server'
 import AdminBlockDates from '@/components/AdminBlockDates'
 
 export const revalidate = 0
 
 export default async function AdminDisponibilidadPage() {
+  const supabaseAdmin = getSupabaseAdmin()
   const { data: cabanas } = await supabaseAdmin
     .from('cabanas')
     .select('id, nombre, slug')

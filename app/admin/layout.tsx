@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createServerSupabase } from '@/lib/supabase'
+import { createServerSupabase } from '@/lib/supabase-server'
 import AdminSidebar from '@/components/AdminSidebar'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

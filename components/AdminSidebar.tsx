@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { LayoutDashboard, Calendar, PartyPopper, CalendarX, LogOut } from 'lucide-react'
-import { supabaseBrowser } from '@/lib/supabase'
+import { supabaseBrowser } from '@/lib/supabase-browser'
 
 const NAV = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },

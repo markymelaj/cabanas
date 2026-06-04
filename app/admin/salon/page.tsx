@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase-server'
 import { formatCLP } from '@/lib/pricing'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -14,6 +14,7 @@ const STATUS_LABELS: Record<string, { label: string; classes: string }> = {
 }
 
 export default async function AdminSalonPage() {
+  const supabaseAdmin = getSupabaseAdmin()
   const { data: quotes } = await supabaseAdmin
     .from('salon_quotes')
     .select(`*, clients(nombre, email, telefono)`)

@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import { getSupabaseAdmin } from '@/lib/supabase-server'
 import { createPreference } from '@/lib/mercadopago'
 import { sendReservationConfirmation, sendAdminNotification } from '@/lib/resend'
 import { ANTICIPO_PERCENT } from '@/lib/pricing'
 
 export async function POST(req: NextRequest) {
   try {
+    const supabaseAdmin = getSupabaseAdmin()
     const body = await req.json()
     const { cabanaId, checkIn, checkOut, guests, pricing, client } = body
 

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin, createServerSupabase } from '@/lib/supabase'
+import { createServerSupabase, getSupabaseAdmin } from '@/lib/supabase-server'
 
 export async function POST(req: NextRequest) {
   const supabase = createServerSupabase()
+  const supabaseAdmin = getSupabaseAdmin()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 

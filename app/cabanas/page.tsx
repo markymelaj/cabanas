@@ -1,12 +1,13 @@
 import Link from 'next/link'
-import { supabaseAdmin, type Cabana } from '@/lib/supabase'
+import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { TreePine } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 async function getCabanas(): Promise<Cabana[]> {
+  const supabaseAdmin = getSupabaseAdmin()
   const { data } = await supabaseAdmin
     .from('cabanas')
     .select('*')
