@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
       savedToAdmin = true
     } catch (error: any) {
-      adminError = error?.message ?? 'No se pudo guardar en Supabase'
+      adminError = 'No se pudo guardar en el panel'
       console.error('[cotizacion-salon.admin.save]', error)
     }
 

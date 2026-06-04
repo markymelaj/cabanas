@@ -182,7 +182,7 @@ export default function CabanaReservationForm({ cabanas }: Props) {
         <TreePine size={40} className="mx-auto text-lago-400 mb-4" />
         <h3 className="font-display text-3xl text-lago-900 mb-3">Reservas por WhatsApp</h3>
         <p className="text-volcÃ¡n-500 text-sm mb-6">Estamos cargando las cabanas disponibles.</p>
-        <a href="https://wa.me/56965880268" className="btn-primary inline-flex">Consultar disponibilidad</a>
+        <a href="https://wa.me/56957845292" className="btn-primary inline-flex">Consultar disponibilidad</a>
       </div>
     )
   }
@@ -230,7 +230,7 @@ export default function CabanaReservationForm({ cabanas }: Props) {
         </div>
         {!savedToAdmin && (
           <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-3 mt-4">
-            La solicitud quedo lista para WhatsApp. El panel admin necesita revisar la conexion de Supabase.
+            La solicitud quedo lista para WhatsApp. Tambien la revisaremos internamente para seguimiento.
           </p>
         )}
       </div>

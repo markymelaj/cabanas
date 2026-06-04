@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
 
       savedToAdmin = true
     } catch (error: any) {
-      adminError = error?.message ?? 'No se pudo guardar en Supabase'
+      adminError = 'No se pudo guardar en el panel'
       console.error('[reservations.admin.save]', error)
     }
 

@@ -56,7 +56,7 @@ RESEND_API_KEY=re_...
 RESEND_FROM=reservas@cabanaspuertovaras.cl
 RESEND_ADMIN_EMAIL=contacto@cabanaspuertovaras.cl
 
-WHATSAPP_ADMIN_NUMBER=+56965880268
+WHATSAPP_ADMIN_NUMBER=+56957845292
 NEXT_PUBLIC_BASE_URL=https://cabanaspuertovaras.cl
 ```
 

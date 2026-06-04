@@ -1,4 +1,4 @@
-const ADMIN_WA = process.env.WHATSAPP_ADMIN_NUMBER?.replace(/\D/g, '') || '56965880268'
+const ADMIN_WA = process.env.WHATSAPP_ADMIN_NUMBER?.replace(/\D/g, '') || '56957845292'
 
 function baseUrl() {
   return process.env.NEXT_PUBLIC_BASE_URL || 'https://cabanaspuertovaras.cl'

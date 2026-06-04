@@ -79,7 +79,7 @@ export async function sendReservationConfirmation({
     </div>
     <p style="font-size:13px; color:#60412c; margin-top:24px;">
       <strong>Dirección:</strong> Camino a Ensenada S/N km 17.5, Ruta 225, Puerto Varas<br>
-      <strong>Contacto:</strong> +569 6588 0268 · ${FROM}
+      <strong>Contacto:</strong> +569 5784 5292 · ${FROM}
     </p>
     <div style="text-align:center">
       <a href="https://maps.app.goo.gl/4YxTYtfonpoMj6rKA" class="btn">Ver en mapa</a>
@@ -165,7 +165,7 @@ export async function sendSalonQuoteConfirmation({
     <p style="margin:4px 0"><strong>Invitados:</strong> ${numInvitados} personas</p>
     <p style="margin:4px 0"><strong>Estimado referencial:</strong> ${clp(montoEstimado)}</p>
   </div>
-  <p style="font-size:13px;color:#60412c">¿Tienes preguntas? Escríbenos al +569 6588 0268</p>
+  <p style="font-size:13px;color:#60412c">¿Tienes preguntas? Escríbenos al +569 5784 5292</p>
   <p style="font-size:12px;color:#978c7e;margin-top:24px">N° cotización: ${quoteId.slice(0, 8).toUpperCase()}</p>
 </div>
     `,

@@ -95,7 +95,7 @@ export default async function ConfirmacionPage({
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/cabanas" className="btn-outline text-sm">Ver otras cabañas</Link>
-            <a href="tel:+56965880268" className="btn-primary text-sm">Llamar al +569 6588 0268</a>
+            <a href="tel:+56957845292" className="btn-primary text-sm">Llamar al +569 5784 5292</a>
           </div>
         </div>
       </main>

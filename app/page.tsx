@@ -107,7 +107,7 @@ export default async function HomePage() {
                 <p className="text-volcÃ¡n-500 text-sm leading-relaxed mb-5">
                   Estamos cargando las cabaÃ±as disponibles. EscrÃ­benos por WhatsApp y te respondemos con fechas y valores.
                 </p>
-                <a href="https://wa.me/56965880268" className="btn-primary inline-flex">
+                <a href="https://wa.me/56957845292" className="btn-primary inline-flex">
                   Consultar disponibilidad
                 </a>
               </div>

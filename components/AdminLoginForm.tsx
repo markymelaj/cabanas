@@ -18,13 +18,18 @@ export default function AdminLoginForm() {
     }
     setLoading(true)
     setError(null)
-    const { error: authError } = await getSupabaseBrowser().auth.signInWithPassword({ email, password })
-    if (authError) {
-      setError('Credenciales incorrectas o variables de Supabase incompletas.')
+    try {
+      const { error: authError } = await getSupabaseBrowser().auth.signInWithPassword({ email, password })
+      if (authError) {
+        setError('Credenciales incorrectas o acceso no disponible en este momento.')
+        setLoading(false)
+      } else {
+        router.push('/admin')
+        router.refresh()
+      }
+    } catch {
+      setError('Acceso no disponible en este momento.')
       setLoading(false)
-    } else {
-      router.push('/admin')
-      router.refresh()
     }
   }
 

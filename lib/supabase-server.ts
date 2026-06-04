@@ -27,10 +27,6 @@ export function getSupabaseAdmin() {
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
     const key = serviceRoleKey || supabaseAnonKey
 
-    if (!serviceRoleKey || serviceRoleKey === supabaseAnonKey) {
-      console.warn('[supabase] SUPABASE_SERVICE_ROLE_KEY no esta configurada como service_role; se usara anon key.')
-    }
-
     supabaseAdminClient = createClient(supabaseUrl, key, {
       auth: { autoRefreshToken: false, persistSession: false },
     })

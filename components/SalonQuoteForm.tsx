@@ -127,7 +127,7 @@ export default function SalonQuoteForm() {
         </div>
         {!savedToAdmin && (
           <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-3 mt-4">
-            La cotizacion quedo lista para WhatsApp. El panel admin necesita revisar la conexion de Supabase.
+            La cotizacion quedo lista para WhatsApp. Tambien la revisaremos internamente para seguimiento.
           </p>
         )}
       </div>

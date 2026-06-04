@@ -56,7 +56,7 @@ export default async function CabanasPage() {
                 <p className="text-volcÃ¡n-500 text-sm leading-relaxed mb-6">
                   Estamos cargando la disponibilidad de cabaÃ±as. EscrÃ­benos y te ayudamos a reservar directamente.
                 </p>
-                <a href="https://wa.me/56965880268" className="btn-primary inline-flex">
+                <a href="https://wa.me/56957845292" className="btn-primary inline-flex">
                   Consultar disponibilidad
                 </a>
               </div>
