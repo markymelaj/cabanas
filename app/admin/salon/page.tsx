@@ -3,6 +3,7 @@ import { formatCLP } from '@/lib/pricing'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import AdminQuoteActions from '@/components/AdminQuoteActions'
+import AdminShell from '@/components/AdminShell'
 
 export const revalidate = 0
 
@@ -24,6 +25,7 @@ export default async function AdminSalonPage() {
   const fmt = (d: string) => format(new Date(d + 'T12:00:00'), "d MMM yyyy", { locale: es })
 
   return (
+    <AdminShell>
     <div>
       <h1 className="font-display text-3xl text-lago-900 mb-8">Cotizaciones salón de eventos</h1>
       <div className="bg-white rounded-xl card-shadow overflow-hidden">
@@ -80,5 +82,6 @@ export default async function AdminSalonPage() {
         </div>
       </div>
     </div>
+    </AdminShell>
   )
 }

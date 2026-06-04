@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { supabaseBrowser } from '@/lib/supabase-browser'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 import { Loader2, AlertCircle } from 'lucide-react'
 
@@ -18,9 +18,9 @@ export default function AdminLoginForm() {
     }
     setLoading(true)
     setError(null)
-    const { error: authError } = await supabaseBrowser.auth.signInWithPassword({ email, password })
+    const { error: authError } = await getSupabaseBrowser().auth.signInWithPassword({ email, password })
     if (authError) {
-      setError('Credenciales incorrectas.')
+      setError('Credenciales incorrectas o variables de Supabase incompletas.')
       setLoading(false)
     } else {
       router.push('/admin')

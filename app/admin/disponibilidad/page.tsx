@@ -1,5 +1,6 @@
 import { getSupabaseAdmin } from '@/lib/supabase-server'
 import AdminBlockDates from '@/components/AdminBlockDates'
+import AdminShell from '@/components/AdminShell'
 
 export const revalidate = 0
 
@@ -17,10 +18,12 @@ export default async function AdminDisponibilidadPage() {
     .order('fecha', { ascending: true })
 
   return (
+    <AdminShell>
     <div>
       <h1 className="font-display text-3xl text-lago-900 mb-2">Gestión de disponibilidad</h1>
       <p className="text-volcán-500 text-sm mb-8">Bloquea fechas manualmente para cabañas o el salón de eventos.</p>
       <AdminBlockDates cabanas={cabanas ?? []} blocked={blocked ?? []} />
     </div>
+    </AdminShell>
   )
 }

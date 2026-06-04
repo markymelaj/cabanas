@@ -24,7 +24,14 @@ let supabaseAdminClient: SupabaseClient | null = null
 // Cliente con service_role para operaciones de servidor (bypass RLS)
 export function getSupabaseAdmin() {
   if (!supabaseAdminClient) {
-    supabaseAdminClient = createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    const key = serviceRoleKey || supabaseAnonKey
+
+    if (!serviceRoleKey || serviceRoleKey === supabaseAnonKey) {
+      console.warn('[supabase] SUPABASE_SERVICE_ROLE_KEY no esta configurada como service_role; se usara anon key.')
+    }
+
+    supabaseAdminClient = createClient(supabaseUrl, key, {
       auth: { autoRefreshToken: false, persistSession: false },
     })
   }

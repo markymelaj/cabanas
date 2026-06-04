@@ -1,7 +1,18 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+let supabaseBrowserClient: SupabaseClient | null = null
 
-// Cliente del lado del cliente (browser)
-export const supabaseBrowser = createClient(supabaseUrl, supabaseAnonKey)
+export function getSupabaseBrowser() {
+  if (!supabaseBrowserClient) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Faltan variables NEXT_PUBLIC_SUPABASE_URL o NEXT_PUBLIC_SUPABASE_ANON_KEY.')
+    }
+
+    supabaseBrowserClient = createClient(supabaseUrl, supabaseAnonKey)
+  }
+
+  return supabaseBrowserClient
+}

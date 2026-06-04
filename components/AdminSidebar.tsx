@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { LayoutDashboard, Calendar, PartyPopper, CalendarX, LogOut } from 'lucide-react'
-import { supabaseBrowser } from '@/lib/supabase-browser'
+import { getSupabaseBrowser } from '@/lib/supabase-browser'
 
 const NAV = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -16,7 +16,7 @@ export default function AdminSidebar() {
   const router = useRouter()
 
   async function handleLogout() {
-    await supabaseBrowser.auth.signOut()
+    await getSupabaseBrowser().auth.signOut()
     router.push('/admin/login')
     router.refresh()
   }

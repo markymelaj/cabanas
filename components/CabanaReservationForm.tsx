@@ -40,6 +40,8 @@ export default function CabanaReservationForm({ cabanas }: Props) {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [reservationId, setReservationId] = useState<string | null>(null)
+  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null)
+  const [savedToAdmin, setSavedToAdmin] = useState(true)
 
   const selectedCabana = cabanas.find((cabana) => cabana.id === selectedCabanaId) ?? cabanas[0]
   const occupied = useMemo(() => new Set(occupiedDates), [occupiedDates])
@@ -161,6 +163,11 @@ export default function CabanaReservationForm({ cabanas }: Props) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al enviar la reserva')
       setReservationId(data.reservationId)
+      setWhatsappUrl(data.whatsappUrl ?? null)
+      setSavedToAdmin(data.savedToAdmin !== false)
+      if (data.whatsappUrl) {
+        window.open(data.whatsappUrl, '_blank', 'noopener,noreferrer')
+      }
       setSubmitted(true)
     } catch (err: any) {
       setError(err.message)
@@ -200,18 +207,32 @@ export default function CabanaReservationForm({ cabanas }: Props) {
           )}
           {reservationId && <p className="text-xs text-volcÃ¡n-400">Solicitud: {reservationId.slice(0, 8).toUpperCase()}</p>}
         </div>
-        <button
-          onClick={() => {
-            setSubmitted(false)
-            setStep('cabana')
-            setCheckIn(null)
-            setCheckOut(null)
-            setForm({ nombre: '', email: '', telefono: '' })
-          }}
-          className="btn-outline text-sm"
-        >
-          Hacer otra solicitud
-        </button>
+        <div className="flex flex-col sm:flex-row justify-center gap-3">
+          {whatsappUrl && (
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
+              Abrir WhatsApp
+            </a>
+          )}
+          <button
+            onClick={() => {
+              setSubmitted(false)
+              setStep('cabana')
+              setCheckIn(null)
+              setCheckOut(null)
+              setForm({ nombre: '', email: '', telefono: '' })
+              setWhatsappUrl(null)
+              setSavedToAdmin(true)
+            }}
+            className="btn-outline text-sm"
+          >
+            Hacer otra solicitud
+          </button>
+        </div>
+        {!savedToAdmin && (
+          <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-3 mt-4">
+            La solicitud quedo lista para WhatsApp. El panel admin necesita revisar la conexion de Supabase.
+          </p>
+        )}
       </div>
     )
   }

@@ -4,6 +4,7 @@ import { Calendar, PartyPopper, TrendingUp, Clock } from 'lucide-react'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import AdminShell from '@/components/AdminShell'
 
 export const revalidate = 0
 
@@ -47,6 +48,7 @@ export default async function AdminDashboard() {
   const fmt = (d: string) => format(new Date(d + 'T12:00:00'), "d MMM", { locale: es })
 
   return (
+    <AdminShell>
     <div>
       <h1 className="font-display text-3xl text-lago-900 mb-8">Dashboard</h1>
 
@@ -87,5 +89,6 @@ export default async function AdminDashboard() {
         )}
       </div>
     </div>
+    </AdminShell>
   )
 }

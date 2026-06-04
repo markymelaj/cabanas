@@ -9,36 +9,36 @@ type CookieToSet = {
 }
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
+  const pathname = req.nextUrl.pathname
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return req.cookies.getAll() },
-        setAll(cookiesToSet: CookieToSet[]) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            req.cookies.set(name, value)
-            res.cookies.set(name, value, options)
-          })
-        },
+  if (pathname.startsWith('/admin/login')) {
+    return NextResponse.next()
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return NextResponse.redirect(new URL('/admin/login', req.url))
+  }
+
+  const res = NextResponse.next()
+  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      getAll() { return req.cookies.getAll() },
+      setAll(cookiesToSet: CookieToSet[]) {
+        cookiesToSet.forEach(({ name, value, options }) => {
+          req.cookies.set(name, value)
+          res.cookies.set(name, value, options)
+        })
       },
-    }
-  )
+    },
+  })
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Rutas admin: requieren autenticación
-  if (req.nextUrl.pathname.startsWith('/admin') && !req.nextUrl.pathname.startsWith('/admin/login')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/admin/login', req.url))
-    }
-  }
-
-  // Si ya está logueado y va al login, redirigir al admin
-  if (req.nextUrl.pathname === '/admin/login' && user) {
-    return NextResponse.redirect(new URL('/admin', req.url))
+  if (!user) {
+    return NextResponse.redirect(new URL('/admin/login', req.url))
   }
 
   return res

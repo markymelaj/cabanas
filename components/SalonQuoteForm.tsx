@@ -26,6 +26,8 @@ export default function SalonQuoteForm() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [quoteResult, setQuoteResult] = useState<any>(null)
+  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null)
+  const [savedToAdmin, setSavedToAdmin] = useState(true)
 
   const today = startOfDay(new Date())
 
@@ -75,6 +77,11 @@ export default function SalonQuoteForm() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al enviar')
       setQuoteResult(data)
+      setWhatsappUrl(data.whatsappUrl ?? null)
+      setSavedToAdmin(data.savedToAdmin !== false)
+      if (data.whatsappUrl) {
+        window.open(data.whatsappUrl, '_blank', 'noopener,noreferrer')
+      }
       setSubmitted(true)
     } catch (e: any) {
       setError(e.message)
@@ -110,7 +117,19 @@ export default function SalonQuoteForm() {
             <p className="text-xs text-volcán-400">Cotización referencial, no vinculante</p>
           </div>
         )}
-        <a href="/salon" className="btn-outline text-sm">Volver al salón</a>
+        <div className="flex flex-col sm:flex-row justify-center gap-3">
+          {whatsappUrl && (
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
+              Abrir WhatsApp
+            </a>
+          )}
+          <a href="/salon" className="btn-outline text-sm">Volver al salón</a>
+        </div>
+        {!savedToAdmin && (
+          <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-3 mt-4">
+            La cotizacion quedo lista para WhatsApp. El panel admin necesita revisar la conexion de Supabase.
+          </p>
+        )}
       </div>
     )
   }
