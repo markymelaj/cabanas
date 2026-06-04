@@ -4,6 +4,15 @@ import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 import { Loader2, AlertCircle } from 'lucide-react'
 
+function withTimeout<T>(promise: Promise<T>, ms = 12000) {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => {
+      window.setTimeout(() => reject(new Error('timeout')), ms)
+    }),
+  ])
+}
+
 export default function AdminLoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,7 +28,9 @@ export default function AdminLoginForm() {
     setLoading(true)
     setError(null)
     try {
-      const { error: authError } = await getSupabaseBrowser().auth.signInWithPassword({ email, password })
+      const { error: authError } = await withTimeout(
+        getSupabaseBrowser().auth.signInWithPassword({ email, password })
+      )
       if (authError) {
         setError('Credenciales incorrectas o acceso no disponible en este momento.')
         setLoading(false)
@@ -28,7 +39,7 @@ export default function AdminLoginForm() {
         router.refresh()
       }
     } catch {
-      setError('Acceso no disponible en este momento.')
+      setError('El acceso no respondio. Revisa /api/estado y vuelve a intentar.')
       setLoading(false)
     }
   }
