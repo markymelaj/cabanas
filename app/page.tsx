@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
+import { logSupabaseError } from '@/lib/supabase-errors'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { MapPin, Phone, Mail, Mountain, Waves, TreePine, Star } from 'lucide-react'
@@ -8,11 +9,17 @@ export const dynamic = 'force-dynamic'
 
 async function getCabanas(): Promise<Cabana[]> {
   const supabaseAdmin = getSupabaseAdmin()
-  const { data } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin
     .from('cabanas')
     .select('*')
     .eq('activa', true)
     .order('orden')
+
+  if (error) {
+    logSupabaseError('home.cabanas.list', error)
+    return []
+  }
+
   return (data as Cabana[]) ?? []
 }
 
@@ -86,8 +93,20 @@ export default async function HomePage() {
                 Cada cabaña fue diseñada para integrarse al paisaje. Madera, piedra y comodidad, con vista al lago desde la terraza.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-8">
-              {cabanas.map((cab, i) => (
+            {cabanas.length === 0 ? (
+              <div className="bg-white rounded-2xl card-shadow p-8 text-center max-w-xl">
+                <TreePine size={36} className="mx-auto text-lago-400 mb-4" />
+                <h3 className="font-display text-2xl text-lago-900 mb-2">Reserva tu cabana</h3>
+                <p className="text-volcÃ¡n-500 text-sm leading-relaxed mb-5">
+                  Estamos cargando las cabaÃ±as disponibles. EscrÃ­benos por WhatsApp y te respondemos con fechas y valores.
+                </p>
+                <a href="https://wa.me/56965880268" className="btn-primary inline-flex">
+                  Consultar disponibilidad
+                </a>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-8">
+                {cabanas.map((cab, i) => (
                 <div key={cab.id} className="bg-white rounded-2xl overflow-hidden card-shadow group">
                   <div className="relative h-64 overflow-hidden bg-lago-100">
                     {cab.fotos[0] ? (
@@ -129,8 +148,9 @@ export default async function HomePage() {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 

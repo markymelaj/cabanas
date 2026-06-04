@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
+import { logSupabaseError, normalizeRpcDates } from '@/lib/supabase-errors'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ReservationCalendar from '@/components/ReservationCalendar'
@@ -8,21 +9,30 @@ export const revalidate = 0
 
 async function getCabana(slug: string): Promise<Cabana | null> {
   const supabaseAdmin = getSupabaseAdmin()
-  const { data } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin
     .from('cabanas')
     .select('*')
     .eq('slug', slug)
     .eq('activa', true)
     .single()
+
+  if (error) logSupabaseError('cabanas.by_slug', error)
+
   return data as Cabana | null
 }
 
 async function getOccupiedDates(cabanaId: string): Promise<string[]> {
   const supabaseAdmin = getSupabaseAdmin()
-  const { data } = await supabaseAdmin.rpc('get_occupied_dates', {
+  const { data, error } = await supabaseAdmin.rpc('get_occupied_dates', {
     p_cabana_id: cabanaId,
   })
-  return (data as { get_occupied_dates: string }[])?.map((r) => r.get_occupied_dates) ?? []
+
+  if (error) {
+    logSupabaseError('get_occupied_dates', error)
+    return []
+  }
+
+  return normalizeRpcDates(data, 'get_occupied_dates')
 }
 
 export default async function ReservarPage({ params }: { params: { id: string } }) {

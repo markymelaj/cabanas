@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
+import { getOrCreateClientId, logSupabaseError } from '@/lib/supabase-errors'
 import { createPreference } from '@/lib/mercadopago'
-import { sendReservationConfirmation, sendAdminNotification } from '@/lib/resend'
-import { ANTICIPO_PERCENT } from '@/lib/pricing'
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,55 +9,40 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { cabanaId, checkIn, checkOut, guests, pricing, client } = body
 
-    // Validaciones básicas
     if (!cabanaId || !checkIn || !checkOut || !pricing || !client) {
       return NextResponse.json({ error: 'Faltan datos requeridos' }, { status: 400 })
     }
 
-    // Verificar disponibilidad
-    const { data: available } = await supabaseAdmin.rpc('check_cabana_availability', {
+    const { data: available, error: availabilityError } = await supabaseAdmin.rpc('check_cabana_availability', {
       p_cabana_id: cabanaId,
       p_check_in: checkIn,
       p_check_out: checkOut,
     })
 
-    if (!available) {
-      return NextResponse.json({ error: 'Las fechas seleccionadas ya no están disponibles.' }, { status: 409 })
+    if (availabilityError) {
+      logSupabaseError('check_cabana_availability', availabilityError)
+      throw new Error('No pudimos verificar disponibilidad. Escribenos por WhatsApp para terminar la reserva.')
     }
 
-    // Obtener cabaña
-    const { data: cabana } = await supabaseAdmin
+    if (!available) {
+      return NextResponse.json({ error: 'Las fechas seleccionadas ya no estan disponibles.' }, { status: 409 })
+    }
+
+    const { data: cabana, error: cabanaError } = await supabaseAdmin
       .from('cabanas')
       .select('*')
       .eq('id', cabanaId)
       .single()
 
+    if (cabanaError) logSupabaseError('cabanas.single', cabanaError)
+
     if (!cabana) {
-      return NextResponse.json({ error: 'Cabaña no encontrada' }, { status: 404 })
+      return NextResponse.json({ error: 'Cabana no encontrada' }, { status: 404 })
     }
 
-    // Crear o recuperar cliente
-    let clientId: string
-    const { data: existingClient } = await supabaseAdmin
-      .from('clients')
-      .select('id')
-      .eq('email', client.email)
-      .maybeSingle()
+    const clientId = await getOrCreateClientId(supabaseAdmin, client)
 
-    if (existingClient) {
-      clientId = existingClient.id
-    } else {
-      const { data: newClient, error: clientError } = await supabaseAdmin
-        .from('clients')
-        .insert({ nombre: client.nombre, email: client.email, telefono: client.telefono })
-        .select('id')
-        .single()
-      if (clientError || !newClient) throw new Error('Error al crear cliente')
-      clientId = newClient.id
-    }
-
-    // Crear reserva en estado pending
-    const { data: reservation, error: resError } = await supabaseAdmin
+    const { data: reservation, error: reservationError } = await supabaseAdmin
       .from('reservations')
       .insert({
         tipo: 'cabana',
@@ -77,19 +61,20 @@ export async function POST(req: NextRequest) {
       .select()
       .single()
 
-    if (resError || !reservation) throw new Error('Error al crear reserva')
+    if (reservationError || !reservation) {
+      logSupabaseError('reservations.insert', reservationError)
+      throw new Error('No pudimos crear la reserva. Escribenos por WhatsApp para terminar la solicitud.')
+    }
 
-    // Crear preferencia de Mercado Pago
     const preference = await createPreference({
       reservationId: reservation.id,
-      title: `${cabana.nombre} — ${checkIn} al ${checkOut}`,
+      title: `${cabana.nombre} - ${checkIn} al ${checkOut}`,
       quantity: 1,
       unit_price: pricing.anticipo,
       payerEmail: client.email,
       payerName: client.nombre,
     })
 
-    // Guardar payment_url en la reserva
     await supabaseAdmin
       .from('reservations')
       .update({ payment_url: preference.sandbox_init_point ?? preference.init_point })

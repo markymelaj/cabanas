@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
+import { logSupabaseError } from '@/lib/supabase-errors'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { TreePine } from 'lucide-react'
@@ -8,11 +9,17 @@ export const dynamic = 'force-dynamic'
 
 async function getCabanas(): Promise<Cabana[]> {
   const supabaseAdmin = getSupabaseAdmin()
-  const { data } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin
     .from('cabanas')
     .select('*')
     .eq('activa', true)
     .order('orden')
+
+  if (error) {
+    logSupabaseError('cabanas.list', error)
+    return []
+  }
+
   return (data as Cabana[]) ?? []
 }
 
@@ -34,8 +41,20 @@ export default async function CabanasPage() {
         </div>
         <section className="py-20 bg-arena-50">
           <div className="container mx-auto px-6 md:px-12">
-            <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-              {cabanas.map((cab) => (
+            {cabanas.length === 0 ? (
+              <div className="max-w-xl mx-auto bg-white rounded-2xl card-shadow p-8 text-center">
+                <TreePine size={40} className="mx-auto text-lago-400 mb-4" />
+                <h2 className="font-display text-3xl text-lago-900 mb-3">Reservas por WhatsApp</h2>
+                <p className="text-volcÃ¡n-500 text-sm leading-relaxed mb-6">
+                  Estamos cargando la disponibilidad de cabaÃ±as. EscrÃ­benos y te ayudamos a reservar directamente.
+                </p>
+                <a href="https://wa.me/56965880268" className="btn-primary inline-flex">
+                  Consultar disponibilidad
+                </a>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                {cabanas.map((cab) => (
                 <div key={cab.id} className="bg-white rounded-2xl overflow-hidden card-shadow group">
                   <div className="relative h-72 overflow-hidden bg-lago-100">
                     {cab.fotos[0] ? (
@@ -69,8 +88,9 @@ export default async function CabanasPage() {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
+import { getOrCreateClientId, logSupabaseError } from '@/lib/supabase-errors'
 import { sendSalonQuoteConfirmation, sendAdminNotification } from '@/lib/resend'
 import { calcSalonPrice } from '@/lib/pricing'
 
@@ -7,37 +8,26 @@ export async function POST(req: NextRequest) {
   try {
     const supabaseAdmin = getSupabaseAdmin()
     const body = await req.json()
-    const { nombre, email, telefono, fechaEvento, tipoEvento, numInvitados, horario, servicios, mensaje } = body
+    const {
+      nombre,
+      email,
+      telefono,
+      fechaEvento,
+      tipoEvento,
+      numInvitados,
+      horario,
+      servicios,
+      mensaje,
+    } = body
 
     if (!nombre || !email || !fechaEvento || !tipoEvento || !numInvitados) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
     }
 
-    // Calcular precio estimado
     const pricing = calcSalonPrice(numInvitados, servicios ?? [], horario ?? 'completo')
+    const clientId = await getOrCreateClientId(supabaseAdmin, { nombre, email, telefono })
 
-    // Crear o recuperar cliente
-    let clientId: string
-    const { data: existing } = await supabaseAdmin
-      .from('clients')
-      .select('id')
-      .eq('email', email)
-      .maybeSingle()
-
-    if (existing) {
-      clientId = existing.id
-    } else {
-      const { data: newClient, error } = await supabaseAdmin
-        .from('clients')
-        .insert({ nombre, email, telefono })
-        .select('id')
-        .single()
-      if (error || !newClient) throw new Error('Error al crear cliente')
-      clientId = newClient.id
-    }
-
-    // Crear cotización
-    const { data: quote, error: qError } = await supabaseAdmin
+    const { data: quote, error: quoteError } = await supabaseAdmin
       .from('salon_quotes')
       .insert({
         client_id: clientId,
@@ -53,9 +43,11 @@ export async function POST(req: NextRequest) {
       .select()
       .single()
 
-    if (qError || !quote) throw new Error('Error al crear cotización')
+    if (quoteError || !quote) {
+      logSupabaseError('salon_quotes.insert', quoteError)
+      throw new Error('No pudimos guardar la cotizacion. Escribenos por WhatsApp para terminar la solicitud.')
+    }
 
-    // Emails
     await sendSalonQuoteConfirmation({
       to: email,
       nombre,
