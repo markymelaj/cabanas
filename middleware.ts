@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import type { CookieOptions } from '@supabase/ssr'
+import { isConfiguredAdmin } from '@/lib/admin-auth'
 
 type CookieToSet = {
   name: string
@@ -37,7 +38,7 @@ export async function middleware(req: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
+  if (!isConfiguredAdmin(user)) {
     return NextResponse.redirect(new URL('/admin/login', req.url))
   }
 

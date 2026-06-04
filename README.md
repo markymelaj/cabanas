@@ -48,6 +48,7 @@ cp .env.local.example .env.local
 NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
+ADMIN_EMAIL=admin@cabanaspuertovaras.cl
 
 MP_ACCESS_TOKEN=APP_USR-...
 NEXT_PUBLIC_MP_PUBLIC_KEY=APP_USR-...
@@ -59,6 +60,8 @@ RESEND_ADMIN_EMAIL=contacto@cabanaspuertovaras.cl
 WHATSAPP_ADMIN_NUMBER=+56957845292
 NEXT_PUBLIC_BASE_URL=https://cabanaspuertovaras.cl
 ```
+
+La contrasena del admin se crea en **Authentication -> Users**. La variable `ADMIN_EMAIL` solo define que email tiene permiso para entrar al panel.
 
 ---
 
