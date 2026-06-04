@@ -26,10 +26,12 @@ export async function POST(req: NextRequest) {
 
     const pricing = calcSalonPrice(numInvitados, servicios ?? [], horario ?? 'completo')
     const clientId = await getOrCreateClientId(supabaseAdmin, { nombre, email, telefono })
+    const quoteId = crypto.randomUUID()
 
-    const { data: quote, error: quoteError } = await supabaseAdmin
+    const { error: quoteError } = await supabaseAdmin
       .from('salon_quotes')
       .insert({
+        id: quoteId,
         client_id: clientId,
         fecha_evento: fechaEvento,
         tipo_evento: tipoEvento,
@@ -40,10 +42,8 @@ export async function POST(req: NextRequest) {
         mensaje,
         status: 'nueva',
       })
-      .select()
-      .single()
 
-    if (quoteError || !quote) {
+    if (quoteError) {
       logSupabaseError('salon_quotes.insert', quoteError)
       throw new Error('No pudimos guardar la cotizacion. Escribenos por WhatsApp para terminar la solicitud.')
     }
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       tipoEvento,
       numInvitados,
       montoEstimado: pricing.total,
-      quoteId: quote.id,
+      quoteId,
     }).catch(console.error)
 
     await sendAdminNotification({
@@ -64,10 +64,10 @@ export async function POST(req: NextRequest) {
       email,
       telefono: telefono ?? '',
       detail: `Fecha: ${fechaEvento}\nTipo: ${tipoEvento}\nInvitados: ${numInvitados}\nHorario: ${horario}\nServicios: ${(servicios ?? []).join(', ')}\nEstimado: $${pricing.total.toLocaleString('es-CL')}\nMensaje: ${mensaje ?? ''}`,
-      reservationId: quote.id,
+      reservationId: quoteId,
     }).catch(console.error)
 
-    return NextResponse.json({ quoteId: quote.id, pricing })
+    return NextResponse.json({ quoteId, pricing })
   } catch (err: any) {
     console.error('[cotizacion-salon]', err)
     return NextResponse.json({ error: err.message ?? 'Error interno' }, { status: 500 })

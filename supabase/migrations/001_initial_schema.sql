@@ -167,7 +167,11 @@ create or replace function check_cabana_availability(
   p_check_out date,
   p_exclude_id uuid default null
 )
-returns boolean language plpgsql as $$
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
 declare
   v_conflicts int;
 begin
@@ -190,7 +194,11 @@ create or replace function get_occupied_dates(
   p_from date default current_date,
   p_to date default current_date + interval '6 months'
 )
-returns setof date language plpgsql as $$
+returns setof date
+language plpgsql
+security definer
+set search_path = public
+as $$
 begin
   return query
     select generate_series(check_in, check_out - 1, '1 day'::interval)::date
@@ -214,7 +222,11 @@ create or replace function get_salon_occupied_dates(
   p_from date default current_date,
   p_to date default current_date + interval '12 months'
 )
-returns setof date language plpgsql as $$
+returns setof date
+language plpgsql
+security definer
+set search_path = public
+as $$
 begin
   return query
     select fecha_evento
@@ -252,13 +264,38 @@ create policy "cabanas_admin_all" on cabanas
 create policy "clients_service_role" on clients
   for all using (auth.role() = 'service_role');
 
+create policy "clients_public_insert" on clients
+  for insert to anon
+  with check (
+    length(trim(nombre)) > 0
+    and email like '%@%'
+  );
+
 -- Reservations: solo service_role
 create policy "reservations_service_role" on reservations
   for all using (auth.role() = 'service_role');
 
+create policy "reservations_public_insert" on reservations
+  for insert to anon
+  with check (
+    tipo = 'cabana'
+    and status = 'pending'
+    and payment_status = 'pending'
+    and check_out > check_in
+    and guests > 0
+  );
+
 -- Salon_quotes: solo service_role
 create policy "salon_quotes_service_role" on salon_quotes
   for all using (auth.role() = 'service_role');
+
+create policy "salon_quotes_public_insert" on salon_quotes
+  for insert to anon
+  with check (
+    status = 'nueva'
+    and length(trim(tipo_evento)) > 0
+    and num_invitados > 0
+  );
 
 -- Blocked_dates: lectura pública (para mostrar disponibilidad), escritura solo admin
 create policy "blocked_dates_public_read" on blocked_dates

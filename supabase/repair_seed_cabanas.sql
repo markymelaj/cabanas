@@ -56,14 +56,116 @@ create policy "clients_service_role" on clients
   using (true)
   with check (true);
 
+drop policy if exists "clients_public_insert" on clients;
+create policy "clients_public_insert" on clients
+  for insert to anon
+  with check (
+    length(trim(nombre)) > 0
+    and email like '%@%'
+  );
+
 drop policy if exists "reservations_service_role" on reservations;
 create policy "reservations_service_role" on reservations
   for all to service_role
   using (true)
   with check (true);
 
+drop policy if exists "reservations_public_insert" on reservations;
+create policy "reservations_public_insert" on reservations
+  for insert to anon
+  with check (
+    tipo = 'cabana'
+    and status = 'pending'
+    and payment_status = 'pending'
+    and check_out > check_in
+    and guests > 0
+  );
+
 drop policy if exists "salon_quotes_service_role" on salon_quotes;
 create policy "salon_quotes_service_role" on salon_quotes
   for all to service_role
   using (true)
   with check (true);
+
+drop policy if exists "salon_quotes_public_insert" on salon_quotes;
+create policy "salon_quotes_public_insert" on salon_quotes
+  for insert to anon
+  with check (
+    status = 'nueva'
+    and length(trim(tipo_evento)) > 0
+    and num_invitados > 0
+  );
+
+create or replace function check_cabana_availability(
+  p_cabana_id uuid,
+  p_check_in date,
+  p_check_out date,
+  p_exclude_id uuid default null
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_conflicts int;
+begin
+  select count(*) into v_conflicts
+  from reservations
+  where cabana_id = p_cabana_id
+    and status not in ('cancelled')
+    and (id != coalesce(p_exclude_id, '00000000-0000-0000-0000-000000000000'::uuid))
+    and (check_in < p_check_out and check_out > p_check_in);
+
+  return v_conflicts = 0;
+end;
+$$;
+
+create or replace function get_occupied_dates(
+  p_cabana_id uuid,
+  p_from date default current_date,
+  p_to date default current_date + interval '6 months'
+)
+returns setof date
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  return query
+    select generate_series(check_in, check_out - 1, '1 day'::interval)::date
+    from reservations
+    where cabana_id = p_cabana_id
+      and status not in ('cancelled')
+      and check_in < p_to
+      and check_out > p_from
+  union
+    select fecha
+    from blocked_dates
+    where (cabana_id = p_cabana_id or (cabana_id is null and tipo = 'cabana'))
+      and fecha between p_from and p_to;
+end;
+$$;
+
+create or replace function get_salon_occupied_dates(
+  p_from date default current_date,
+  p_to date default current_date + interval '12 months'
+)
+returns setof date
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  return query
+    select fecha_evento
+    from salon_quotes
+    where status in ('confirmada')
+      and fecha_evento between p_from and p_to
+  union
+    select fecha
+    from blocked_dates
+    where tipo = 'salon'
+      and fecha between p_from and p_to;
+end;
+$$;

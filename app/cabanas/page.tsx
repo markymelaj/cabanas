@@ -3,6 +3,7 @@ import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
 import { logSupabaseError } from '@/lib/supabase-errors'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import CabanaReservationForm from '@/components/CabanaReservationForm'
 import { TreePine } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -53,8 +54,23 @@ export default async function CabanasPage() {
                 </a>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-                {cabanas.map((cab) => (
+              <>
+                <div className="max-w-2xl mx-auto mb-16">
+                  <div className="text-center mb-10">
+                    <p className="text-arena-600 font-display italic text-lg mb-2">Reserva tu estadia</p>
+                    <h2 className="font-display text-4xl text-lago-900 font-light">Solicita tu cabana</h2>
+                    <p className="text-volcÃ¡n-500 text-sm mt-2">Elige cabana, fechas y datos. Te contactamos para confirmar en menos de 24 horas.</p>
+                  </div>
+                  <CabanaReservationForm cabanas={cabanas} />
+                </div>
+
+                <div className="max-w-4xl mx-auto mb-8">
+                  <p className="text-arena-600 font-display italic text-lg mb-2">Opciones</p>
+                  <h2 className="font-display text-4xl text-lago-900 font-light">Cabanas disponibles</h2>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                  {cabanas.map((cab) => (
                 <div key={cab.id} className="bg-white rounded-2xl overflow-hidden card-shadow group">
                   <div className="relative h-72 overflow-hidden bg-lago-100">
                     {cab.fotos[0] ? (
@@ -88,8 +104,9 @@ export default async function CabanasPage() {
                     </div>
                   </div>
                 </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </section>
