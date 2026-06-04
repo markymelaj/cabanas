@@ -22,6 +22,7 @@ export async function GET() {
 
   let message = 'Falta configurar la conexion.'
   let reason: string | null = null
+  let nextStepMessage: string | null = null
   let detail: {
     client?: string
     code?: string
@@ -64,6 +65,7 @@ export async function GET() {
         message = 'Conexion lista. Falta configurar email admin.'
       } else {
         message = 'Conexion lista.'
+        nextStepMessage = 'Listo. La base, clave administrativa, admin y WhatsApp estan configurados.'
       }
     } catch (error: any) {
       checks.database = 'error'
@@ -79,7 +81,7 @@ export async function GET() {
       message,
       reason,
       detail,
-      nextStep: nextStep(reason, detail),
+      nextStep: nextStepMessage ?? nextStep(reason, detail),
       checks: {
         ...checks,
         anonRole,

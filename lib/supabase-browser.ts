@@ -1,4 +1,5 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 let supabaseBrowserClient: SupabaseClient | null = null
 
@@ -11,7 +12,7 @@ export function getSupabaseBrowser() {
       throw new Error('Acceso no disponible en este momento.')
     }
 
-    supabaseBrowserClient = createClient(supabaseUrl, supabaseAnonKey)
+    supabaseBrowserClient = createBrowserClient(supabaseUrl, supabaseAnonKey)
   }
 
   return supabaseBrowserClient

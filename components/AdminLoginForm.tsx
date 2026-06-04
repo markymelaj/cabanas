@@ -35,7 +35,7 @@ export default function AdminLoginForm() {
         setError('Credenciales incorrectas o acceso no disponible en este momento.')
         setLoading(false)
       } else {
-        router.push('/admin')
+        router.replace('/admin')
         router.refresh()
       }
     } catch {
