@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { CalendarDays, ListFilter, PartyPopper, Search, Users } from 'lucide-react'
@@ -36,8 +37,13 @@ type Props = {
 const STATUS_LABELS: Record<string, { label: string; classes: string }> = {
   nueva: { label: 'Nueva', classes: 'bg-blue-100 text-blue-800 border-blue-200' },
   contactada: { label: 'Contactada', classes: 'bg-amber-100 text-amber-800 border-amber-200' },
+  cotizada: { label: 'Cotizada', classes: 'bg-lago-100 text-lago-800 border-lago-200' },
+  reservada: { label: 'Reservada', classes: 'bg-amber-50 text-amber-800 border-amber-200' },
   confirmada: { label: 'Confirmada', classes: 'bg-green-100 text-green-800 border-green-200' },
+  pagada: { label: 'Pagada', classes: 'bg-green-50 text-green-700 border-green-200' },
+  realizada: { label: 'Realizada', classes: 'bg-blue-100 text-blue-800 border-blue-200' },
   rechazada: { label: 'Rechazada', classes: 'bg-red-100 text-red-700 border-red-200' },
+  cancelada: { label: 'Cancelada', classes: 'bg-red-50 text-red-700 border-red-200' },
 }
 
 function clientOf(row: QuoteRow): ClientInfo {
@@ -131,7 +137,10 @@ export default function AdminSalonQuotesTable({ quotes }: Props) {
           <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Salon</p>
           <h1 className="font-display text-3xl text-lago-900">Cotizaciones salon</h1>
         </div>
-        <p className="text-sm text-volcan-500">{filtered.length} visibles de {quotes.length} solicitudes</p>
+        <div className="flex items-center gap-3">
+          <p className="text-sm text-volcan-500">{filtered.length} visibles de {quotes.length} solicitudes</p>
+          <Link href="/admin/salon/nuevo" className="btn-primary px-4 py-2 text-xs">Nuevo evento</Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 xl:grid-cols-5 gap-3">
@@ -157,8 +166,13 @@ export default function AdminSalonQuotesTable({ quotes }: Props) {
             <option value="">Todos los estados</option>
             <option value="nueva">Nueva</option>
             <option value="contactada">Contactada</option>
+            <option value="cotizada">Cotizada</option>
+            <option value="reservada">Reservada</option>
             <option value="confirmada">Confirmada</option>
+            <option value="pagada">Pagada</option>
+            <option value="realizada">Realizada</option>
             <option value="rechazada">Rechazada</option>
+            <option value="cancelada">Cancelada</option>
           </select>
           <input
             type="date"
@@ -209,7 +223,9 @@ export default function AdminSalonQuotesTable({ quotes }: Props) {
                 return (
                   <tr key={row.id} className="align-top hover:bg-arena-50/70 transition-colors">
                     <td className="px-5 py-4">
-                      <p className="font-medium text-lago-900">{client.nombre ?? 'Sin nombre'}</p>
+                      <Link href={`/admin/salon/${row.id}`} className="font-medium text-lago-900 hover:text-lago-700">
+                        {client.nombre ?? 'Sin nombre'}
+                      </Link>
                       <p className="font-mono text-[11px] text-volcan-500 mt-1">#{shortId(row.id)}</p>
                       <p className="text-xs text-volcan-400 mt-1">Ingreso: {fmtDate(row.created_at.slice(0, 10))}</p>
                     </td>
@@ -237,6 +253,9 @@ export default function AdminSalonQuotesTable({ quotes }: Props) {
                       <p className="text-xs text-volcan-400 mt-2">Tipo: {row.tipo_evento}</p>
                     </td>
                     <td className="px-4 py-4">
+                      <Link href={`/admin/salon/${row.id}`} className="mb-2 inline-flex text-xs font-medium text-lago-700 hover:text-lago-900">
+                        Abrir ficha
+                      </Link>
                       <AdminQuoteActions
                         quoteId={row.id}
                         status={row.status}

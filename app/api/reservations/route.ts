@@ -50,7 +50,12 @@ export async function POST(req: NextRequest) {
       new Date(`${checkIn}T12:00:00`),
       new Date(`${checkOut}T12:00:00`),
       Number(cabana.precio_noche),
-      Number(cabana.precio_limpieza)
+      Number(cabana.precio_limpieza),
+      {
+        guests: guestCount,
+        baseGuests: Number(cabana.base_huespedes ?? cabana.capacidad),
+        extraGuestFee: Number(cabana.precio_huesped_extra ?? 0),
+      }
     )
 
     if (pricing.noches < 1) {
@@ -91,10 +96,19 @@ export async function POST(req: NextRequest) {
           guests: guestCount,
           precio_noche: pricing.precioPorNoche,
           precio_limpieza: pricing.limpieza,
+          base_guests: Number(cabana.base_huespedes ?? cabana.capacidad),
+          extra_guest_fee: Number(cabana.precio_huesped_extra ?? 0),
+          subtotal_amount: pricing.subtotalNoches + pricing.extraHuespedes + pricing.limpieza,
+          adjustment_amount: 0,
           total_amount: pricing.total,
           anticipo_monto: pricing.anticipo,
+          paid_amount: 0,
+          balance_amount: pricing.total,
           status: 'pending',
           payment_status: 'pending',
+          source: 'web',
+          hold_alert: true,
+          checkin_token: crypto.randomUUID().replace(/-/g, ''),
           notas: dbCabanaId ? null : `Solicitud para ${cabana.nombre} (${cabana.slug})`,
         })
 

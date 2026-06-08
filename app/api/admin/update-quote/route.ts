@@ -1,16 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { isConfiguredAdmin } from '@/lib/admin-auth'
-import { createServerSupabase, getSupabaseAdmin } from '@/lib/supabase-server'
+import { requireAdminApi } from '@/lib/admin-api'
 
 export async function POST(req: NextRequest) {
-  const supabase = createServerSupabase()
-  const supabaseAdmin = getSupabaseAdmin()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!isConfiguredAdmin(user)) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  const { supabaseAdmin, error } = await requireAdminApi()
+  if (error) return error
 
   const { quoteId, status } = await req.json()
   if (!quoteId || !status) return NextResponse.json({ error: 'Faltan datos' }, { status: 400 })
 
-  await supabaseAdmin.from('salon_quotes').update({ status }).eq('id', quoteId)
+  const payload: Record<string, any> = { status }
+  if (status === 'confirmada') payload.hold_alert = false
+
+  const { error: updateError } = await supabaseAdmin!
+    .from('salon_quotes')
+    .update(payload)
+    .eq('id', quoteId)
+
+  if (updateError) return NextResponse.json({ error: updateError.message }, { status: 400 })
   return NextResponse.json({ ok: true })
 }

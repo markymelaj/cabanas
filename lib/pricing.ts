@@ -8,7 +8,9 @@ export interface PriceBreakdown {
   noches: number
   precioPorNoche: number
   subtotalNoches: number
+  extraHuespedes: number
   limpieza: number
+  ajuste: number
   total: number
   anticipo: number
   saldo: number
@@ -18,17 +20,33 @@ export function calcCabanaPrice(
   checkIn: Date,
   checkOut: Date,
   precioPorNoche: number,
-  precioLimpieza: number
+  precioLimpieza: number,
+  options: {
+    guests?: number
+    baseGuests?: number
+    extraGuestFee?: number
+    adjustment?: number
+    anticipoPercent?: number
+  } = {}
 ): PriceBreakdown {
   const noches = differenceInCalendarDays(checkOut, checkIn)
   const subtotalNoches = noches * precioPorNoche
-  const total = subtotalNoches + precioLimpieza
-  const anticipo = Math.round(total * ANTICIPO_PERCENT)
+  const guests = Math.max(0, Number(options.guests ?? 0))
+  const baseGuests = Math.max(0, Number(options.baseGuests ?? guests))
+  const extraGuestFee = Math.max(0, Number(options.extraGuestFee ?? 0))
+  const extraGuests = Math.max(0, guests - baseGuests)
+  const extraHuespedes = noches * extraGuests * extraGuestFee
+  const ajuste = Number(options.adjustment ?? 0)
+  const total = Math.max(0, subtotalNoches + extraHuespedes + precioLimpieza + ajuste)
+  const anticipoRatio = Number(options.anticipoPercent ?? ANTICIPO_PERCENT)
+  const anticipo = Math.round(total * anticipoRatio)
   return {
     noches,
     precioPorNoche,
     subtotalNoches,
+    extraHuespedes,
     limpieza: precioLimpieza,
+    ajuste,
     total,
     anticipo,
     saldo: total - anticipo,

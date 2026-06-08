@@ -23,11 +23,12 @@ type Step = 'cabana' | 'dates' | 'details'
 
 type Props = {
   cabanas: Cabana[]
+  initialCabanaId?: string
 }
 
-export default function CabanaReservationForm({ cabanas }: Props) {
+export default function CabanaReservationForm({ cabanas, initialCabanaId }: Props) {
   const [step, setStep] = useState<Step>('cabana')
-  const [selectedCabanaId, setSelectedCabanaId] = useState(cabanas[0]?.id ?? '')
+  const [selectedCabanaId, setSelectedCabanaId] = useState(initialCabanaId || cabanas[0]?.id || '')
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [occupiedDates, setOccupiedDates] = useState<string[]>([])
   const [checkIn, setCheckIn] = useState<Date | null>(null)
@@ -91,9 +92,14 @@ export default function CabanaReservationForm({ cabanas }: Props) {
       checkIn,
       checkOut,
       Number(selectedCabana.precio_noche),
-      Number(selectedCabana.precio_limpieza)
+      Number(selectedCabana.precio_limpieza),
+      {
+        guests,
+        baseGuests: Number(selectedCabana.base_huespedes ?? selectedCabana.capacidad),
+        extraGuestFee: Number(selectedCabana.precio_huesped_extra ?? 0),
+      }
     )
-  }, [selectedCabana, checkIn, checkOut])
+  }, [selectedCabana, checkIn, checkOut, guests])
 
   function isOccupied(date: Date) {
     return occupied.has(format(date, 'yyyy-MM-dd'))
@@ -260,13 +266,16 @@ export default function CabanaReservationForm({ cabanas }: Props) {
                   key={cabana.id}
                   onClick={() => {
                     setSelectedCabanaId(cabana.id)
-                    setGuests(Math.min(guests, cabana.capacidad))
+                    setGuests(Math.min(Math.max(1, Number(cabana.base_huespedes ?? guests)), cabana.capacidad))
                   }}
                   className={`text-left p-4 rounded-xl border transition-all ${selectedCabanaId === cabana.id ? 'border-lago-600 bg-lago-50' : 'border-volcÃ¡n-200 hover:border-lago-300'}`}
                 >
                   <p className="font-display text-xl text-lago-900">{cabana.nombre}</p>
                   <p className="text-xs text-volcÃ¡n-500 mt-1">Hasta {cabana.capacidad} personas</p>
                   <p className="text-sm text-lago-700 mt-3">{formatCLP(Number(cabana.precio_noche))} / noche</p>
+                  {Number(cabana.precio_huesped_extra ?? 0) > 0 && (
+                    <p className="text-xs text-volcÃ¡n-400 mt-1">Extra huesped: {formatCLP(Number(cabana.precio_huesped_extra))}</p>
+                  )}
                 </button>
               ))}
             </div>
@@ -345,6 +354,12 @@ export default function CabanaReservationForm({ cabanas }: Props) {
                   <span className="text-volcÃ¡n-500">Limpieza</span>
                   <span>{formatCLP(pricing.limpieza)}</span>
                 </div>
+                {pricing.extraHuespedes > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-volcÃ¡n-500">Huespedes extra</span>
+                    <span>{formatCLP(pricing.extraHuespedes)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between font-semibold border-t border-lago-100 pt-2">
                   <span>Total estimado</span>
                   <span className="text-lago-700">{formatCLP(pricing.total)}</span>

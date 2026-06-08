@@ -60,6 +60,26 @@ export default function AdminReservationActions({
           Confirmar
         </button>
       )}
+      {status === 'confirmed' && (
+        <button onClick={() => updateStatus('checked_in')} className="text-xs px-3 py-1.5 rounded-lg bg-lago-100 text-lago-700 hover:bg-lago-200 font-medium transition-colors">
+          Check-in
+        </button>
+      )}
+      {status === 'checked_in' && (
+        <button onClick={() => updateStatus('checked_out')} className="text-xs px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 font-medium transition-colors">
+          Check-out
+        </button>
+      )}
+      {status === 'checked_out' && (
+        <button onClick={() => updateStatus('completed')} className="text-xs px-3 py-1.5 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 font-medium transition-colors">
+          Completar
+        </button>
+      )}
+      {status !== 'standby' && (
+        <button onClick={() => updateStatus('standby')} className="text-xs px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-100 font-medium transition-colors">
+          Standby
+        </button>
+      )}
       {status !== 'pending' && (
         <button onClick={() => updateStatus('pending')} className="text-xs px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-100 font-medium transition-colors">
           Pendiente

@@ -54,12 +54,27 @@ export default function AdminQuoteActions({
           Marcar contactada
         </button>
       )}
+      {status !== 'cotizada' && (
+        <button onClick={() => updateStatus('cotizada')} className="text-xs px-3 py-1.5 rounded-lg bg-lago-50 text-lago-700 hover:bg-lago-100 font-medium transition-colors">
+          Cotizada
+        </button>
+      )}
+      {status !== 'reservada' && (
+        <button onClick={() => updateStatus('reservada')} className="text-xs px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-100 font-medium transition-colors">
+          Reservar
+        </button>
+      )}
       {status !== 'confirmada' && (
         <button onClick={() => updateStatus('confirmada')} className="text-xs px-3 py-1.5 rounded-lg bg-green-100 text-green-700 hover:bg-green-200 font-medium transition-colors">
           Confirmar evento
         </button>
       )}
-      {status !== 'nueva' && status !== 'confirmada' && (
+      {status === 'confirmada' && (
+        <button onClick={() => updateStatus('realizada')} className="text-xs px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 font-medium transition-colors">
+          Realizada
+        </button>
+      )}
+      {status !== 'nueva' && status !== 'confirmada' && status !== 'realizada' && (
         <button onClick={() => updateStatus('nueva')} className="text-xs px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 font-medium transition-colors">
           Reabrir
         </button>

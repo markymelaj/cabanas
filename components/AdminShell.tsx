@@ -10,10 +10,10 @@ export default async function AdminShell({ children }: { children: React.ReactNo
   if (!isConfiguredAdmin(user)) redirect('/admin/login')
 
   return (
-    <div className="min-h-screen bg-volcÃ¡n-50 flex">
+    <div className="min-h-screen bg-arena-50 flex print:block">
       <AdminSidebar />
-      <main className="flex-1 overflow-auto">
-        <div className="p-8 max-w-6xl mx-auto">
+      <main className="flex-1 overflow-auto print:overflow-visible">
+        <div className="p-8 max-w-6xl mx-auto print:max-w-none print:p-0">
           {children}
         </div>
       </main>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { CalendarDays, Home, ListFilter, Search, Users } from 'lucide-react'
@@ -33,8 +34,12 @@ type Props = {
 }
 
 const STATUS_LABELS: Record<string, { label: string; classes: string }> = {
+  standby: { label: 'Standby', classes: 'bg-amber-50 text-amber-800 border-amber-200' },
   pending: { label: 'Pendiente', classes: 'bg-amber-100 text-amber-800 border-amber-200' },
   confirmed: { label: 'Confirmada', classes: 'bg-green-100 text-green-800 border-green-200' },
+  checked_in: { label: 'Check-in', classes: 'bg-lago-100 text-lago-800 border-lago-200' },
+  checked_out: { label: 'Check-out', classes: 'bg-blue-100 text-blue-800 border-blue-200' },
+  completed: { label: 'Completada', classes: 'bg-green-50 text-green-700 border-green-200' },
   cancelled: { label: 'Cancelada', classes: 'bg-red-100 text-red-700 border-red-200' },
   no_show: { label: 'No show', classes: 'bg-volcan-100 text-volcan-700 border-volcan-200' },
 }
@@ -134,7 +139,10 @@ export default function AdminReservationsTable({ reservas }: Props) {
           <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Cabanas</p>
           <h1 className="font-display text-3xl text-lago-900">Reservas de cabanas</h1>
         </div>
-        <p className="text-sm text-volcan-500">{filtered.length} visibles de {reservas.length} solicitudes</p>
+        <div className="flex items-center gap-3">
+          <p className="text-sm text-volcan-500">{filtered.length} visibles de {reservas.length} solicitudes</p>
+          <Link href="/admin/reservas/nueva" className="btn-primary px-4 py-2 text-xs">Nueva reserva</Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 xl:grid-cols-5 gap-3">
@@ -158,8 +166,12 @@ export default function AdminReservationsTable({ reservas }: Props) {
           </label>
           <select value={status} onChange={(event) => setStatus(event.target.value)} className="input-field">
             <option value="">Todos los estados</option>
+            <option value="standby">Standby</option>
             <option value="pending">Pendiente</option>
             <option value="confirmed">Confirmada</option>
+            <option value="checked_in">Check-in</option>
+            <option value="checked_out">Check-out</option>
+            <option value="completed">Completada</option>
             <option value="cancelled">Cancelada</option>
             <option value="no_show">No show</option>
           </select>
@@ -206,7 +218,9 @@ export default function AdminReservationsTable({ reservas }: Props) {
                 return (
                   <tr key={row.id} className="align-top hover:bg-arena-50/70 transition-colors">
                     <td className="px-5 py-4">
-                      <p className="font-medium text-lago-900">{row.client_nombre ?? 'Sin nombre'}</p>
+                      <Link href={`/admin/reservas/${row.id}`} className="font-medium text-lago-900 hover:text-lago-700">
+                        {row.client_nombre ?? 'Sin nombre'}
+                      </Link>
                       <p className="font-mono text-[11px] text-volcan-500 mt-1">#{shortId(row.id)}</p>
                       <p className="text-xs text-volcan-400 mt-1">Ingreso: {fmtDate(row.created_at.slice(0, 10))}</p>
                     </td>
@@ -230,6 +244,9 @@ export default function AdminReservationsTable({ reservas }: Props) {
                       <p className="text-xs text-volcan-400 mt-2">Pago: {row.payment_status ?? 'pendiente'}</p>
                     </td>
                     <td className="px-4 py-4">
+                      <Link href={`/admin/reservas/${row.id}`} className="mb-2 inline-flex text-xs font-medium text-lago-700 hover:text-lago-900">
+                        Abrir ficha
+                      </Link>
                       <AdminReservationActions
                         reservationId={row.id}
                         status={row.status}

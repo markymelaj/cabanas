@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
 import { getOrCreateClientId, logSupabaseError } from '@/lib/supabase-errors'
 import { sendSalonQuoteConfirmation, sendAdminNotification } from '@/lib/resend'
-import { calcSalonPrice } from '@/lib/pricing'
 import { buildSalonQuoteRequestMessage, buildWhatsAppLink } from '@/lib/whatsapp'
 
 export async function POST(req: NextRequest) {
@@ -25,13 +24,19 @@ export async function POST(req: NextRequest) {
     }
 
     const serviciosSeleccionados = Array.isArray(servicios) ? servicios : []
-    const pricing = calcSalonPrice(numInvitados, serviciosSeleccionados, horario ?? 'completo')
     const quoteId = crypto.randomUUID()
     let savedToAdmin = false
     let adminError: string | null = null
+    let pricing = {
+      arriendoSalon: horario === 'medio' ? 520000 : 800000,
+      banqueteria: 0,
+      total: horario === 'medio' ? 520000 : 800000,
+      porPersona: 0,
+    }
 
     try {
       const supabaseAdmin = getSupabaseAdmin()
+      pricing = await calcSalonPriceFromDb(supabaseAdmin, Number(numInvitados), serviciosSeleccionados, horario ?? 'completo')
       const clientId = await getOrCreateClientId(supabaseAdmin, { nombre, email, telefono })
       const { error: quoteError } = await supabaseAdmin
         .from('salon_quotes')
@@ -44,8 +49,14 @@ export async function POST(req: NextRequest) {
           horario: horario ?? 'completo',
           servicios: serviciosSeleccionados,
           monto_estimado: pricing.total,
+          subtotal_amount: pricing.total,
+          total_amount: pricing.total,
+          paid_amount: 0,
+          balance_amount: pricing.total,
           mensaje,
           status: 'nueva',
+          source: 'web',
+          hold_alert: true,
         })
 
       if (quoteError) {
@@ -109,5 +120,31 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     console.error('[cotizacion-salon]', err)
     return NextResponse.json({ error: err.message ?? 'Error interno' }, { status: 500 })
+  }
+}
+
+async function calcSalonPriceFromDb(supabaseAdmin: any, guests: number, selected: string[], schedule: string) {
+  const [{ data: settings }, { data: services }] = await Promise.all([
+    supabaseAdmin.from('salon_settings').select('*').limit(1).maybeSingle(),
+    selected.length > 0
+      ? supabaseAdmin.from('salon_services').select('*').in('nombre', selected)
+      : Promise.resolve({ data: [] }),
+  ])
+
+  const arriendoSalon = schedule === 'medio'
+    ? Number(settings?.precio_media_jornada ?? 520000)
+    : Number(settings?.precio_jornada_completa ?? 800000)
+
+  const extras = (services ?? []).reduce((sum: number, service: any) => {
+    const price = Number(service.precio ?? 0)
+    return sum + (service.precio_por_persona ? price * guests : price)
+  }, 0)
+
+  const total = arriendoSalon + extras
+  return {
+    arriendoSalon,
+    banqueteria: extras,
+    total,
+    porPersona: Math.round(total / Math.max(1, guests)),
   }
 }
