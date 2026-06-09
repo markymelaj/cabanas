@@ -1,5 +1,5 @@
 export type ConflictAdviceContext = {
-  type: 'cabana' | 'salon'
+  type: 'cabana' | 'salon' | 'operaciones'
   current: Record<string, any>
   conflicts: Record<string, any>[]
   blockedDates: Record<string, any>[]
@@ -22,7 +22,7 @@ export type ConflictAdvice = {
 
 const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
 const CLAUDE_API_VERSION = '2023-06-01'
-const DEFAULT_MODEL = 'claude-sonnet-4-6'
+const DEFAULT_MODEL = 'claude-sonnet-4-5-20250929'
 
 function compact(value: unknown, fallback = '-') {
   if (value == null || value === '') return fallback
@@ -52,7 +52,9 @@ function fallbackAdvice(context: ConflictAdviceContext, reason?: string): Confli
 
   const dateText = context.type === 'cabana'
     ? `${compact(current.check_in)} al ${compact(current.check_out)}`
-    : compact(current.fecha_evento)
+    : context.type === 'salon'
+      ? compact(current.fecha_evento)
+      : compact(current.date_range, 'las próximas fechas')
 
   const recommendation = conflictCount > 0
     ? `No confirmes todavía. Mantén esta solicitud en espera y prioriza la reserva con pago comprobado, confirmación más antigua o mayor valor comercial.`
@@ -85,7 +87,9 @@ function fallbackAdvice(context: ConflictAdviceContext, reason?: string): Confli
       reason || 'Claude queda listo apenas agregues ANTHROPIC_API_KEY en Vercel.',
     ],
     nextSteps,
-    whatsappMessage: `Hola ${client}, estamos revisando disponibilidad para ${dateText}. Te confirmo a la brevedad la mejor alternativa y los pasos para dejarlo reservado.`,
+    whatsappMessage: context.type === 'operaciones'
+      ? `Resumen operativo: revisar ${dateText}, priorizar conflictos con pagos o estados confirmados y contactar hoy las solicitudes con alerta.`
+      : `Hola ${client}, estamos revisando disponibilidad para ${dateText}. Te confirmo a la brevedad la mejor alternativa y los pasos para dejarlo reservado.`,
     confidence: conflictCount > 0 ? 0.62 : 0.72,
     opportunities: [
       'Redactar mensajes de WhatsApp según estado de pago.',
@@ -153,17 +157,26 @@ function systemPrompt() {
 }
 
 function userPrompt(context: ConflictAdviceContext) {
+  const typeLabel = context.type === 'cabana'
+    ? 'reserva de cabaña'
+    : context.type === 'salon'
+      ? 'reserva de salón'
+      : 'panel general de operaciones'
+  const currentLabel = context.type === 'operaciones' ? 'Resumen operativo' : 'Reserva actual'
+
   return [
     'Analiza esta situación operativa y recomienda qué decisión tomar.',
     '',
-    `Tipo: ${context.type === 'cabana' ? 'reserva de cabaña' : 'reserva de salón'}`,
+    `Tipo: ${typeLabel}`,
     `Fecha de análisis: ${context.generatedAt}`,
-    `Reserva actual: ${JSON.stringify(context.current)}`,
+    `${currentLabel}: ${JSON.stringify(context.current)}`,
     `Reservas potencialmente conflictivas: ${JSON.stringify(context.conflicts)}`,
     `Bloqueos cargados: ${JSON.stringify(context.blockedDates)}`,
     `Pagos relacionados: ${JSON.stringify(context.payments)}`,
     '',
-    `Incluye un mensaje breve de WhatsApp para el cliente ${getClientName(context.current)}.`,
+    context.type === 'operaciones'
+      ? 'Incluye un mensaje interno breve para el equipo de administración.'
+      : `Incluye un mensaje breve de WhatsApp para el cliente ${getClientName(context.current)}.`,
     `Si hay pagos, menciona montos solo como referencia interna: total actual ${money(context.current.total_amount ?? context.current.monto_estimado)}.`,
   ].join('\n')
 }

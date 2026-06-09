@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import AdminShell from '@/components/AdminShell'
+import AdminAIAssistant from '@/components/AdminAIAssistant'
 
 export const revalidate = 0
 
@@ -89,6 +90,10 @@ async function DashboardContent() {
             <p className={`font-display text-2xl font-medium ${metric.isText ? 'text-base' : ''} text-lago-900`}>{metric.value}</p>
           </div>
         ))}
+      </div>
+
+      <div className="mb-10">
+        <AdminAIAssistant mode="overview" />
       </div>
 
       <div className="bg-white border border-arena-100 rounded-lg overflow-hidden">
