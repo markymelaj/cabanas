@@ -4,10 +4,11 @@ import { useRef, useState } from 'react'
 import { BedDouble, Bath, Home, Users } from 'lucide-react'
 import type { Cabana } from '@/lib/supabase'
 import { formatCLP } from '@/lib/pricing'
+import { cabanaPhotos, displayCabana, polishCabanaText } from '@/lib/cabana-display'
 import CabanaReservationForm from '@/components/CabanaReservationForm'
 
 function photosOf(cabana: Cabana) {
-  return (cabana.fotos ?? []).filter(Boolean).slice(0, 3)
+  return cabanaPhotos(cabana)
 }
 
 export default function CabanaBookingExperience({ cabanas }: { cabanas: Cabana[] }) {
@@ -24,16 +25,17 @@ export default function CabanaBookingExperience({ cabanas }: { cabanas: Cabana[]
       <section>
         <div className="max-w-4xl mx-auto mb-8">
           <p className="text-arena-600 font-display italic text-lg mb-2">Opciones disponibles</p>
-          <h2 className="font-display text-4xl text-lago-900 font-light">Elige tu cabana</h2>
+          <h2 className="font-display text-4xl text-lago-900 font-light">Elige tu cabaña</h2>
           <p className="text-sm text-volcan-500 mt-2">Revisa fotos, capacidad y precio antes de solicitar la reserva.</p>
         </div>
 
         <div className="grid gap-8 max-w-5xl mx-auto">
-          {cabanas.map((cabana) => {
-            const photos = photosOf(cabana)
-            const selected = selectedId === cabana.id
+          {cabanas.map((rawCabana) => {
+            const cabana = displayCabana(rawCabana)
+            const photos = photosOf(rawCabana)
+            const selected = selectedId === rawCabana.id
             return (
-              <article key={cabana.id} className={`bg-white border rounded-lg overflow-hidden transition-colors ${selected ? 'border-lago-500' : 'border-arena-100'}`}>
+              <article key={rawCabana.id} className={`bg-white border rounded-lg overflow-hidden transition-colors ${selected ? 'border-lago-500' : 'border-arena-100'}`}>
                 <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
                   <div className="grid grid-cols-3 gap-1 bg-arena-100 min-h-[280px]">
                     {photos.length > 0 ? photos.map((photo, index) => (
@@ -57,7 +59,7 @@ export default function CabanaBookingExperience({ cabanas }: { cabanas: Cabana[]
                       <div className="grid grid-cols-2 gap-3 my-6 text-sm">
                         <Spec icon={Users} label={`Hasta ${cabana.capacidad} personas`} />
                         <Spec icon={BedDouble} label={`${cabana.dormitorios ?? 1} dormitorio${Number(cabana.dormitorios ?? 1) === 1 ? '' : 's'}`} />
-                        <Spec icon={Bath} label={`${cabana.banos ?? 1} bano${Number(cabana.banos ?? 1) === 1 ? '' : 's'}`} />
+                        <Spec icon={Bath} label={`${cabana.banos ?? 1} baño${Number(cabana.banos ?? 1) === 1 ? '' : 's'}`} />
                         <Spec icon={Home} label={cabana.camas || `${cabana.min_noches ?? 1} noche min.`} />
                       </div>
 
@@ -75,8 +77,8 @@ export default function CabanaBookingExperience({ cabanas }: { cabanas: Cabana[]
                         <p className="font-display text-3xl text-lago-900">{formatCLP(Number(cabana.precio_noche ?? 0))}</p>
                         <p className="text-xs text-volcan-500">por noche · limpieza {formatCLP(Number(cabana.precio_limpieza ?? 0))}</p>
                       </div>
-                      <button onClick={() => selectCabana(cabana.id)} className={selected ? 'btn-outline' : 'btn-primary'}>
-                        {selected ? 'Seleccionada' : 'Reservar esta cabana'}
+                      <button onClick={() => selectCabana(rawCabana.id)} className={selected ? 'btn-outline' : 'btn-primary'}>
+                        Reservar esta cabaña
                       </button>
                     </div>
                   </div>
@@ -93,7 +95,7 @@ export default function CabanaBookingExperience({ cabanas }: { cabanas: Cabana[]
           <h2 className="font-display text-4xl text-lago-900 font-light">Solicita tu reserva</h2>
           <p className="text-volcan-500 text-sm mt-2">Elige fechas, revisa el total y envia la solicitud por WhatsApp.</p>
         </div>
-        <CabanaReservationForm key={selectedId} cabanas={cabanas} initialCabanaId={selectedId} />
+        <CabanaReservationForm key={selectedId} cabanas={cabanas.map(displayCabana)} initialCabanaId={selectedId} />
       </section>
     </div>
   )
@@ -103,7 +105,7 @@ function Spec({ icon: Icon, label }: { icon: any; label: string }) {
   return (
     <div className="flex items-center gap-2 rounded-lg bg-arena-50 px-3 py-2 text-volcan-600">
       <Icon size={15} className="text-lago-600" />
-      <span>{label}</span>
+      <span>{polishCabanaText(label)}</span>
     </div>
   )
 }

@@ -15,6 +15,26 @@ function num(value: unknown, fallback = 0) {
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
+function migrationError(error: any) {
+  const text = String(`${error?.message ?? ''} ${error?.details ?? ''} ${error?.hint ?? ''}`).toLowerCase()
+  if (
+    error?.code === 'PGRST204' ||
+    text.includes('schema cache') ||
+    text.includes('could not find') ||
+    text.includes('adjustment_amount') ||
+    text.includes('checkin_token')
+  ) {
+    return NextResponse.json(
+      {
+        error: 'Falta ejecutar o recargar la migracion integral. Ejecuta supabase/migrations/002_integrated_operations.sql y luego notify pgrst, reload schema.',
+        detail: error?.message,
+      },
+      { status: 409 }
+    )
+  }
+  return null
+}
+
 async function hasCabanaConflict(
   supabaseAdmin: any,
   cabanaId: string,
@@ -150,7 +170,7 @@ export async function POST(req: NextRequest) {
     .select('id')
     .single()
 
-  if (insertError) return NextResponse.json({ error: insertError.message }, { status: 400 })
+  if (insertError) return migrationError(insertError) ?? NextResponse.json({ error: insertError.message }, { status: 400 })
 
   return NextResponse.json({ ok: true, reservationId: data.id, holdAlert: payload.hold_alert })
 }
@@ -238,7 +258,7 @@ export async function PATCH(req: NextRequest) {
     .update(payload)
     .eq('id', body.id)
 
-  if (updateError) return NextResponse.json({ error: updateError.message }, { status: 400 })
+  if (updateError) return migrationError(updateError) ?? NextResponse.json({ error: updateError.message }, { status: 400 })
 
   return NextResponse.json({ ok: true, holdAlert: payload.hold_alert })
 }

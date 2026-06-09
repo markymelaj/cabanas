@@ -18,6 +18,7 @@ import { es } from 'date-fns/locale'
 import { AlertCircle, CheckCircle, ChevronLeft, ChevronRight, Loader2, TreePine } from 'lucide-react'
 import { calcCabanaPrice, formatCLP } from '@/lib/pricing'
 import type { Cabana } from '@/lib/supabase'
+import { displayCabana, polishCabanaText } from '@/lib/cabana-display'
 
 type Step = 'cabana' | 'dates' | 'details'
 
@@ -27,8 +28,9 @@ type Props = {
 }
 
 export default function CabanaReservationForm({ cabanas, initialCabanaId }: Props) {
+  const polishedCabanas = cabanas.map(displayCabana)
   const [step, setStep] = useState<Step>('cabana')
-  const [selectedCabanaId, setSelectedCabanaId] = useState(initialCabanaId || cabanas[0]?.id || '')
+  const [selectedCabanaId, setSelectedCabanaId] = useState(initialCabanaId || polishedCabanas[0]?.id || '')
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [occupiedDates, setOccupiedDates] = useState<string[]>([])
   const [checkIn, setCheckIn] = useState<Date | null>(null)
@@ -44,7 +46,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
   const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null)
   const [savedToAdmin, setSavedToAdmin] = useState(true)
 
-  const selectedCabana = cabanas.find((cabana) => cabana.id === selectedCabanaId) ?? cabanas[0]
+  const selectedCabana = polishedCabanas.find((cabana) => cabana.id === selectedCabanaId) ?? polishedCabanas[0]
   const occupied = useMemo(() => new Set(occupiedDates), [occupiedDates])
   const today = startOfDay(new Date())
 
@@ -187,7 +189,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
       <div className="bg-white rounded-2xl card-shadow p-8 text-center">
         <TreePine size={40} className="mx-auto text-lago-400 mb-4" />
         <h3 className="font-display text-3xl text-lago-900 mb-3">Reservas por WhatsApp</h3>
-        <p className="text-volcÃ¡n-500 text-sm mb-6">Estamos cargando las cabanas disponibles.</p>
+        <p className="text-volcÃ¡n-500 text-sm mb-6">Estamos cargando las cabañas disponibles.</p>
         <a href="https://wa.me/56957845292" className="btn-primary inline-flex">Consultar disponibilidad</a>
       </div>
     )
@@ -202,7 +204,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
           Te contactaremos en menos de 24 horas para confirmar disponibilidad y pago.
         </p>
         <div className="bg-lago-50 rounded-xl p-5 text-left space-y-2 text-sm mb-6">
-          <div className="flex justify-between"><span className="text-volcÃ¡n-500">Cabana</span><span>{selectedCabana.nombre}</span></div>
+          <div className="flex justify-between"><span className="text-volcÃ¡n-500">Cabaña</span><span>{polishCabanaText(selectedCabana.nombre)}</span></div>
           <div className="flex justify-between"><span className="text-volcÃ¡n-500">Check-in</span><span>{checkIn ? format(checkIn, "d 'de' MMMM yyyy", { locale: es }) : ''}</span></div>
           <div className="flex justify-between"><span className="text-volcÃ¡n-500">Check-out</span><span>{checkOut ? format(checkOut, "d 'de' MMMM yyyy", { locale: es }) : ''}</span></div>
           {pricing && (
@@ -251,7 +253,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
             key={item}
             className={`flex-1 py-3 text-center text-xs font-medium transition-colors border-b-2 ${step === item ? 'border-lago-600 text-lago-800' : 'border-transparent text-volcÃ¡n-400'}`}
           >
-            {item === 'cabana' ? 'Cabana' : item === 'dates' ? 'Fechas' : 'Tus datos'}
+            {item === 'cabana' ? 'Cabaña' : item === 'dates' ? 'Fechas' : 'Tus datos'}
           </div>
         ))}
       </div>
@@ -259,9 +261,9 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
       <div className="p-6">
         {step === 'cabana' && (
           <div>
-            <h3 className="font-display text-2xl text-lago-900 mb-5">Elige tu cabana</h3>
+            <h3 className="font-display text-2xl text-lago-900 mb-5">Elige tu cabaña</h3>
             <div className="grid md:grid-cols-2 gap-3 mb-6">
-              {cabanas.map((cabana) => (
+              {polishedCabanas.map((cabana) => (
                 <button
                   key={cabana.id}
                   onClick={() => {
@@ -274,7 +276,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
                   <p className="text-xs text-volcÃ¡n-500 mt-1">Hasta {cabana.capacidad} personas</p>
                   <p className="text-sm text-lago-700 mt-3">{formatCLP(Number(cabana.precio_noche))} / noche</p>
                   {Number(cabana.precio_huesped_extra ?? 0) > 0 && (
-                    <p className="text-xs text-volcÃ¡n-400 mt-1">Extra huesped: {formatCLP(Number(cabana.precio_huesped_extra))}</p>
+                    <p className="text-xs text-volcÃ¡n-400 mt-1">Huésped extra: {formatCLP(Number(cabana.precio_huesped_extra))}</p>
                   )}
                 </button>
               ))}
@@ -335,7 +337,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
             {loadingAvailability && <p className="text-xs text-volcÃ¡n-400 mt-3">Cargando disponibilidad...</p>}
 
             <div className="mt-6">
-              <label className="label-text">Huespedes</label>
+              <label className="label-text">Huéspedes</label>
               <div className="flex items-center gap-4 mt-2">
                 <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-9 h-9 rounded-full border border-volcÃ¡n-200 hover:bg-arena-100 text-lg">-</button>
                 <span className="text-2xl font-display text-lago-900 w-12 text-center">{guests}</span>
@@ -356,7 +358,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
                 </div>
                 {pricing.extraHuespedes > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-volcÃ¡n-500">Huespedes extra</span>
+                    <span className="text-volcÃ¡n-500">Huéspedes extra</span>
                     <span>{formatCLP(pricing.extraHuespedes)}</span>
                   </div>
                 )}

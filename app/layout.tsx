@@ -18,14 +18,14 @@ const body = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Cabañas Puerto Varas — Naturaleza y tranquilidad junto al lago',
-  description: 'Cabañas rústicas con vista a los volcanes y el lago Llanquihue. A 15 minutos del centro de Puerto Varas. Salón de eventos para hasta 200 personas.',
-  keywords: 'cabañas puerto varas, cabaña lago llanquihue, arriendo cabaña puerto varas, salón eventos puerto varas, volcán osorno',
+  title: 'Cabañas y Eventos — Reservas online',
+  description: 'Sistema de reservas para cabañas, eventos, pagos, disponibilidad y administración integral.',
+  keywords: 'reservas cabañas, salón de eventos, sistema de reservas, hospedaje, eventos',
   openGraph: {
-    title: 'Cabañas Puerto Varas',
-    description: 'Naturaleza y exclusividad junto al lago Llanquihue',
-    url: 'https://cabanaspuertovaras.cl',
-    siteName: 'Cabañas Puerto Varas',
+    title: 'Cabañas y Eventos',
+    description: 'Reservas online para hospedaje y eventos',
+    url: 'https://demo-reservas.vercel.app',
+    siteName: 'Cabañas y Eventos',
     locale: 'es_CL',
     type: 'website',
   },
