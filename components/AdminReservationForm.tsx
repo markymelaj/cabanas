@@ -113,7 +113,7 @@ export default function AdminReservationForm({ cabanas }: { cabanas: Cabana[] })
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Reservas cabanas</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Reservas cabañas</p>
         <h1 className="font-display text-3xl text-lago-900">Crear reserva manual</h1>
       </div>
 
@@ -122,12 +122,12 @@ export default function AdminReservationForm({ cabanas }: { cabanas: Cabana[] })
           <Section title="Estadia">
             <div className="grid gap-4 md:grid-cols-2">
               <label>
-                <span className="label-text">Cabana</span>
+                <span className="label-text">Cabaña</span>
                 <select value={form.cabana_id} onChange={(event) => update('cabana_id', event.target.value)} className="input-field">
                   {cabanas.map((cabana) => <option key={cabana.id} value={cabana.id}>{cabana.nombre}</option>)}
                 </select>
               </label>
-              <Field label="Huespedes" type="number" value={form.guests} onChange={(value) => update('guests', value)} />
+              <Field label="Huéspedes" type="number" value={form.guests} onChange={(value) => update('guests', value)} />
               <Field label="Check-in" type="date" value={form.check_in} onChange={(value) => update('check_in', value)} />
               <Field label="Check-out" type="date" value={form.check_out} onChange={(value) => update('check_out', value)} />
               <label>
@@ -144,7 +144,7 @@ export default function AdminReservationForm({ cabanas }: { cabanas: Cabana[] })
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Nombre" value={form.nombre} onChange={(value) => update('nombre', value)} />
               <Field label="Email" type="email" value={form.email} onChange={(value) => update('email', value)} />
-              <Field label="Telefono" value={form.telefono} onChange={(value) => update('telefono', value)} />
+              <Field label="Teléfono" value={form.telefono} onChange={(value) => update('telefono', value)} />
               <Field label="Documento" value={form.documento} onChange={(value) => update('documento', value)} />
               <label className="md:col-span-2">
                 <span className="label-text">Direccion</span>
@@ -157,8 +157,8 @@ export default function AdminReservationForm({ cabanas }: { cabanas: Cabana[] })
             <div className="grid gap-4 md:grid-cols-3">
               <Field label="Precio noche" type="number" value={form.precio_noche} onChange={(value) => update('precio_noche', value)} />
               <Field label="Limpieza" type="number" value={form.precio_limpieza} onChange={(value) => update('precio_limpieza', value)} />
-              <Field label="Huespedes base" type="number" value={form.base_huespedes} onChange={(value) => update('base_huespedes', value)} />
-              <Field label="Extra por huesped" type="number" value={form.extra_guest_fee} onChange={(value) => update('extra_guest_fee', value)} />
+              <Field label="Huéspedes base" type="number" value={form.base_huespedes} onChange={(value) => update('base_huespedes', value)} />
+              <Field label="Extra por huésped" type="number" value={form.extra_guest_fee} onChange={(value) => update('extra_guest_fee', value)} />
               <Field label="Ajuste +/-" type="number" value={form.adjustment_amount} onChange={(value) => update('adjustment_amount', value)} />
               <Field label="Total manual" type="number" value={form.total_amount} onChange={(value) => update('total_amount', value)} />
               <Field label="Anticipo" type="number" value={form.anticipo_monto} onChange={(value) => update('anticipo_monto', value)} />
@@ -180,11 +180,11 @@ export default function AdminReservationForm({ cabanas }: { cabanas: Cabana[] })
         </div>
 
         <div className="rounded-lg border border-arena-100 bg-white p-5 h-fit">
-          <h2 className="font-display text-2xl text-lago-900">{selectedCabana?.nombre ?? 'Cabana'}</h2>
+          <h2 className="font-display text-2xl text-lago-900">{selectedCabana?.nombre ?? 'Cabaña'}</h2>
           <div className="mt-4 space-y-2 text-sm">
             <Line label="Noches" value={pricing?.noches ?? '-'} />
             <Line label="Subtotal noches" value={pricing ? formatCLP(pricing.subtotalNoches) : '-'} />
-            <Line label="Extra huespedes" value={pricing ? formatCLP(pricing.extraHuespedes) : '-'} />
+            <Line label="Extra huéspedes" value={pricing ? formatCLP(pricing.extraHuespedes) : '-'} />
             <Line label="Limpieza" value={pricing ? formatCLP(pricing.limpieza) : '-'} />
             <Line label="Ajuste" value={pricing ? formatCLP(pricing.ajuste) : '-'} />
           </div>

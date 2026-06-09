@@ -38,12 +38,12 @@ export async function POST(req: NextRequest) {
     }
 
     if (!cabana) {
-      return NextResponse.json({ error: 'Cabana no encontrada' }, { status: 404 })
+      return NextResponse.json({ error: 'Cabaña no encontrada' }, { status: 404 })
     }
 
     const guestCount = Number(guests)
     if (guestCount < 1 || guestCount > Number(cabana.capacidad)) {
-      return NextResponse.json({ error: 'Cantidad de huespedes invalida' }, { status: 400 })
+      return NextResponse.json({ error: 'Cantidad de huéspedes inválida' }, { status: 400 })
     }
 
     const pricing = calcCabanaPrice(
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     )
 
     if (pricing.noches < 1) {
-      return NextResponse.json({ error: 'Fechas invalidas' }, { status: 400 })
+      return NextResponse.json({ error: 'Fechas inválidas' }, { status: 400 })
     }
 
     const reservationId = crypto.randomUUID()
@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
         nombre: client.nombre,
         email: client.email,
         telefono: client.telefono,
-        detail: `Cabana: ${cabana.nombre}\nCheck-in: ${checkIn}\nCheck-out: ${checkOut}\nHuespedes: ${guestCount}\nTotal: $${pricing.total.toLocaleString('es-CL')}\nAnticipo sugerido: $${pricing.anticipo.toLocaleString('es-CL')}`,
+        detail: `Cabaña: ${cabana.nombre}\nCheck-in: ${checkIn}\nCheck-out: ${checkOut}\nHuéspedes: ${guestCount}\nTotal: $${pricing.total.toLocaleString('es-CL')}\nAnticipo sugerido: $${pricing.anticipo.toLocaleString('es-CL')}`,
         reservationId,
       }).catch(console.error)
     }

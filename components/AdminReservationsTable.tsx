@@ -74,7 +74,7 @@ export default function AdminReservationsTable({ reservas }: Props) {
   const cabanaOptions = useMemo(() => {
     const names = new Set<string>()
     reservas.forEach((row) => {
-      const name = row.cabana_nombre ?? row.notas ?? 'Cabana solicitada'
+      const name = row.cabana_nombre ?? row.notas ?? 'Cabaña solicitada'
       names.add(name)
     })
     return Array.from(names).sort((a, b) => a.localeCompare(b, 'es'))
@@ -83,7 +83,7 @@ export default function AdminReservationsTable({ reservas }: Props) {
   const filtered = useMemo(() => {
     const q = normalize(query)
     const rows = reservas.filter((row) => {
-      const cabanaName = row.cabana_nombre ?? row.notas ?? 'Cabana solicitada'
+      const cabanaName = row.cabana_nombre ?? row.notas ?? 'Cabaña solicitada'
       const haystack = [
         row.id,
         shortId(row.id),
@@ -136,8 +136,8 @@ export default function AdminReservationsTable({ reservas }: Props) {
     <div className="space-y-5">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Cabanas</p>
-          <h1 className="font-display text-3xl text-lago-900">Reservas de cabanas</h1>
+          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Cabañas</p>
+          <h1 className="font-display text-3xl text-lago-900">Reservas de cabañas</h1>
         </div>
         <div className="flex items-center gap-3">
           <p className="text-sm text-volcan-500">{filtered.length} visibles de {reservas.length} solicitudes</p>
@@ -160,7 +160,7 @@ export default function AdminReservationsTable({ reservas }: Props) {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar por nombre, telefono, email o codigo"
+              placeholder="Buscar por nombre, teléfono, email o código"
               className="input-field pl-9"
             />
           </label>
@@ -180,15 +180,15 @@ export default function AdminReservationsTable({ reservas }: Props) {
             value={stayDay}
             onChange={(event) => setStayDay(event.target.value)}
             className="input-field"
-            aria-label="Filtrar por dia de estadia"
+            aria-label="Filtrar por día de estadía"
           />
           <select value={cabana} onChange={(event) => setCabana(event.target.value)} className="input-field">
-            <option value="">Todas las cabanas</option>
+            <option value="">Todas las cabañas</option>
             {cabanaOptions.map((name) => <option key={name} value={name}>{name}</option>)}
           </select>
           <select value={sort} onChange={(event) => setSort(event.target.value)} className="input-field">
             <option value="newest">Nuevas primero</option>
-            <option value="checkin">Check-in proximo</option>
+            <option value="checkin">Check-in próximo</option>
             <option value="status">Estado</option>
             <option value="total">Mayor monto</option>
           </select>
@@ -204,7 +204,7 @@ export default function AdminReservationsTable({ reservas }: Props) {
             <thead>
               <tr className="border-b border-arena-100 bg-arena-50">
                 <Th>Solicitud</Th>
-                <Th>Estadia</Th>
+                <Th>Estadía</Th>
                 <Th>Contacto</Th>
                 <Th>Monto</Th>
                 <Th>Seguimiento</Th>
@@ -214,7 +214,7 @@ export default function AdminReservationsTable({ reservas }: Props) {
             <tbody className="divide-y divide-arena-100">
               {filtered.map((row) => {
                 const st = STATUS_LABELS[row.status] ?? STATUS_LABELS.pending
-                const cabanaName = row.cabana_nombre ?? row.notas ?? 'Cabana solicitada'
+                const cabanaName = row.cabana_nombre ?? row.notas ?? 'Cabaña solicitada'
                 return (
                   <tr key={row.id} className="align-top hover:bg-arena-50/70 transition-colors">
                     <td className="px-5 py-4">
@@ -227,11 +227,11 @@ export default function AdminReservationsTable({ reservas }: Props) {
                     <td className="px-4 py-4">
                       <p className="font-medium text-lago-800">{cabanaName}</p>
                       <p className="text-xs text-volcan-500 mt-1">{fmtDate(row.check_in)} a {fmtDate(row.check_out)}</p>
-                      <p className="text-xs text-volcan-400 mt-1">{row.noches} noche{row.noches === 1 ? '' : 's'} · {row.guests} huespedes</p>
+                      <p className="text-xs text-volcan-400 mt-1">{row.noches} noche{row.noches === 1 ? '' : 's'} · {row.guests} huéspedes</p>
                     </td>
                     <td className="px-4 py-4">
                       <p className="text-lago-900">{row.client_email ?? 'Sin email'}</p>
-                      <p className="text-xs text-volcan-500 mt-1">{row.client_telefono ?? 'Sin telefono'}</p>
+                      <p className="text-xs text-volcan-500 mt-1">{row.client_telefono ?? 'Sin teléfono'}</p>
                     </td>
                     <td className="px-4 py-4">
                       <p className="font-medium text-lago-900">{formatCLP(row.total_amount ?? 0)}</p>

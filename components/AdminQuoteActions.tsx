@@ -35,7 +35,7 @@ export default function AdminQuoteActions({
 
   const waLink = telefono
     ? buildWhatsAppLink(
-        `Hola ${nombre || ''}, te contactamos de Cabanas Puerto Varas por tu cotizacion del salon de eventos. Tienes unos minutos para conversar?`,
+        `Hola ${nombre || ''}, te contactamos por tu cotización del salón de eventos. ¿Tienes unos minutos para conversar?`,
         telefono
       )
     : null

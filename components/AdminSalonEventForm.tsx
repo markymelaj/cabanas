@@ -134,7 +134,7 @@ export default function AdminSalonEventForm({ settings, services }: { settings: 
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Nombre" value={form.nombre} onChange={(value) => setForm({ ...form, nombre: value })} />
               <Field label="Email" type="email" value={form.email} onChange={(value) => setForm({ ...form, email: value })} />
-              <Field label="Telefono" value={form.telefono} onChange={(value) => setForm({ ...form, telefono: value })} />
+              <Field label="Teléfono" value={form.telefono} onChange={(value) => setForm({ ...form, telefono: value })} />
               <Field label="Documento" value={form.documento} onChange={(value) => setForm({ ...form, documento: value })} />
               <label className="md:col-span-2">
                 <span className="label-text">Direccion</span>

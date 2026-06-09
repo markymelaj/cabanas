@@ -148,7 +148,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
   async function handleSubmit() {
     if (!selectedCabana || !checkIn || !checkOut || !pricing) return
     if (!form.nombre || !form.email || !form.telefono) {
-      setError('Completa nombre, email y telefono.')
+      setError('Completa nombre, email y teléfono.')
       return
     }
 
@@ -238,7 +238,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
         </div>
         {!savedToAdmin && (
           <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-3 mt-4">
-            La solicitud quedo lista para WhatsApp. Tambien la revisaremos internamente para seguimiento.
+            La solicitud quedó lista para WhatsApp. También la revisaremos internamente para seguimiento.
           </p>
         )}
       </div>
@@ -388,10 +388,10 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
             </button>
 
             <div className="bg-arena-50 rounded-xl p-4 mb-6 text-sm space-y-1">
-              <div className="flex justify-between"><span className="text-volcÃ¡n-500">Cabana</span><span>{selectedCabana.nombre}</span></div>
+              <div className="flex justify-between"><span className="text-volcÃ¡n-500">Cabaña</span><span>{selectedCabana.nombre}</span></div>
               <div className="flex justify-between"><span className="text-volcÃ¡n-500">Check-in</span><span>{checkIn ? format(checkIn, "d 'de' MMMM yyyy", { locale: es }) : '-'}</span></div>
               <div className="flex justify-between"><span className="text-volcÃ¡n-500">Check-out</span><span>{checkOut ? format(checkOut, "d 'de' MMMM yyyy", { locale: es }) : '-'}</span></div>
-              <div className="flex justify-between"><span className="text-volcÃ¡n-500">Huespedes</span><span>{guests}</span></div>
+              <div className="flex justify-between"><span className="text-volcÃ¡n-500">Huéspedes</span><span>{guests}</span></div>
               {pricing && (
                 <div className="flex justify-between font-semibold pt-1 border-t border-arena-200">
                   <span>Total estimado</span>
@@ -410,7 +410,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
                 <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="input-field" />
               </div>
               <div>
-                <label className="label-text">Telefono / WhatsApp</label>
+                <label className="label-text">Teléfono / WhatsApp</label>
                 <input type="tel" value={form.telefono} onChange={(e) => setForm({ ...form, telefono: e.target.value })} className="input-field" />
               </div>
             </div>

@@ -18,7 +18,7 @@ export default async function CheckInPage({ params }: { params: { token: string 
       <main className="min-h-screen bg-arena-50 px-6 py-20">
         <div className="mx-auto max-w-xl bg-white border border-arena-100 rounded-lg p-8 text-center">
           <h1 className="font-display text-3xl text-lago-900">Link no disponible</h1>
-          <p className="text-sm text-volcan-500 mt-2">Contactanos por WhatsApp para revisar tu reserva.</p>
+          <p className="text-sm text-volcan-500 mt-2">Contáctanos por WhatsApp para revisar tu reserva.</p>
         </div>
       </main>
     )
@@ -32,15 +32,15 @@ export default async function CheckInPage({ params }: { params: { token: string 
         <div className="mb-6">
           <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Check-in online</p>
           <h1 className="font-display text-4xl text-lago-900">Completa tus datos de llegada</h1>
-          <p className="text-sm text-volcan-500 mt-2">Esta informacion ayuda a agilizar tu ingreso y confirmar los datos de tu estadia.</p>
+          <p className="text-sm text-volcan-500 mt-2">Esta información ayuda a agilizar tu ingreso y confirmar los datos de tu estadía.</p>
         </div>
 
         <div className="bg-lago-950 text-white rounded-lg p-5 mb-5">
-          <p className="font-display text-2xl">{reservation.cabana_nombre ?? 'Cabana'}</p>
+          <p className="font-display text-2xl">{reservation.cabana_nombre ?? 'Cabaña'}</p>
           <div className="mt-3 grid gap-2 text-sm text-lago-100 md:grid-cols-3">
             <span>Check-in: {fmt(reservation.check_in)}</span>
             <span>Check-out: {fmt(reservation.check_out)}</span>
-            <span>{reservation.guests} huespedes</span>
+            <span>{reservation.guests} huéspedes</span>
           </div>
         </div>
 

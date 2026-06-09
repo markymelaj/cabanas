@@ -41,7 +41,7 @@ export default function AdminReservationActions({
 
   const waLink = telefono
     ? buildWhatsAppLink(
-        `Hola ${nombre || ''}, te contactamos de Cabanas Puerto Varas por tu solicitud para ${cabanaNombre || 'cabana'}${checkIn && checkOut ? ` del ${checkIn} al ${checkOut}` : ''}. Tienes unos minutos para confirmar detalles?`,
+        `Hola ${nombre || ''}, te contactamos por tu solicitud para ${cabanaNombre || 'cabaña'}${checkIn && checkOut ? ` del ${checkIn} al ${checkOut}` : ''}. ¿Tienes unos minutos para confirmar detalles?`,
         telefono
       )
     : null

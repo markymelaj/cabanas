@@ -10,7 +10,7 @@ export async function POST(req: NextRequest, { params }: { params: { token: stri
   const accepted = Boolean(body.accepted)
 
   if (!accepted) return NextResponse.json({ error: 'Debes aceptar las condiciones.' }, { status: 400 })
-  if (guests.length === 0) return NextResponse.json({ error: 'Ingresa al menos un huesped.' }, { status: 400 })
+  if (guests.length === 0) return NextResponse.json({ error: 'Ingresa al menos un huésped.' }, { status: 400 })
 
   const supabaseAdmin = getSupabaseAdmin()
   const { data: reservation, error: lookupError } = await supabaseAdmin

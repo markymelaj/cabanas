@@ -91,9 +91,9 @@ export default function CabanaBookingExperience({ cabanas }: { cabanas: Cabana[]
 
       <section ref={formRef} className="max-w-2xl mx-auto scroll-mt-24">
         <div className="text-center mb-8">
-          <p className="text-arena-600 font-display italic text-lg mb-2">Reserva tu estadia</p>
+          <p className="text-arena-600 font-display italic text-lg mb-2">Reserva tu estadía</p>
           <h2 className="font-display text-4xl text-lago-900 font-light">Solicita tu reserva</h2>
-          <p className="text-volcan-500 text-sm mt-2">Elige fechas, revisa el total y envia la solicitud por WhatsApp.</p>
+          <p className="text-volcan-500 text-sm mt-2">Elige fechas, revisa el total y envía la solicitud por WhatsApp.</p>
         </div>
         <CabanaReservationForm key={selectedId} cabanas={cabanas.map(displayCabana)} initialCabanaId={selectedId} />
       </section>

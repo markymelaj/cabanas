@@ -6,6 +6,7 @@ import { Loader2, Printer } from 'lucide-react'
 import { formatCLP } from '@/lib/pricing'
 import AdminPaymentForm from '@/components/AdminPaymentForm'
 import AdminNotesPanel from '@/components/AdminNotesPanel'
+import AdminAIAssistant from '@/components/AdminAIAssistant'
 
 type Service = {
   id: string
@@ -114,7 +115,7 @@ export default function AdminSalonDetail({
     <div className="space-y-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Ficha salon</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Ficha salón</p>
           <h1 className="font-display text-3xl text-lago-900">{client?.nombre ?? 'Evento'}</h1>
           <p className="text-sm text-volcan-500">#{event.id.slice(0, 8).toUpperCase()} · {event.tipo_evento}</p>
         </div>
@@ -201,6 +202,8 @@ export default function AdminSalonDetail({
         </div>
 
         <div className="space-y-5">
+          <AdminAIAssistant salonQuoteId={event.id} />
+
           <div className="rounded-lg border border-arena-100 bg-white p-5 print:hidden">
             <h3 className="font-display text-xl text-lago-900 mb-3">Acciones</h3>
             <div className="grid gap-2">
@@ -215,7 +218,7 @@ export default function AdminSalonDetail({
             <div className="space-y-1 text-sm">
               <Line label="Nombre" value={client?.nombre ?? '-'} />
               <Line label="Email" value={client?.email ?? '-'} />
-              <Line label="Telefono" value={client?.telefono ?? '-'} />
+              <Line label="Teléfono" value={client?.telefono ?? '-'} />
             </div>
           </div>
           <AdminPaymentForm salonQuoteId={event.id} clientId={event.client_id} />

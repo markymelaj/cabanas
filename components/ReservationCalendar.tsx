@@ -126,13 +126,13 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
         </p>
         {pricing && (
           <div className="bg-lago-50 rounded-xl p-5 text-left space-y-2 text-sm mb-6">
-            <div className="flex justify-between"><span className="text-volcan-500">Cabana</span><span>{cabana.nombre}</span></div>
+            <div className="flex justify-between"><span className="text-volcan-500">Cabaña</span><span>{cabana.nombre}</span></div>
             <div className="flex justify-between"><span className="text-volcan-500">Total estimado</span><span>{formatCLP(pricing.total)}</span></div>
             <div className="flex justify-between"><span className="text-volcan-500">Anticipo sugerido</span><span>{formatCLP(pricing.anticipo)}</span></div>
             {reservationId && <p className="text-xs text-volcan-400">Solicitud: {reservationId.slice(0, 8).toUpperCase()}</p>}
           </div>
         )}
-        <a href="/cabanas" className="btn-outline text-sm">Volver a cabanas</a>
+        <a href="/cabanas" className="btn-outline text-sm">Volver a cabañas</a>
       </div>
     )
   }

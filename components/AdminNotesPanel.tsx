@@ -52,7 +52,7 @@ export default function AdminNotesPanel({
       <h3 className="font-display text-xl text-lago-900 mb-4">Seguimiento</h3>
       <div className="space-y-3 mb-4">
         {notes.length === 0 ? (
-          <p className="text-sm text-volcan-500">Sin notas todavia.</p>
+          <p className="text-sm text-volcan-500">Sin notas todavía.</p>
         ) : notes.map((item) => (
           <div key={item.id} className="rounded-lg bg-arena-50 p-3">
             <p className="text-sm text-lago-900 whitespace-pre-wrap">{item.note}</p>

@@ -149,7 +149,7 @@ export default function SalonQuoteFormV2({ settings, services }: { settings: Set
       <div className="grid gap-4 md:grid-cols-2">
         <Field label="Nombre" value={form.nombre} onChange={(value) => setForm({ ...form, nombre: value })} />
         <Field label="Email" type="email" value={form.email} onChange={(value) => setForm({ ...form, email: value })} />
-        <Field label="Telefono / WhatsApp" value={form.telefono} onChange={(value) => setForm({ ...form, telefono: value })} />
+        <Field label="Teléfono / WhatsApp" value={form.telefono} onChange={(value) => setForm({ ...form, telefono: value })} />
         <label className="md:col-span-2">
           <span className="label-text">Mensaje</span>
           <textarea value={form.mensaje} onChange={(event) => setForm({ ...form, mensaje: event.target.value })} className="input-field min-h-24" />
@@ -158,7 +158,7 @@ export default function SalonQuoteFormV2({ settings, services }: { settings: Set
 
       {error && <p className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</p>}
       <button onClick={submit} disabled={loading} className="btn-primary w-full disabled:opacity-50">
-        {loading ? <><Loader2 size={16} className="animate-spin" />Enviando</> : 'Solicitar cotizacion'}
+        {loading ? <><Loader2 size={16} className="animate-spin" />Enviando</> : 'Solicitar cotización'}
       </button>
     </div>
   )

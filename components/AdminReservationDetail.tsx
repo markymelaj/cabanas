@@ -7,6 +7,7 @@ import type { Cabana } from '@/lib/supabase'
 import { calcCabanaPrice, formatCLP } from '@/lib/pricing'
 import AdminPaymentForm from '@/components/AdminPaymentForm'
 import AdminNotesPanel from '@/components/AdminNotesPanel'
+import AdminAIAssistant from '@/components/AdminAIAssistant'
 
 type Payment = {
   id: string
@@ -128,7 +129,7 @@ export default function AdminReservationDetail({
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Ficha reserva</p>
           <h1 className="font-display text-3xl text-lago-900">{reservation.client_nombre ?? 'Sin nombre'}</h1>
-          <p className="text-sm text-volcan-500">#{reservation.id.slice(0, 8).toUpperCase()} · {reservation.cabana_nombre ?? 'Cabana'}</p>
+          <p className="text-sm text-volcan-500">#{reservation.id.slice(0, 8).toUpperCase()} · {reservation.cabana_nombre ?? 'Cabaña'}</p>
         </div>
         <div className="flex flex-wrap gap-2 print:hidden">
           <button onClick={() => window.print()} className="btn-outline px-4 py-2 text-xs"><Printer size={15} />Imprimir</button>
@@ -145,7 +146,7 @@ export default function AdminReservationDetail({
 
       {reservation.hold_alert && (
         <p className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-          Esta reserva esta en standby o tiene alerta de bloqueo. Confirma solo si ya validaste disponibilidad.
+          Esta reserva está en standby o tiene alerta de bloqueo. Confirma solo si ya validaste disponibilidad.
         </p>
       )}
 
@@ -154,14 +155,14 @@ export default function AdminReservationDetail({
           <Section title="Reserva">
             <div className="grid gap-4 md:grid-cols-3">
               <label>
-                <span className="label-text">Cabana</span>
+                <span className="label-text">Cabaña</span>
                 <select value={form.cabana_id} onChange={(event) => update('cabana_id', event.target.value)} className="input-field">
                   {cabanas.map((cabana) => <option key={cabana.id} value={cabana.id}>{cabana.nombre}</option>)}
                 </select>
               </label>
               <Field label="Check-in" type="date" value={form.check_in} onChange={(value) => update('check_in', value)} />
               <Field label="Check-out" type="date" value={form.check_out} onChange={(value) => update('check_out', value)} />
-              <Field label="Huespedes" type="number" value={form.guests} onChange={(value) => update('guests', value)} />
+              <Field label="Huéspedes" type="number" value={form.guests} onChange={(value) => update('guests', value)} />
               <label>
                 <span className="label-text">Estado</span>
                 <select value={form.status} onChange={(event) => update('status', event.target.value)} className="input-field">
@@ -184,8 +185,8 @@ export default function AdminReservationDetail({
             <div className="grid gap-4 md:grid-cols-3">
               <Field label="Precio noche" type="number" value={form.precio_noche} onChange={(value) => update('precio_noche', value)} />
               <Field label="Limpieza" type="number" value={form.precio_limpieza} onChange={(value) => update('precio_limpieza', value)} />
-              <Field label="Huespedes base" type="number" value={form.base_guests} onChange={(value) => update('base_guests', value)} />
-              <Field label="Extra huesped" type="number" value={form.extra_guest_fee} onChange={(value) => update('extra_guest_fee', value)} />
+              <Field label="Huéspedes base" type="number" value={form.base_guests} onChange={(value) => update('base_guests', value)} />
+              <Field label="Extra huésped" type="number" value={form.extra_guest_fee} onChange={(value) => update('extra_guest_fee', value)} />
               <Field label="Ajuste +/-" type="number" value={form.adjustment_amount} onChange={(value) => update('adjustment_amount', value)} />
               <Field label="Total" type="number" value={form.total_amount} onChange={(value) => update('total_amount', value)} />
               <Field label="Anticipo" type="number" value={form.anticipo_monto} onChange={(value) => update('anticipo_monto', value)} />
@@ -204,7 +205,7 @@ export default function AdminReservationDetail({
             <div className="rounded-lg bg-arena-50 p-4 text-sm">
               <Line label="Noches" value={pricing.noches} />
               <Line label="Subtotal" value={formatCLP(pricing.subtotalNoches)} />
-              <Line label="Extra huespedes" value={formatCLP(pricing.extraHuespedes)} />
+              <Line label="Extra huéspedes" value={formatCLP(pricing.extraHuespedes)} />
               <Line label="Limpieza" value={formatCLP(pricing.limpieza)} />
               <Line label="Ajuste" value={formatCLP(pricing.ajuste)} />
             </div>
@@ -217,6 +218,8 @@ export default function AdminReservationDetail({
         </div>
 
         <div className="space-y-5">
+          <AdminAIAssistant reservationId={reservation.id} />
+
           <div className="rounded-lg border border-arena-100 bg-white p-5 print:hidden">
             <h3 className="font-display text-xl text-lago-900 mb-3">Acciones</h3>
             <div className="grid gap-2">
@@ -232,7 +235,7 @@ export default function AdminReservationDetail({
             <div className="space-y-1 text-sm">
               <Line label="Nombre" value={reservation.client_nombre ?? '-'} />
               <Line label="Email" value={reservation.client_email ?? '-'} />
-              <Line label="Telefono" value={reservation.client_telefono ?? '-'} />
+              <Line label="Teléfono" value={reservation.client_telefono ?? '-'} />
               <Line label="Documento" value={reservation.client_documento ?? '-'} />
             </div>
           </div>

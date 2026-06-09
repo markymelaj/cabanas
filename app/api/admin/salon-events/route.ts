@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
   const status = body.status || 'reservada'
   const conflict = await hasSalonConflict(supabaseAdmin, body.fecha_evento)
   if (conflict && status === 'confirmada') {
-    return NextResponse.json({ error: 'El salon ya tiene bloqueo o evento confirmado ese dia.' }, { status: 409 })
+    return NextResponse.json({ error: 'El salón ya tiene bloqueo o evento confirmado ese día.' }, { status: 409 })
   }
 
   const clientId = await getOrCreateClientId(supabaseAdmin!, {
@@ -143,7 +143,7 @@ export async function PATCH(req: NextRequest) {
   const nextStatus = body.status ?? current.status
   const conflict = await hasSalonConflict(supabaseAdmin, nextFecha, body.id)
   if (conflict && nextStatus === 'confirmada') {
-    return NextResponse.json({ error: 'El salon ya tiene bloqueo o evento confirmado ese dia.' }, { status: 409 })
+    return NextResponse.json({ error: 'El salón ya tiene bloqueo o evento confirmado ese día.' }, { status: 409 })
   }
 
   const pricing = await calcSalonTotal(supabaseAdmin, {

@@ -39,7 +39,7 @@ async function DisponibilidadContent() {
   return (
     <div>
       <h1 className="font-display text-3xl text-lago-900 mb-2">Gestion de disponibilidad</h1>
-      <p className="text-volcan-500 text-sm mb-8">Bloquea fechas manualmente para cabanas o el salon de eventos.</p>
+      <p className="text-volcan-500 text-sm mb-8">Bloquea fechas manualmente para cabañas o el salón de eventos.</p>
       <AdminBlockDates cabanas={cabanas} blocked={blocked} />
     </div>
   )

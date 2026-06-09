@@ -85,7 +85,7 @@ export default function AdminCabanasManager({ cabanas }: { cabanas: Cabana[] }) 
         body: JSON.stringify(form),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'No se pudo guardar la cabana.')
+      if (!res.ok) throw new Error(data.error || 'No se pudo guardar la cabaña.')
       setForm(emptyForm)
       router.refresh()
     } catch (err: any) {
@@ -99,11 +99,11 @@ export default function AdminCabanasManager({ cabanas }: { cabanas: Cabana[] }) 
     <div className="space-y-6">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Catalogo</p>
-          <h1 className="font-display text-3xl text-lago-900">Cabanas</h1>
+          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Catálogo</p>
+          <h1 className="font-display text-3xl text-lago-900">Cabañas</h1>
         </div>
         <button onClick={() => setForm(emptyForm)} className="btn-outline px-4 py-2 text-xs">
-          <Plus size={15} />Nueva cabana
+          <Plus size={15} />Nueva cabaña
         </button>
       </div>
 
@@ -137,21 +137,21 @@ export default function AdminCabanasManager({ cabanas }: { cabanas: Cabana[] }) 
         </div>
 
         <div className="rounded-lg border border-arena-100 bg-white p-5">
-          <h2 className="font-display text-2xl text-lago-900 mb-5">{form.id ? 'Editar cabana' : 'Nueva cabana'}</h2>
+          <h2 className="font-display text-2xl text-lago-900 mb-5">{form.id ? 'Editar cabaña' : 'Nueva cabaña'}</h2>
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Nombre" value={form.nombre} onChange={(value) => update('nombre', value)} />
             <Field label="Slug" value={form.slug} onChange={(value) => update('slug', value)} />
             <Field label="Subtitulo" value={form.subtitulo} onChange={(value) => update('subtitulo', value)} />
             <Field label="Camas" value={form.camas} onChange={(value) => update('camas', value)} />
             <Field label="Capacidad" type="number" value={form.capacidad} onChange={(value) => update('capacidad', value)} />
-            <Field label="Huespedes base" type="number" value={form.base_huespedes} onChange={(value) => update('base_huespedes', value)} />
+            <Field label="Huéspedes base" type="number" value={form.base_huespedes} onChange={(value) => update('base_huespedes', value)} />
             <Field label="Dormitorios" type="number" value={form.dormitorios} onChange={(value) => update('dormitorios', value)} />
-            <Field label="Banos" type="number" value={form.banos} onChange={(value) => update('banos', value)} />
+            <Field label="Baños" type="number" value={form.banos} onChange={(value) => update('banos', value)} />
             <Field label="M2" type="number" value={form.metros_cuadrados} onChange={(value) => update('metros_cuadrados', value)} />
             <Field label="Min noches" type="number" value={form.min_noches} onChange={(value) => update('min_noches', value)} />
             <Field label="Precio noche" type="number" value={form.precio_noche} onChange={(value) => update('precio_noche', value)} />
             <Field label="Limpieza" type="number" value={form.precio_limpieza} onChange={(value) => update('precio_limpieza', value)} />
-            <Field label="Huesped extra" type="number" value={form.precio_huesped_extra} onChange={(value) => update('precio_huesped_extra', value)} />
+            <Field label="Huésped extra" type="number" value={form.precio_huesped_extra} onChange={(value) => update('precio_huesped_extra', value)} />
             <Field label="Orden" type="number" value={form.orden} onChange={(value) => update('orden', value)} />
             <Field label="Check-in" value={form.check_in_hora} onChange={(value) => update('check_in_hora', value)} />
             <Field label="Check-out" value={form.check_out_hora} onChange={(value) => update('check_out_hora', value)} />
@@ -177,7 +177,7 @@ export default function AdminCabanasManager({ cabanas }: { cabanas: Cabana[] }) 
 
           {error && <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</p>}
           <button onClick={submit} disabled={loading || !form.nombre} className="btn-primary mt-5 w-full disabled:opacity-50">
-            {loading ? <><Loader2 size={16} className="animate-spin" />Guardando</> : 'Guardar cabana'}
+            {loading ? <><Loader2 size={16} className="animate-spin" />Guardando</> : 'Guardar cabaña'}
           </button>
         </div>
       </div>

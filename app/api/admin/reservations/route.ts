@@ -109,12 +109,12 @@ export async function POST(req: NextRequest) {
     .eq('id', body.cabana_id)
     .single()
 
-  if (cabanaError || !cabana) return NextResponse.json({ error: 'Cabana no encontrada' }, { status: 404 })
+  if (cabanaError || !cabana) return NextResponse.json({ error: 'Cabaña no encontrada' }, { status: 404 })
 
   const status = body.status || 'standby'
   const conflict = await hasCabanaConflict(supabaseAdmin, body.cabana_id, body.check_in, body.check_out)
   if (conflict && status === 'confirmed') {
-    return NextResponse.json({ error: 'La cabana ya tiene bloqueo o reserva confirmada en ese rango.' }, { status: 409 })
+    return NextResponse.json({ error: 'La cabaña ya tiene bloqueo o reserva confirmada en ese rango.' }, { status: 409 })
   }
 
   const clientId = await getOrCreateClientId(supabaseAdmin!, {
@@ -209,7 +209,7 @@ export async function PATCH(req: NextRequest) {
     : false
 
   if (conflict && next.status === 'confirmed') {
-    return NextResponse.json({ error: 'La cabana ya tiene bloqueo o reserva confirmada en ese rango.' }, { status: 409 })
+    return NextResponse.json({ error: 'La cabaña ya tiene bloqueo o reserva confirmada en ese rango.' }, { status: 409 })
   }
 
   const pricing = calcCabanaPrice(

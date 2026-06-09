@@ -74,8 +74,8 @@ async function DashboardContent() {
           <h1 className="font-display text-3xl text-lago-900">Dashboard</h1>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin/reservas" className="btn-outline px-4 py-2 text-xs">Reservas cabanas</Link>
-          <Link href="/admin/salon" className="btn-outline px-4 py-2 text-xs">Salon</Link>
+          <Link href="/admin/reservas" className="btn-outline px-4 py-2 text-xs">Reservas cabañas</Link>
+          <Link href="/admin/salon" className="btn-outline px-4 py-2 text-xs">Salón</Link>
         </div>
       </div>
 
@@ -97,14 +97,14 @@ async function DashboardContent() {
           <Link href="/admin/reservas" className="text-sm text-lago-600 hover:text-lago-800 transition-colors">Ver todas</Link>
         </div>
         {stats.proximas.length === 0 ? (
-          <p className="text-volcan-500 text-sm p-6">No hay reservas proximas.</p>
+          <p className="text-volcan-500 text-sm p-6">No hay reservas próximas.</p>
         ) : (
           <div className="divide-y divide-arena-100">
             {stats.proximas.map((row: any) => (
               <div key={row.id} className="flex items-center justify-between px-5 py-4 gap-4">
                 <div>
                   <p className="font-medium text-sm text-lago-900">{row.client_nombre}</p>
-                  <p className="text-xs text-volcan-500">{row.cabana_nombre ?? row.notas ?? 'Cabana solicitada'}</p>
+                  <p className="text-xs text-volcan-500">{row.cabana_nombre ?? row.notas ?? 'Cabaña solicitada'}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium text-lago-700">{fmt(row.check_in)} a {fmt(row.check_out)}</p>
