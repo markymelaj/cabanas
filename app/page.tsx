@@ -85,6 +85,9 @@ export default async function HomePage() {
                 <Link href="/salon" className="btn-outline border-white/40 text-white hover:bg-white/10">
                   Salón de eventos
                 </Link>
+                <Link href="/admin" className="btn-outline border-arena-300/60 text-arena-100 hover:bg-arena-500/15">
+                  Demo admin
+                </Link>
               </div>
             </div>
           </div>

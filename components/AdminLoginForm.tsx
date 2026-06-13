@@ -4,6 +4,9 @@ import { getSupabaseBrowser } from '@/lib/supabase-browser'
 import { useRouter } from 'next/navigation'
 import { Loader2, AlertCircle } from 'lucide-react'
 
+const DEMO_EMAIL = 'demo@cabanas.cl'
+const DEMO_PASSWORD = '12345678'
+
 function withTimeout<T>(promise: Promise<T>, ms = 12000) {
   return Promise.race([
     promise,
@@ -14,8 +17,8 @@ function withTimeout<T>(promise: Promise<T>, ms = 12000) {
 }
 
 export default function AdminLoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState(DEMO_EMAIL)
+  const [password, setPassword] = useState(DEMO_PASSWORD)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -39,13 +42,22 @@ export default function AdminLoginForm() {
         router.refresh()
       }
     } catch {
-      setError('El acceso no respondio. Revisa /api/estado y vuelve a intentar.')
+      setError('El acceso no respondió. Revisa /api/estado y vuelve a intentar.')
       setLoading(false)
     }
   }
 
+  function restoreDemoAccess() {
+    setEmail(DEMO_EMAIL)
+    setPassword(DEMO_PASSWORD)
+    setError(null)
+  }
+
   return (
     <div className="space-y-4">
+      <div className="rounded-lg border border-arena-100 bg-arena-50 p-3 text-xs text-volcan-600">
+        Acceso demo precargado. Si se borra, puedes restaurarlo con el botón inferior.
+      </div>
       <div>
         <label className="label-text">Email</label>
         <input
@@ -74,6 +86,9 @@ export default function AdminLoginForm() {
       )}
       <button onClick={handleLogin} disabled={loading} className="btn-primary w-full mt-2 disabled:opacity-50">
         {loading ? <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin" />Ingresando...</span> : 'Ingresar'}
+      </button>
+      <button type="button" onClick={restoreDemoAccess} className="btn-outline w-full text-sm">
+        Restaurar acceso demo
       </button>
     </div>
   )

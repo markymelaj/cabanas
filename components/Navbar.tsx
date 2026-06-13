@@ -15,6 +15,7 @@ export default function Navbar() {
         <nav className="hidden md:flex items-center gap-8">
           <Link href="/cabanas" className="text-lago-200 hover:text-white text-sm transition-colors">Cabañas</Link>
           <Link href="/salon" className="text-lago-200 hover:text-white text-sm transition-colors">Salón de eventos</Link>
+          <Link href="/admin" className="text-lago-200 hover:text-white text-sm transition-colors">Demo admin</Link>
           <a href="tel:+56957845292" className="flex items-center gap-2 text-lago-200 hover:text-white text-sm transition-colors">
             <Phone size={14} />+569 5784 5292
           </a>
@@ -30,6 +31,7 @@ export default function Navbar() {
         <div className="md:hidden bg-lago-950 border-t border-white/10 px-6 py-4 flex flex-col gap-4">
           <Link href="/cabanas" className="text-lago-200 text-sm" onClick={() => setOpen(false)}>Cabañas</Link>
           <Link href="/salon" className="text-lago-200 text-sm" onClick={() => setOpen(false)}>Salón de eventos</Link>
+          <Link href="/admin" className="text-lago-200 text-sm" onClick={() => setOpen(false)}>Demo admin</Link>
           <a href="tel:+56957845292" className="text-lago-200 text-sm">+569 5784 5292</a>
           <Link href="/cabanas" className="btn-primary bg-arena-500 text-sm text-center" onClick={() => setOpen(false)}>Reservar</Link>
         </div>
