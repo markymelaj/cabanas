@@ -15,7 +15,7 @@ export async function PATCH(req: NextRequest) {
 
   const body = await req.json()
   const payload = {
-    nombre: body.nombre || 'Salon de Eventos',
+    nombre: body.nombre || 'Salón de Eventos',
     capacidad: Number(body.capacidad ?? 200),
     metros_cuadrados: Number(body.metros_cuadrados ?? 290),
     precio_jornada_completa: Number(body.precio_jornada_completa ?? 0),

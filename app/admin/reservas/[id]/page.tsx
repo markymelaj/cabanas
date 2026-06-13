@@ -3,6 +3,8 @@ import AdminReservationDetail from '@/components/AdminReservationDetail'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
 import type { Cabana } from '@/lib/supabase'
 
+
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default function ReservationDetailPage({ params }: { params: { id: string } }) {
@@ -42,7 +44,7 @@ async function ReservationDetailContent({ id }: { id: string }) {
       cabanas={(cabanas ?? []) as Cabana[]}
       payments={payments ?? []}
       notes={notes ?? []}
-      baseUrl={process.env.NEXT_PUBLIC_BASE_URL || 'https://cabanaspuertovaras.cl'}
+      baseUrl={process.env.NEXT_PUBLIC_BASE_URL || 'https://cabanas-theta.vercel.app'}
     />
   )
 }

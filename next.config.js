@@ -3,8 +3,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '*.supabase.co' },
-      { protocol: 'https', hostname: 'cabanaspuertovaras.cl' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
+  },
+  experimental: {
+    cpus: 1,
+    workerThreads: false,
   },
 }
 

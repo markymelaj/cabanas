@@ -4,7 +4,7 @@ export const DEFAULT_CABANAS: Cabana[] = [
   {
     id: '11111111-1111-4111-8111-111111111111',
     slug: 'cabana-2-4',
-    nombre: 'Cabaña para 2 y 4 personas',
+    nombre: 'Cabaña para 2 a 4 personas',
     subtitulo: 'Ideal para parejas o familias pequeñas',
     capacidad: 4,
     dormitorios: 2,
@@ -15,12 +15,11 @@ export const DEFAULT_CABANAS: Cabana[] = [
     min_noches: 1,
     precio_noche: 85000,
     precio_limpieza: 15000,
-    descripcion_corta: 'Acogedora cabaña con vista al lago Llanquihue y los volcanes.',
-    descripcion:
-      'Perfecta para parejas o familias pequeñas. Vista panorámica al volcán Osorno y el lago Llanquihue desde la terraza.',
+    descripcion_corta: 'Unidad acogedora con terraza, cocina equipada y solicitud de reserva por WhatsApp.',
+    descripcion: 'Ejemplo de unidad para mostrar cómo el sistema presenta fotos, capacidad, precios, limpieza, fechas disponibles y solicitud directa al negocio.',
     amenidades: [
       '1 habitación doble',
-      '1 habitación con cama 2 plazas',
+      '1 habitación adicional',
       '1 baño completo',
       'Cocina equipada',
       'Terraza con parrilla',
@@ -40,7 +39,7 @@ export const DEFAULT_CABANAS: Cabana[] = [
   {
     id: '22222222-2222-4222-8222-222222222222',
     slug: 'cabana-6',
-    nombre: 'Cabaña para 6 personas',
+    nombre: 'Cabaña familiar para 6 personas',
     subtitulo: 'Amplia, familiar y con espacios independientes',
     capacidad: 6,
     dormitorios: 3,
@@ -51,9 +50,8 @@ export const DEFAULT_CABANAS: Cabana[] = [
     min_noches: 1,
     precio_noche: 120000,
     precio_limpieza: 20000,
-    descripcion_corta: 'Amplia cabaña con suite, ideal para familias o grupos de amigos.',
-    descripcion:
-      'Espacio, confort y naturaleza en armonía. Ideal para grupos que buscan disfrutar juntos sin renunciar a la privacidad.',
+    descripcion_corta: 'Unidad familiar de ejemplo para grupos, con cálculo automático de noches y anticipo.',
+    descripcion: 'Ejemplo de cabaña familiar para demostrar reservas por noche, huéspedes, limpieza, total estimado, anticipo y seguimiento desde el panel.',
     amenidades: [
       '1 suite con baño privado',
       '2 habitaciones dobles',
@@ -63,7 +61,7 @@ export const DEFAULT_CABANAS: Cabana[] = [
       'Terraza con parrilla',
       'Estacionamiento doble',
       'WiFi',
-      'Lavanderia',
+      'Lavandería',
       'Ropa de cama incluida',
     ],
     fotos: [

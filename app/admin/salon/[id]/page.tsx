@@ -2,6 +2,8 @@ import AdminShell from '@/components/AdminShell'
 import AdminSalonDetail from '@/components/AdminSalonDetail'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
 
+
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default function SalonDetailPage({ params }: { params: { id: string } }) {

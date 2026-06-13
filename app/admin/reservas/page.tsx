@@ -2,6 +2,8 @@ import { getSupabaseAdmin } from '@/lib/supabase-server'
 import AdminShell from '@/components/AdminShell'
 import AdminReservationsTable from '@/components/AdminReservationsTable'
 
+
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default function AdminReservasPage() {

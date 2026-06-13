@@ -1,8 +1,9 @@
 import { Resend } from 'resend'
+import { DEMO_CONFIG } from './demo-config'
 
 let resendClient: Resend | null = null
-const FROM = process.env.RESEND_FROM || 'reservas@cabanaspuertovaras.cl'
-const ADMIN = process.env.RESEND_ADMIN_EMAIL || 'contacto@cabanaspuertovaras.cl'
+const FROM = process.env.RESEND_FROM || DEMO_CONFIG.email
+const ADMIN = process.env.RESEND_ADMIN_EMAIL || DEMO_CONFIG.email
 
 function getResend() {
   if (!resendClient) {
@@ -10,6 +11,23 @@ function getResend() {
   }
 
   return resendClient
+}
+
+function escapeHtml(value: string) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;')
+}
+
+function fmt(d: string) {
+  return new Date(d + 'T12:00:00').toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+}
+
+function clp(n: number) {
+  return n.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })
 }
 
 export async function sendReservationConfirmation({
@@ -33,63 +51,27 @@ export async function sendReservationConfirmation({
   anticipo: number
   reservationId: string
 }) {
-  const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-  const clp = (n: number) => n.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })
-
   await getResend().emails.send({
     from: FROM,
     to,
-    subject: `✅ Reserva confirmada — ${cabanaNombre}`,
+    subject: `Reserva recibida — ${cabanaNombre}`,
     html: `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><style>
-  body { font-family: Georgia, serif; color: #1b3b32; background: #f0f7f4; margin: 0; padding: 0; }
-  .wrap { max-width: 560px; margin: 32px auto; background: #fff; border-radius: 12px; overflow: hidden; }
-  .header { background: #265a4c; padding: 32px; text-align: center; }
-  .header h1 { color: #fff; margin: 0; font-size: 22px; font-weight: normal; letter-spacing: 0.5px; }
-  .header p { color: #8fc5b4; margin: 8px 0 0; font-size: 14px; }
-  .body { padding: 32px; }
-  .row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0ede6; font-size: 14px; }
-  .row:last-child { border-bottom: none; }
-  .label { color: #978c7e; }
-  .value { color: #1b3b32; font-weight: bold; }
-  .total { background: #f0f7f4; border-radius: 8px; padding: 16px; margin-top: 20px; text-align: center; }
-  .total .monto { font-size: 28px; color: #265a4c; font-weight: bold; }
-  .footer { background: #f8f7f6; padding: 20px 32px; text-align: center; font-size: 12px; color: #978c7e; }
-  .btn { display: inline-block; background: #265a4c; color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 6px; margin-top: 20px; font-size: 14px; }
-</style></head>
-<body>
-<div class="wrap">
-  <div class="header">
-    <h1>Cabañas Puerto Varas</h1>
-    <p>Reserva confirmada</p>
+<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;background:#fff;color:#1b3b32">
+  <div style="background:#265a4c;padding:28px;text-align:center;color:#fff">
+    <h1 style="margin:0;font-size:22px">${escapeHtml(DEMO_CONFIG.brandName)}</h1>
+    <p style="margin:8px 0 0;color:#d9bf98">Solicitud de reserva recibida</p>
   </div>
-  <div class="body">
-    <p style="font-size:16px; margin-bottom:24px;">Hola <strong>${nombre}</strong>, tu reserva fue confirmada exitosamente. ¡Te esperamos!</p>
-    <div class="row"><span class="label">Cabaña</span><span class="value">${cabanaNombre}</span></div>
-    <div class="row"><span class="label">Llegada</span><span class="value">${fmt(checkIn)}</span></div>
-    <div class="row"><span class="label">Salida</span><span class="value">${fmt(checkOut)}</span></div>
-    <div class="row"><span class="label">Huéspedes</span><span class="value">${guests} personas</span></div>
-    <div class="row"><span class="label">Anticipo pagado</span><span class="value">${clp(anticipo)}</span></div>
-    <div class="total">
-      <div style="color:#978c7e; font-size:12px; margin-bottom:4px;">TOTAL RESERVA</div>
-      <div class="monto">${clp(total)}</div>
-      <div style="color:#978c7e; font-size:12px; margin-top:4px;">El saldo restante se paga al llegar</div>
-    </div>
-    <p style="font-size:13px; color:#60412c; margin-top:24px;">
-      <strong>Dirección:</strong> Camino a Ensenada S/N km 17.5, Ruta 225, Puerto Varas<br>
-      <strong>Contacto:</strong> +569 5784 5292 · ${FROM}
-    </p>
-    <div style="text-align:center">
-      <a href="https://maps.app.goo.gl/4YxTYtfonpoMj6rKA" class="btn">Ver en mapa</a>
-    </div>
-  </div>
-  <div class="footer">
-    N° de reserva: ${reservationId.slice(0, 8).toUpperCase()} · Cabañas Puerto Varas · cabanaspuertovaras.cl
+  <div style="padding:28px">
+    <p>Hola <strong>${escapeHtml(nombre)}</strong>, recibimos tu solicitud. El equipo confirmará disponibilidad y condiciones por WhatsApp o correo.</p>
+    <p><strong>Cabaña:</strong> ${escapeHtml(cabanaNombre)}</p>
+    <p><strong>Llegada:</strong> ${fmt(checkIn)}</p>
+    <p><strong>Salida:</strong> ${fmt(checkOut)}</p>
+    <p><strong>Huéspedes:</strong> ${guests}</p>
+    <p><strong>Total estimado:</strong> ${clp(total)}</p>
+    <p><strong>Anticipo sugerido:</strong> ${clp(anticipo)}</p>
+    <p style="font-size:12px;color:#746a5f;margin-top:24px">Solicitud: ${reservationId.slice(0, 8).toUpperCase()} · ${escapeHtml(DEMO_CONFIG.brandName)}</p>
   </div>
 </div>
-</body></html>
     `,
   })
 }
@@ -110,22 +92,23 @@ export async function sendAdminNotification({
   reservationId: string
 }) {
   const subject = type === 'reserva_cabana'
-    ? `🏡 Nueva reserva cabaña — ${nombre}`
-    : `🎉 Nueva cotización salón — ${nombre}`
+    ? `Nueva reserva cabaña — ${nombre}`
+    : `Nueva cotización salón — ${nombre}`
 
   await getResend().emails.send({
     from: FROM,
     to: ADMIN,
     subject,
     html: `
-<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:24px">
-  <h2 style="color:#265a4c;margin-bottom:16px">${subject}</h2>
-  <p><strong>Cliente:</strong> ${nombre}</p>
-  <p><strong>Email:</strong> ${email}</p>
-  <p><strong>Teléfono:</strong> ${telefono}</p>
+<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:24px">
+  <h2 style="color:#265a4c;margin-bottom:16px">${escapeHtml(subject)}</h2>
+  <p><strong>Cliente:</strong> ${escapeHtml(nombre)}</p>
+  <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+  <p><strong>Teléfono:</strong> ${escapeHtml(telefono)}</p>
   <hr style="border:none;border-top:1px solid #e8d9c0;margin:16px 0">
-  <pre style="background:#f8f7f6;padding:12px;border-radius:6px;font-size:13px;white-space:pre-wrap">${detail}</pre>
-  <p style="margin-top:16px"><a href="${process.env.NEXT_PUBLIC_BASE_URL}/admin" style="background:#265a4c;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px">Ver en panel admin →</a></p>
+  <pre style="background:#f8f7f6;padding:12px;border-radius:6px;font-size:13px;white-space:pre-wrap">${escapeHtml(detail)}</pre>
+  <p style="font-size:12px;color:#746a5f">Referencia: ${reservationId.slice(0, 8).toUpperCase()}</p>
+  <p style="margin-top:16px"><a href="${process.env.NEXT_PUBLIC_BASE_URL || DEMO_CONFIG.baseUrl}/admin" style="background:#265a4c;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px">Ver en panel admin →</a></p>
 </div>
     `,
   })
@@ -148,24 +131,21 @@ export async function sendSalonQuoteConfirmation({
   montoEstimado: number
   quoteId: string
 }) {
-  const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-  const clp = (n: number) => n.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })
-
   await getResend().emails.send({
     from: FROM,
     to,
-    subject: `📋 Cotización recibida — Salón de Eventos Puerto Varas`,
+    subject: 'Cotización recibida — Salón de eventos',
     html: `
-<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:24px;background:#fff">
+<div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;padding:24px;background:#fff;color:#1b3b32">
   <h2 style="color:#265a4c">Cotización recibida</h2>
-  <p>Hola <strong>${nombre}</strong>, recibimos tu solicitud para el salón de eventos. Te contactaremos en menos de 24 horas para confirmar disponibilidad.</p>
+  <p>Hola <strong>${escapeHtml(nombre)}</strong>, recibimos tu solicitud para el salón de eventos. Te contactaremos para revisar disponibilidad, servicios y condiciones.</p>
   <div style="background:#f0f7f4;border-radius:8px;padding:16px;margin:20px 0">
-    <p style="margin:4px 0"><strong>Fecha del evento:</strong> ${fmt(fechaEvento)}</p>
-    <p style="margin:4px 0"><strong>Tipo:</strong> ${tipoEvento}</p>
-    <p style="margin:4px 0"><strong>Invitados:</strong> ${numInvitados} personas</p>
-    <p style="margin:4px 0"><strong>Estimado referencial:</strong> ${clp(montoEstimado)}</p>
+    <p><strong>Fecha del evento:</strong> ${fmt(fechaEvento)}</p>
+    <p><strong>Tipo:</strong> ${escapeHtml(tipoEvento)}</p>
+    <p><strong>Invitados:</strong> ${numInvitados} personas</p>
+    <p><strong>Estimado referencial:</strong> ${clp(montoEstimado)}</p>
   </div>
-  <p style="font-size:13px;color:#60412c">¿Tienes preguntas? Escríbenos al +569 5784 5292</p>
+  <p style="font-size:13px;color:#60412c">Contacto comercial: ${escapeHtml(DEMO_CONFIG.phoneDisplay)}</p>
   <p style="font-size:12px;color:#978c7e;margin-top:24px">N° cotización: ${quoteId.slice(0, 8).toUpperCase()}</p>
 </div>
     `,

@@ -3,6 +3,8 @@ import AdminReservationForm from '@/components/AdminReservationForm'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
 import type { Cabana } from '@/lib/supabase'
 
+
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default function NewReservationPage() {

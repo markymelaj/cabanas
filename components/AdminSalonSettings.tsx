@@ -31,7 +31,7 @@ type Service = {
 export default function AdminSalonSettings({ settings, services }: { settings: Settings | null; services: Service[] }) {
   const router = useRouter()
   const [form, setForm] = useState({
-    nombre: settings?.nombre ?? 'Salon de Eventos',
+    nombre: settings?.nombre ?? 'Salón de Eventos',
     capacidad: String(settings?.capacidad ?? 200),
     metros_cuadrados: String(settings?.metros_cuadrados ?? 290),
     precio_jornada_completa: String(settings?.precio_jornada_completa ?? 800000),

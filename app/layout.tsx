@@ -1,31 +1,16 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, DM_Sans } from 'next/font/google'
 import './globals.css'
-
-const display = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  style: ['normal', 'italic'],
-  variable: '--font-display',
-  display: 'swap',
-})
-
-const body = DM_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500'],
-  variable: '--font-body',
-  display: 'swap',
-})
+import { DEMO_CONFIG } from '@/lib/demo-config'
 
 export const metadata: Metadata = {
-  title: 'Cabañas y Eventos — Reservas online',
-  description: 'Sistema de reservas para cabañas, eventos, pagos, disponibilidad y administración integral.',
-  keywords: 'reservas cabañas, salón de eventos, sistema de reservas, hospedaje, eventos',
+  title: `${DEMO_CONFIG.brandName} — ${DEMO_CONFIG.productName}`,
+  description: 'Demo comercial de sistema de reservas, cotizaciones, disponibilidad, pagos, WhatsApp y panel administrativo para cabañas, salones de eventos y complejos mixtos.',
+  keywords: 'sistema de reservas, cabañas, salón de eventos, turismo, cotizaciones WhatsApp, Alto Cauce',
   openGraph: {
-    title: 'Cabañas y Eventos',
-    description: 'Reservas online para hospedaje y eventos',
-    url: 'https://demo-reservas.vercel.app',
-    siteName: 'Cabañas y Eventos',
+    title: DEMO_CONFIG.brandName,
+    description: DEMO_CONFIG.productName,
+    url: DEMO_CONFIG.baseUrl,
+    siteName: DEMO_CONFIG.brandName,
     locale: 'es_CL',
     type: 'website',
   },
@@ -33,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${display.variable} ${body.variable}`}>
+    <html lang="es">
       <body className="font-body bg-arena-50 text-lago-900 antialiased">
         {children}
       </body>

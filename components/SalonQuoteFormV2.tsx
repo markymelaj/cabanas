@@ -18,13 +18,16 @@ type Service = {
   activa: boolean
 }
 
-const TYPES = ['Matrimonio', 'Aniversario', 'Cumpleanos', 'Evento corporativo', 'Reunion de empresa', 'Otro']
+const TYPES = ['Matrimonio', 'Aniversario', 'Cumpleaños', 'Evento corporativo', 'Reunión de empresa', 'Otro']
 
 export default function SalonQuoteFormV2({ settings, services }: { settings: Settings | null; services: Service[] }) {
   const maxGuests = Number(settings?.capacidad ?? 200)
-  const activeServices = services.length > 0
-    ? services.filter((service) => service.activa !== false)
-    : [{ id: 'banqueteria', nombre: 'Banqueteria', precio: 12000, precio_por_persona: true, activa: true }]
+  const activeServices = useMemo(
+    () => services.length > 0
+      ? services.filter((service) => service.activa !== false)
+      : [{ id: 'banqueteria', nombre: 'Banquetería', precio: 12000, precio_por_persona: true, activa: true }],
+    [services]
+  )
 
   const [form, setForm] = useState({
     tipoEvento: '',

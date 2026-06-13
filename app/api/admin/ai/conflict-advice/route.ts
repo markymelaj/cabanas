@@ -23,6 +23,7 @@ function slimReservation(item: any) {
     id: item.id,
     cabana_id: item.cabana_id,
     cabana_nombre: item.cabana_nombre,
+    client_id: item.client_id,
     client_nombre: item.client_nombre,
     client_email: item.client_email,
     client_telefono: item.client_telefono,
@@ -49,6 +50,7 @@ function slimSalon(item: any) {
 
   return {
     id: item.id,
+    client_id: item.client_id,
     client_nombre: client?.nombre,
     client_email: client?.email,
     client_telefono: client?.telefono,
@@ -307,6 +309,32 @@ async function buildOverviewContext(supabaseAdmin: any): Promise<ConflictAdviceC
   }
 }
 
+
+async function persistAiAdvice(supabaseAdmin: any, context: ConflictAdviceContext, advice: Awaited<ReturnType<typeof getClaudeConflictAdvice>>) {
+  const current: any = context.current ?? {}
+  const target: Record<string, any> = {
+    client_id: current.client_id ?? null,
+    reservation_id: context.type === 'cabana' ? current.id ?? null : null,
+    salon_quote_id: context.type === 'salon' ? current.id ?? null : null,
+    created_by: advice.source === 'claude' ? `IA ${advice.model ?? 'Claude'}` : 'IA modo guía',
+    note: [
+      `Informe IA · ${context.type}`,
+      `Riesgo: ${advice.riskLevel}`,
+      `Recomendación: ${advice.recommendation}`,
+      advice.reasoning?.length ? `Motivos:\n- ${advice.reasoning.join('\n- ')}` : '',
+      advice.nextSteps?.length ? `Próximos pasos:\n- ${advice.nextSteps.join('\n- ')}` : '',
+      advice.whatsappMessage ? `Mensaje sugerido:\n${advice.whatsappMessage}` : '',
+    ].filter(Boolean).join('\n\n'),
+  }
+
+  const { error } = await supabaseAdmin.from('operation_notes').insert(target)
+  if (error) {
+    console.error('[ai.persist_note]', error)
+    return false
+  }
+  return true
+}
+
 export async function POST(req: NextRequest) {
   const { supabaseAdmin, error } = await requireAdminApi()
   if (error) return error
@@ -329,5 +357,6 @@ export async function POST(req: NextRequest) {
   if (context instanceof NextResponse) return context
 
   const advice = await getClaudeConflictAdvice(context)
-  return NextResponse.json({ ok: true, advice, context })
+  const persisted = await persistAiAdvice(supabaseAdmin!, context, advice)
+  return NextResponse.json({ ok: true, advice, context, persisted })
 }

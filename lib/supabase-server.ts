@@ -17,17 +17,28 @@ type CookieToSet = {
   options: CookieOptions
 }
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 let supabaseAdminClient: SupabaseClient | null = null
 
-// Cliente con service_role para operaciones de servidor (bypass RLS)
+function assertSupabasePublicEnv() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Faltan NEXT_PUBLIC_SUPABASE_URL o NEXT_PUBLIC_SUPABASE_ANON_KEY')
+  }
+}
+
+// Cliente con service_role para operaciones de servidor. Si falta service_role se usa anon solo para mantener fallback público de demo.
 export function getSupabaseAdmin() {
+  assertSupabasePublicEnv()
   if (!supabaseAdminClient) {
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    const key = serviceRoleKey || supabaseAnonKey
+    const key = serviceRoleKey || supabaseAnonKey!
 
-    supabaseAdminClient = createClient(supabaseUrl, key, {
+    if (!serviceRoleKey && process.env.NODE_ENV !== 'development') {
+      console.warn('[supabase] SUPABASE_SERVICE_ROLE_KEY no configurada. Las escrituras admin pueden fallar.')
+    }
+
+    supabaseAdminClient = createClient(supabaseUrl!, key, {
       auth: { autoRefreshToken: false, persistSession: false },
     })
   }
@@ -37,8 +48,9 @@ export function getSupabaseAdmin() {
 
 // Cliente server-side con cookies (para auth del admin)
 export function createServerSupabase() {
+  assertSupabasePublicEnv()
   const cookieStore = cookies()
-  return createServerClient(supabaseUrl, supabaseAnonKey, {
+  return createServerClient(supabaseUrl!, supabaseAnonKey!, {
     cookies: {
       getAll() { return cookieStore.getAll() },
       setAll(cookiesToSet: CookieToSet[]) {

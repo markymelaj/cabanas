@@ -65,7 +65,7 @@ export default function AdminLoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-          placeholder="admin@cabanaspuertovaras.cl"
+          placeholder="contacto@altocauce.cl"
           className="input-field"
         />
       </div>

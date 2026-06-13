@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { useState, useMemo } from 'react'
 import { addDays, format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isAfter, isBefore, startOfDay, getDay, addMonths, subMonths } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -58,7 +58,7 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
       const range = eachDayOfInterval({ start: checkIn, end: date })
       const hasConflict = range.some((d) => isOccupied(d))
       if (hasConflict) {
-        setError('Hay fechas no disponibles en ese rango. Por favor elige otro perÃ­odo.')
+        setError('Hay fechas no disponibles en ese rango. Por favor elige otro período.')
         return
       }
       setError(null)
@@ -114,7 +114,7 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
     }
   }
 
-  const DAY_NAMES = ['Lun', 'Mar', 'MiÃ©', 'Jue', 'Vie', 'SÃ¡b', 'Dom']
+  const DAY_NAMES = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 
   if (submitted) {
     return (
@@ -142,8 +142,8 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
       {/* Steps header */}
       <div className="flex border-b border-arena-100">
         {(['calendar', 'form'] as Step[]).map((s, i) => (
-          <div key={s} className={`flex-1 py-4 px-5 text-sm font-medium border-b-2 transition-colors ${step === s || (step === 'paying' && i === 1) ? 'border-lago-600 text-lago-800' : 'border-transparent text-volcÃ¡n-400'}`}>
-            <span className="mr-2 text-xs text-volcÃ¡n-400">{i + 1}.</span>
+          <div key={s} className={`flex-1 py-4 px-5 text-sm font-medium border-b-2 transition-colors ${step === s || (step === 'paying' && i === 1) ? 'border-lago-600 text-lago-800' : 'border-transparent text-volcan-400'}`}>
+            <span className="mr-2 text-xs text-volcan-400">{i + 1}.</span>
             {s === 'calendar' ? 'Elige fechas' : 'Tus datos'}
           </div>
         ))}
@@ -167,7 +167,7 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
           {/* Day names */}
           <div className="grid grid-cols-7 mb-1">
             {DAY_NAMES.map((d) => (
-              <div key={d} className="text-center text-xs font-medium text-volcÃ¡n-400 py-1">{d}</div>
+              <div key={d} className="text-center text-xs font-medium text-volcan-400 py-1">{d}</div>
             ))}
           </div>
 
@@ -191,8 +191,8 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
                     ${isCI || isCO ? 'bg-lago-700 text-white font-medium' : ''}
                     ${inRange ? 'bg-lago-100 text-lago-800 rounded-none' : ''}
                     ${!isCI && !isCO && !inRange && !disabled ? 'hover:bg-arena-100 text-lago-900' : ''}
-                    ${disabled && !occ ? 'text-volcÃ¡n-200 cursor-not-allowed' : ''}
-                    ${occ ? 'text-volcÃ¡n-300 cursor-not-allowed line-through' : ''}
+                    ${disabled && !occ ? 'text-volcan-200 cursor-not-allowed' : ''}
+                    ${occ ? 'text-volcan-300 cursor-not-allowed line-through' : ''}
                   `}
                 >
                   {format(date, 'd')}
@@ -202,20 +202,20 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
           </div>
 
           {/* Legend */}
-          <div className="flex gap-4 mt-4 text-xs text-volcÃ¡n-500">
+          <div className="flex gap-4 mt-4 text-xs text-volcan-500">
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-lago-700 inline-block" />Seleccionado</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-lago-100 inline-block" />Tu estadÃ­a</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-volcÃ¡n-100 inline-block" />No disponible</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-lago-100 inline-block" />Tu estadía</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-volcan-100 inline-block" />No disponible</span>
           </div>
 
           {/* Guests */}
           <div className="mt-6 pt-5 border-t border-arena-100">
-            <label className="label-text">NÃºmero de huÃ©spedes</label>
+            <label className="label-text">Número de huéspedes</label>
             <div className="flex items-center gap-4 mt-1">
-              <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-9 h-9 rounded-full border border-volcÃ¡n-200 flex items-center justify-center hover:bg-arena-100 transition-colors text-lg">âˆ’</button>
+              <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-9 h-9 rounded-full border border-volcan-200 flex items-center justify-center hover:bg-arena-100 transition-colors text-lg">−</button>
               <span className="text-lg font-medium text-lago-900 w-8 text-center">{guests}</span>
-              <button onClick={() => setGuests(Math.min(cabana.capacidad, guests + 1))} className="w-9 h-9 rounded-full border border-volcÃ¡n-200 flex items-center justify-center hover:bg-arena-100 transition-colors text-lg">+</button>
-              <span className="text-xs text-volcÃ¡n-500">mÃ¡x. {cabana.capacidad}</span>
+              <button onClick={() => setGuests(Math.min(cabana.capacidad, guests + 1))} className="w-9 h-9 rounded-full border border-volcan-200 flex items-center justify-center hover:bg-arena-100 transition-colors text-lg">+</button>
+              <span className="text-xs text-volcan-500">máx. {cabana.capacidad}</span>
             </div>
           </div>
 
@@ -223,18 +223,18 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
           {pricing && (
             <div className="mt-5 bg-lago-50 rounded-xl p-4 space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-volcÃ¡n-600">{pricing.noches} noche{pricing.noches > 1 ? 's' : ''} Ã— {formatCLP(pricing.precioPorNoche)}</span>
+                <span className="text-volcan-600">{pricing.noches} noche{pricing.noches > 1 ? 's' : ''} × {formatCLP(pricing.precioPorNoche)}</span>
                 <span className="text-lago-900">{formatCLP(pricing.subtotalNoches)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-volcÃ¡n-600">Limpieza</span>
+                <span className="text-volcan-600">Limpieza</span>
                 <span className="text-lago-900">{formatCLP(pricing.limpieza)}</span>
               </div>
               <div className="flex justify-between text-sm font-medium border-t border-lago-100 pt-2">
                 <span className="text-lago-900">Total</span>
                 <span className="text-lago-900 text-base">{formatCLP(pricing.total)}</span>
               </div>
-              <div className="flex justify-between text-xs text-volcÃ¡n-500">
+              <div className="flex justify-between text-xs text-volcan-500">
                 <span>Anticipo referencial</span>
                 <span className="text-lago-700 font-medium">{formatCLP(pricing.anticipo)}</span>
               </div>
@@ -260,7 +260,7 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
 
       {step === 'form' && (
         <div className="p-6">
-          <button onClick={() => setStep('calendar')} className="text-sm text-volcÃ¡n-500 hover:text-lago-700 flex items-center gap-1 mb-5 transition-colors">
+          <button onClick={() => setStep('calendar')} className="text-sm text-volcan-500 hover:text-lago-700 flex items-center gap-1 mb-5 transition-colors">
             <ChevronLeft size={14} />Volver al calendario
           </button>
 
@@ -268,19 +268,19 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
           {checkIn && checkOut && pricing && (
             <div className="bg-arena-50 rounded-xl p-4 mb-6 text-sm">
               <div className="flex justify-between mb-1">
-                <span className="text-volcÃ¡n-500">Check-in</span>
+                <span className="text-volcan-500">Check-in</span>
                 <span className="font-medium">{format(checkIn, "d 'de' MMMM", { locale: es })}</span>
               </div>
               <div className="flex justify-between mb-1">
-                <span className="text-volcÃ¡n-500">Check-out</span>
+                <span className="text-volcan-500">Check-out</span>
                 <span className="font-medium">{format(checkOut, "d 'de' MMMM", { locale: es })}</span>
               </div>
               <div className="flex justify-between mb-1">
-                <span className="text-volcÃ¡n-500">HuÃ©spedes</span>
+                <span className="text-volcan-500">Huéspedes</span>
                 <span className="font-medium">{guests}</span>
               </div>
               <div className="flex justify-between border-t border-arena-200 pt-2 mt-2">
-                <span className="text-volcÃ¡n-500">Anticipo referencial</span>
+                <span className="text-volcan-500">Anticipo referencial</span>
                 <span className="font-semibold text-lago-700 text-base">{formatCLP(pricing.anticipo)}</span>
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
               <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="tu@email.com" className="input-field" />
             </div>
             <div>
-              <label className="label-text">TelÃ©fono / WhatsApp</label>
+              <label className="label-text">Teléfono / WhatsApp</label>
               <input type="tel" value={form.telefono} onChange={(e) => setForm({ ...form, telefono: e.target.value })} placeholder="+569 XXXX XXXX" className="input-field" />
             </div>
           </div>
@@ -308,7 +308,7 @@ export default function ReservationCalendar({ cabana, occupiedDates }: Props) {
             </div>
           )}
 
-          <p className="text-xs text-volcÃ¡n-400 mt-4 mb-5">
+          <p className="text-xs text-volcan-400 mt-4 mb-5">
             Te contactaremos para confirmar disponibilidad, anticipo y forma de pago.
           </p>
 

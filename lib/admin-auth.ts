@@ -9,7 +9,7 @@ export function isConfiguredAdmin(user: User | null | undefined) {
   const configuredEmail = getConfiguredAdminEmail()
 
   if (!email) return false
-  if (!configuredEmail) return true
+  if (!configuredEmail) return false
 
   return email === configuredEmail
 }

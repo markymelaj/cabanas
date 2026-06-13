@@ -6,6 +6,8 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ReservationCalendar from '@/components/ReservationCalendar'
 
+
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 async function getCabana(slug: string): Promise<Cabana | null> {

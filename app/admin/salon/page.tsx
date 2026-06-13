@@ -2,6 +2,8 @@ import { getSupabaseAdmin } from '@/lib/supabase-server'
 import AdminShell from '@/components/AdminShell'
 import AdminSalonQuotesTable from '@/components/AdminSalonQuotesTable'
 
+
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default function AdminSalonPage() {

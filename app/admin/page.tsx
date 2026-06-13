@@ -7,6 +7,8 @@ import { es } from 'date-fns/locale'
 import AdminShell from '@/components/AdminShell'
 import AdminAIAssistant from '@/components/AdminAIAssistant'
 
+
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 async function getStats() {

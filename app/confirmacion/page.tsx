@@ -5,6 +5,8 @@ import Footer from '@/components/Footer'
 import { CheckCircle, XCircle, Clock } from 'lucide-react'
 import { formatCLP } from '@/lib/pricing'
 
+
+export const dynamic = 'force-dynamic'
 export default async function ConfirmacionPage({
   searchParams,
 }: {

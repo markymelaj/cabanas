@@ -27,12 +27,7 @@ export async function POST(req: NextRequest) {
     const quoteId = crypto.randomUUID()
     let savedToAdmin = false
     let adminError: string | null = null
-    let pricing = {
-      arriendoSalon: horario === 'medio' ? 520000 : 800000,
-      banqueteria: 0,
-      total: horario === 'medio' ? 520000 : 800000,
-      porPersona: 0,
-    }
+    let pricing = calcSalonPriceFallback(Number(numInvitados), serviciosSeleccionados, horario ?? 'completo')
 
     try {
       const supabaseAdmin = getSupabaseAdmin()
@@ -135,15 +130,33 @@ async function calcSalonPriceFromDb(supabaseAdmin: any, guests: number, selected
     ? Number(settings?.precio_media_jornada ?? 520000)
     : Number(settings?.precio_jornada_completa ?? 800000)
 
-  const extras = (services ?? []).reduce((sum: number, service: any) => {
-    const price = Number(service.precio ?? 0)
-    return sum + (service.precio_por_persona ? price * guests : price)
-  }, 0)
+  const dbServices = services ?? []
+  const selectedFallback = calcSalonPriceFallback(guests, selected, schedule)
+  const extras = dbServices.length > 0
+    ? dbServices.reduce((sum: number, service: any) => {
+        const price = Number(service.precio ?? 0)
+        return sum + (service.precio_por_persona ? price * guests : price)
+      }, 0)
+    : selectedFallback.banqueteria
 
   const total = arriendoSalon + extras
   return {
     arriendoSalon,
     banqueteria: extras,
+    total,
+    porPersona: Math.round(total / Math.max(1, guests)),
+  }
+}
+
+
+function calcSalonPriceFallback(guests: number, selected: string[], schedule: string) {
+  const base = schedule === 'medio' ? 520000 : 800000
+  const normalized = selected.map((item) => item.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
+  const banqueteria = normalized.includes('banqueteria') ? guests * 12000 : 0
+  const total = base + banqueteria
+  return {
+    arriendoSalon: base,
+    banqueteria,
     total,
     porPersona: Math.round(total / Math.max(1, guests)),
   }

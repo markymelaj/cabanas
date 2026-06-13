@@ -4,6 +4,7 @@ import { DEFAULT_CABANAS } from '@/lib/default-cabanas'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CabanaBookingExperience from '@/components/CabanaBookingExperience'
+import { DEMO_CONFIG } from '@/lib/demo-config'
 import { TreePine } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -38,11 +39,11 @@ export default async function CabanasPage() {
       <Navbar />
       <main className="pt-16">
         <div className="bg-lago-900 text-white py-20 px-6 md:px-12">
-          <div className="container mx-auto max-w-2xl text-center">
-            <p className="font-display italic text-lago-300 text-lg mb-3">Hospedaje</p>
-            <h1 className="font-display text-5xl md:text-6xl font-light mb-4">Nuestras cabañas</h1>
+          <div className="container mx-auto max-w-3xl text-center">
+            <p className="font-display italic text-lago-300 text-lg mb-3">Demo de hospedaje</p>
+            <h1 className="font-display text-5xl md:text-6xl font-light mb-4">Reservas para cabañas</h1>
             <p className="text-lago-200 leading-relaxed">
-              Revisa fotos, capacidad, precios y solicita la reserva sobre la cabaña que quieres.
+              Este flujo se adapta a cabañas, lodge, camping, hostería o complejo turístico. Permite elegir unidad, fechas, huéspedes y enviar una solicitud lista por WhatsApp.
             </p>
           </div>
         </div>
@@ -54,10 +55,10 @@ export default async function CabanasPage() {
                 <TreePine size={40} className="mx-auto text-lago-400 mb-4" />
                 <h2 className="font-display text-3xl text-lago-900 mb-3">Reservas por WhatsApp</h2>
                 <p className="text-volcan-500 text-sm leading-relaxed mb-6">
-                  Estamos cargando la disponibilidad de cabañas. Escríbenos y te ayudamos a reservar directamente.
+                  La demo puede funcionar con catálogo propio del cliente o con datos iniciales de ejemplo.
                 </p>
-                <a href="https://wa.me/56957845292" className="btn-primary inline-flex">
-                  Consultar disponibilidad
+                <a href={`https://wa.me/${DEMO_CONFIG.whatsappNumber}`} className="btn-primary inline-flex">
+                  Consultar implementación
                 </a>
               </div>
             ) : (

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -189,7 +189,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
       <div className="bg-white rounded-2xl card-shadow p-8 text-center">
         <TreePine size={40} className="mx-auto text-lago-400 mb-4" />
         <h3 className="font-display text-3xl text-lago-900 mb-3">Reservas por WhatsApp</h3>
-        <p className="text-volcÃ¡n-500 text-sm mb-6">Estamos cargando las cabañas disponibles.</p>
+        <p className="text-volcan-500 text-sm mb-6">Estamos cargando las cabañas disponibles.</p>
         <a href="https://wa.me/56957845292" className="btn-primary inline-flex">Consultar disponibilidad</a>
       </div>
     )
@@ -200,20 +200,20 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
       <div className="bg-white rounded-2xl card-shadow p-10 text-center">
         <CheckCircle size={48} className="mx-auto text-lago-600 mb-4" />
         <h3 className="font-display text-3xl text-lago-900 mb-2">Solicitud recibida</h3>
-        <p className="text-volcÃ¡n-500 text-sm mb-6">
+        <p className="text-volcan-500 text-sm mb-6">
           Te contactaremos en menos de 24 horas para confirmar disponibilidad y pago.
         </p>
         <div className="bg-lago-50 rounded-xl p-5 text-left space-y-2 text-sm mb-6">
-          <div className="flex justify-between"><span className="text-volcÃ¡n-500">Cabaña</span><span>{polishCabanaText(selectedCabana.nombre)}</span></div>
-          <div className="flex justify-between"><span className="text-volcÃ¡n-500">Check-in</span><span>{checkIn ? format(checkIn, "d 'de' MMMM yyyy", { locale: es }) : ''}</span></div>
-          <div className="flex justify-between"><span className="text-volcÃ¡n-500">Check-out</span><span>{checkOut ? format(checkOut, "d 'de' MMMM yyyy", { locale: es }) : ''}</span></div>
+          <div className="flex justify-between"><span className="text-volcan-500">Cabaña</span><span>{polishCabanaText(selectedCabana.nombre)}</span></div>
+          <div className="flex justify-between"><span className="text-volcan-500">Check-in</span><span>{checkIn ? format(checkIn, "d 'de' MMMM yyyy", { locale: es }) : ''}</span></div>
+          <div className="flex justify-between"><span className="text-volcan-500">Check-out</span><span>{checkOut ? format(checkOut, "d 'de' MMMM yyyy", { locale: es }) : ''}</span></div>
           {pricing && (
             <div className="flex justify-between font-semibold border-t border-lago-100 pt-2">
               <span>Total estimado</span>
               <span className="text-lago-700">{formatCLP(pricing.total)}</span>
             </div>
           )}
-          {reservationId && <p className="text-xs text-volcÃ¡n-400">Solicitud: {reservationId.slice(0, 8).toUpperCase()}</p>}
+          {reservationId && <p className="text-xs text-volcan-400">Solicitud: {reservationId.slice(0, 8).toUpperCase()}</p>}
         </div>
         <div className="flex flex-col sm:flex-row justify-center gap-3">
           {whatsappUrl && (
@@ -251,7 +251,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
         {(['cabana', 'dates', 'details'] as Step[]).map((item) => (
           <div
             key={item}
-            className={`flex-1 py-3 text-center text-xs font-medium transition-colors border-b-2 ${step === item ? 'border-lago-600 text-lago-800' : 'border-transparent text-volcÃ¡n-400'}`}
+            className={`flex-1 py-3 text-center text-xs font-medium transition-colors border-b-2 ${step === item ? 'border-lago-600 text-lago-800' : 'border-transparent text-volcan-400'}`}
           >
             {item === 'cabana' ? 'Cabaña' : item === 'dates' ? 'Fechas' : 'Tus datos'}
           </div>
@@ -270,13 +270,13 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
                     setSelectedCabanaId(cabana.id)
                     setGuests(Math.min(Math.max(1, Number(cabana.base_huespedes ?? guests)), cabana.capacidad))
                   }}
-                  className={`text-left p-4 rounded-xl border transition-all ${selectedCabanaId === cabana.id ? 'border-lago-600 bg-lago-50' : 'border-volcÃ¡n-200 hover:border-lago-300'}`}
+                  className={`text-left p-4 rounded-xl border transition-all ${selectedCabanaId === cabana.id ? 'border-lago-600 bg-lago-50' : 'border-volcan-200 hover:border-lago-300'}`}
                 >
                   <p className="font-display text-xl text-lago-900">{cabana.nombre}</p>
-                  <p className="text-xs text-volcÃ¡n-500 mt-1">Hasta {cabana.capacidad} personas</p>
+                  <p className="text-xs text-volcan-500 mt-1">Hasta {cabana.capacidad} personas</p>
                   <p className="text-sm text-lago-700 mt-3">{formatCLP(Number(cabana.precio_noche))} / noche</p>
                   {Number(cabana.precio_huesped_extra ?? 0) > 0 && (
-                    <p className="text-xs text-volcÃ¡n-400 mt-1">Huésped extra: {formatCLP(Number(cabana.precio_huesped_extra))}</p>
+                    <p className="text-xs text-volcan-400 mt-1">Huésped extra: {formatCLP(Number(cabana.precio_huesped_extra))}</p>
                   )}
                 </button>
               ))}
@@ -289,13 +289,13 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
 
         {step === 'dates' && (
           <div>
-            <button onClick={() => setStep('cabana')} className="text-sm text-volcÃ¡n-500 hover:text-lago-700 flex items-center gap-1 mb-5">
+            <button onClick={() => setStep('cabana')} className="text-sm text-volcan-500 hover:text-lago-700 flex items-center gap-1 mb-5">
               <ChevronLeft size={14} />Volver
             </button>
 
             <div className="bg-arena-50 rounded-xl p-4 mb-5">
               <p className="font-display text-xl text-lago-900">{selectedCabana.nombre}</p>
-              <p className="text-xs text-volcÃ¡n-500">Hasta {selectedCabana.capacidad} personas</p>
+              <p className="text-xs text-volcan-500">Hasta {selectedCabana.capacidad} personas</p>
             </div>
 
             <div className="flex items-center justify-between mb-3">
@@ -310,7 +310,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
 
             <div className="grid grid-cols-7 mb-1">
               {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((day) => (
-                <div key={day} className="text-center text-xs text-volcÃ¡n-400 py-1">{day}</div>
+                <div key={day} className="text-center text-xs text-volcan-400 py-1">{day}</div>
               ))}
             </div>
             <div className="grid grid-cols-7 gap-0.5">
@@ -326,7 +326,7 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
                     key={date.toISOString()}
                     onClick={() => handleDayClick(date)}
                     disabled={disabled}
-                    className={`h-9 text-sm rounded-lg transition-all ${isCI || isCO ? 'bg-lago-700 text-white font-medium' : ''} ${inRange ? 'bg-lago-100 text-lago-800 rounded-none' : ''} ${!isCI && !isCO && !inRange && !disabled ? 'hover:bg-arena-100 text-lago-900' : ''} ${disabled && !occ ? 'text-volcÃ¡n-200 cursor-not-allowed' : ''} ${occ ? 'text-volcÃ¡n-300 cursor-not-allowed line-through' : ''}`}
+                    className={`h-9 text-sm rounded-lg transition-all ${isCI || isCO ? 'bg-lago-700 text-white font-medium' : ''} ${inRange ? 'bg-lago-100 text-lago-800 rounded-none' : ''} ${!isCI && !isCO && !inRange && !disabled ? 'hover:bg-arena-100 text-lago-900' : ''} ${disabled && !occ ? 'text-volcan-200 cursor-not-allowed' : ''} ${occ ? 'text-volcan-300 cursor-not-allowed line-through' : ''}`}
                   >
                     {format(date, 'd')}
                   </button>
@@ -334,31 +334,31 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
               })}
             </div>
 
-            {loadingAvailability && <p className="text-xs text-volcÃ¡n-400 mt-3">Cargando disponibilidad...</p>}
+            {loadingAvailability && <p className="text-xs text-volcan-400 mt-3">Cargando disponibilidad...</p>}
 
             <div className="mt-6">
               <label className="label-text">Huéspedes</label>
               <div className="flex items-center gap-4 mt-2">
-                <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-9 h-9 rounded-full border border-volcÃ¡n-200 hover:bg-arena-100 text-lg">-</button>
+                <button onClick={() => setGuests(Math.max(1, guests - 1))} className="w-9 h-9 rounded-full border border-volcan-200 hover:bg-arena-100 text-lg">-</button>
                 <span className="text-2xl font-display text-lago-900 w-12 text-center">{guests}</span>
-                <button onClick={() => setGuests(Math.min(selectedCabana.capacidad, guests + 1))} className="w-9 h-9 rounded-full border border-volcÃ¡n-200 hover:bg-arena-100 text-lg">+</button>
-                <span className="text-xs text-volcÃ¡n-500">max. {selectedCabana.capacidad}</span>
+                <button onClick={() => setGuests(Math.min(selectedCabana.capacidad, guests + 1))} className="w-9 h-9 rounded-full border border-volcan-200 hover:bg-arena-100 text-lg">+</button>
+                <span className="text-xs text-volcan-500">máx. {selectedCabana.capacidad}</span>
               </div>
             </div>
 
             {pricing && (
               <div className="bg-lago-50 rounded-xl p-4 mt-5 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-volcÃ¡n-500">{pricing.noches} noche{pricing.noches > 1 ? 's' : ''}</span>
+                  <span className="text-volcan-500">{pricing.noches} noche{pricing.noches > 1 ? 's' : ''}</span>
                   <span>{formatCLP(pricing.subtotalNoches)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-volcÃ¡n-500">Limpieza</span>
+                  <span className="text-volcan-500">Limpieza</span>
                   <span>{formatCLP(pricing.limpieza)}</span>
                 </div>
                 {pricing.extraHuespedes > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-volcÃ¡n-500">Huéspedes extra</span>
+                    <span className="text-volcan-500">Huéspedes extra</span>
                     <span>{formatCLP(pricing.extraHuespedes)}</span>
                   </div>
                 )}
@@ -383,15 +383,15 @@ export default function CabanaReservationForm({ cabanas, initialCabanaId }: Prop
 
         {step === 'details' && (
           <div>
-            <button onClick={() => setStep('dates')} className="text-sm text-volcÃ¡n-500 hover:text-lago-700 flex items-center gap-1 mb-5">
+            <button onClick={() => setStep('dates')} className="text-sm text-volcan-500 hover:text-lago-700 flex items-center gap-1 mb-5">
               <ChevronLeft size={14} />Volver
             </button>
 
             <div className="bg-arena-50 rounded-xl p-4 mb-6 text-sm space-y-1">
-              <div className="flex justify-between"><span className="text-volcÃ¡n-500">Cabaña</span><span>{selectedCabana.nombre}</span></div>
-              <div className="flex justify-between"><span className="text-volcÃ¡n-500">Check-in</span><span>{checkIn ? format(checkIn, "d 'de' MMMM yyyy", { locale: es }) : '-'}</span></div>
-              <div className="flex justify-between"><span className="text-volcÃ¡n-500">Check-out</span><span>{checkOut ? format(checkOut, "d 'de' MMMM yyyy", { locale: es }) : '-'}</span></div>
-              <div className="flex justify-between"><span className="text-volcÃ¡n-500">Huéspedes</span><span>{guests}</span></div>
+              <div className="flex justify-between"><span className="text-volcan-500">Cabaña</span><span>{selectedCabana.nombre}</span></div>
+              <div className="flex justify-between"><span className="text-volcan-500">Check-in</span><span>{checkIn ? format(checkIn, "d 'de' MMMM yyyy", { locale: es }) : '-'}</span></div>
+              <div className="flex justify-between"><span className="text-volcan-500">Check-out</span><span>{checkOut ? format(checkOut, "d 'de' MMMM yyyy", { locale: es }) : '-'}</span></div>
+              <div className="flex justify-between"><span className="text-volcan-500">Huéspedes</span><span>{guests}</span></div>
               {pricing && (
                 <div className="flex justify-between font-semibold pt-1 border-t border-arena-200">
                   <span>Total estimado</span>

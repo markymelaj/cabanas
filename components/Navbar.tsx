@@ -2,28 +2,29 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Menu, X, Phone } from 'lucide-react'
+import { DEMO_CONFIG } from '@/lib/demo-config'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-lago-950/80 backdrop-blur-md border-b border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-lago-950/85 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
         <Link href="/" className="font-display text-xl text-white font-light tracking-wide">
-          Cabañas <span className="text-arena-300 italic">Puerto Varas</span>
+          Alto Cauce <span className="text-arena-300 italic">Reservas</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           <Link href="/cabanas" className="text-lago-200 hover:text-white text-sm transition-colors">Cabañas</Link>
           <Link href="/salon" className="text-lago-200 hover:text-white text-sm transition-colors">Salón de eventos</Link>
-          <Link href="/admin" className="text-lago-200 hover:text-white text-sm transition-colors">Demo admin</Link>
-          <a href="tel:+56957845292" className="flex items-center gap-2 text-lago-200 hover:text-white text-sm transition-colors">
-            <Phone size={14} />+569 5784 5292
+          <Link href="/admin" className="text-lago-200 hover:text-white text-sm transition-colors">Panel demo</Link>
+          <a href={`tel:${DEMO_CONFIG.phoneHref}`} className="flex items-center gap-2 text-lago-200 hover:text-white text-sm transition-colors">
+            <Phone size={14} />{DEMO_CONFIG.phoneDisplay}
           </a>
           <Link href="/cabanas" className="btn-primary bg-arena-500 hover:bg-arena-600 text-sm py-2 px-4">
-            Reservar
+            Probar demo
           </Link>
         </nav>
-        <button onClick={() => setOpen(!open)} className="md:hidden text-white p-1">
+        <button onClick={() => setOpen(!open)} className="md:hidden text-white p-1" aria-label="Abrir menú">
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
@@ -31,9 +32,9 @@ export default function Navbar() {
         <div className="md:hidden bg-lago-950 border-t border-white/10 px-6 py-4 flex flex-col gap-4">
           <Link href="/cabanas" className="text-lago-200 text-sm" onClick={() => setOpen(false)}>Cabañas</Link>
           <Link href="/salon" className="text-lago-200 text-sm" onClick={() => setOpen(false)}>Salón de eventos</Link>
-          <Link href="/admin" className="text-lago-200 text-sm" onClick={() => setOpen(false)}>Demo admin</Link>
-          <a href="tel:+56957845292" className="text-lago-200 text-sm">+569 5784 5292</a>
-          <Link href="/cabanas" className="btn-primary bg-arena-500 text-sm text-center" onClick={() => setOpen(false)}>Reservar</Link>
+          <Link href="/admin" className="text-lago-200 text-sm" onClick={() => setOpen(false)}>Panel demo</Link>
+          <a href={`tel:${DEMO_CONFIG.phoneHref}`} className="text-lago-200 text-sm">{DEMO_CONFIG.phoneDisplay}</a>
+          <Link href="/cabanas" className="btn-primary bg-arena-500 text-sm text-center" onClick={() => setOpen(false)}>Probar demo</Link>
         </div>
       )}
     </header>

@@ -1,7 +1,9 @@
-const ADMIN_WA = process.env.WHATSAPP_ADMIN_NUMBER?.replace(/\D/g, '') || '56957845292'
+import { DEMO_CONFIG } from './demo-config'
+
+const ADMIN_WA = process.env.WHATSAPP_ADMIN_NUMBER?.replace(/\D/g, '') || DEMO_CONFIG.whatsappNumber
 
 function baseUrl() {
-  return process.env.NEXT_PUBLIC_BASE_URL || 'https://cabanaspuertovaras.cl'
+  return process.env.NEXT_PUBLIC_BASE_URL || DEMO_CONFIG.baseUrl
 }
 
 function fmtDate(date: string) {
@@ -46,18 +48,18 @@ export function buildReservationRequestMessage({
   savedToAdmin: boolean
 }) {
   return [
-    '*Nueva solicitud de reserva - Cabanas Puerto Varas*',
+    '*Nueva solicitud de reserva - Demo Alto Cauce*',
     '',
     `Solicitud: ${requestId.slice(0, 8).toUpperCase()}`,
     `Cliente: ${nombre}`,
     `Email: ${email}`,
-    `Telefono: ${telefono}`,
+    `Teléfono: ${telefono}`,
     '',
-    `Cabana: ${cabanaNombre}`,
+    `Cabaña: ${cabanaNombre}`,
     `Check-in: ${fmtDate(checkIn)}`,
     `Check-out: ${fmtDate(checkOut)}`,
     `Noches: ${noches}`,
-    `Huespedes: ${guests}`,
+    `Huéspedes: ${guests}`,
     `Total estimado: ${clp(total)}`,
     `Anticipo sugerido: ${clp(anticipo)}`,
     '',
@@ -94,12 +96,12 @@ export function buildSalonQuoteRequestMessage({
   savedToAdmin: boolean
 }) {
   return [
-    '*Nueva cotizacion salon - Cabanas Puerto Varas*',
+    '*Nueva cotización de evento - Demo Alto Cauce*',
     '',
     `Solicitud: ${quoteId.slice(0, 8).toUpperCase()}`,
     `Cliente: ${nombre}`,
     `Email: ${email}`,
-    `Telefono: ${telefono}`,
+    `Teléfono: ${telefono}`,
     '',
     `Fecha evento: ${fmtDate(fechaEvento)}`,
     `Tipo evento: ${tipoEvento}`,
@@ -135,10 +137,10 @@ export function buildReservationMessage({
     '*Nueva reserva confirmada*',
     '',
     `Cliente: ${nombre} (${telefono})`,
-    `Cabana: ${cabanaNombre}`,
+    `Cabaña: ${cabanaNombre}`,
     `Check-in: ${fmtDate(checkIn)}`,
     `Check-out: ${fmtDate(checkOut)}`,
-    `Huespedes: ${guests}`,
+    `Huéspedes: ${guests}`,
     `Total: ${clp(total)}`,
     '',
     `Ver en panel: ${baseUrl()}/admin`,
@@ -161,7 +163,7 @@ export function buildQuoteMessage({
   monto: number
 }): string {
   return [
-    '*Nueva cotizacion salon*',
+    '*Nueva cotización de salón*',
     '',
     `Cliente: ${nombre} (${telefono})`,
     `Fecha: ${fmtDate(fechaEvento)}`,

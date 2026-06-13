@@ -29,12 +29,14 @@ export default function AdminAIAssistant({
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [advice, setAdvice] = useState<Advice | null>(null)
+  const [persisted, setPersisted] = useState(false)
   const isOverview = mode === 'overview'
 
   async function analyze() {
     setLoading(true)
     setError(null)
     setCopied(false)
+    setPersisted(false)
 
     try {
       const res = await fetch('/api/admin/ai/conflict-advice', {
@@ -45,6 +47,7 @@ export default function AdminAIAssistant({
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'No se pudo analizar.')
       setAdvice(data.advice)
+      setPersisted(Boolean(data.persisted))
     } catch (err: any) {
       setError(err.message || 'No se pudo analizar.')
     } finally {
@@ -99,6 +102,12 @@ export default function AdminAIAssistant({
             <AlertTriangle size={14} />
             Riesgo {advice.riskLevel}
           </div>
+
+          {persisted && (
+            <p className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800">
+              Informe guardado en notas operativas del panel.
+            </p>
+          )}
 
           {!advice.configured && (
             <p className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
