@@ -40,13 +40,23 @@ export default async function CabanasPage() {
       <main className="pt-16">
         <div className="bg-lago-900 text-white py-20 px-6 md:px-12">
           <div className="container mx-auto max-w-3xl text-center">
-            <p className="font-display italic text-lago-300 text-lg mb-3">Demo de hospedaje</p>
-            <h1 className="font-display text-5xl md:text-6xl font-light mb-4">Reservas para cabañas</h1>
+            <p className="font-display italic text-lago-300 text-lg mb-3">Demo huésped</p>
+            <h1 className="font-display text-5xl md:text-6xl font-light mb-4">Reserva una cabaña</h1>
             <p className="text-lago-200 leading-relaxed">
-              Este flujo se adapta a cabañas, lodge, camping, hostería o complejo turístico. Permite elegir unidad, fechas, huéspedes y enviar una solicitud lista por WhatsApp.
+              Probá el flujo como si fueras un huésped. Elegís unidad, fechas, huéspedes y el sistema arma una solicitud completa para WhatsApp y panel.
             </p>
           </div>
         </div>
+
+        <section className="py-10 bg-white border-b border-arena-100">
+          <div className="container mx-auto px-6 md:px-12 max-w-5xl">
+            <div className="grid gap-3 md:grid-cols-3 text-sm">
+              <div className="rounded-2xl bg-arena-50 border border-arena-100 p-4"><strong className="text-lago-900">1. Elegí cabaña</strong><p className="text-volcan-600 mt-1">Fotos, capacidad, precio y limpieza visibles.</p></div>
+              <div className="rounded-2xl bg-arena-50 border border-arena-100 p-4"><strong className="text-lago-900">2. Marcá fechas</strong><p className="text-volcan-600 mt-1">Disponibilidad y total estimado antes de consultar.</p></div>
+              <div className="rounded-2xl bg-arena-50 border border-arena-100 p-4"><strong className="text-lago-900">3. Enviá solicitud</strong><p className="text-volcan-600 mt-1">Queda guardada y lista para responder por WhatsApp.</p></div>
+            </div>
+          </div>
+        </section>
 
         <section className="py-20 bg-arena-50">
           <div className="container mx-auto px-6 md:px-12">

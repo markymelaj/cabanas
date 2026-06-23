@@ -30,13 +30,13 @@ export default async function SalonPage() {
       <Navbar />
       <main className="pt-16">
         <div className="relative bg-lago-900 text-white py-24 px-6 overflow-hidden">
-          <img src={DEMO_CONFIG.salonImage} alt="Demo salón de eventos" className="absolute inset-0 h-full w-full object-cover opacity-25" />
+          <img src={DEMO_CONFIG.salonImage} alt="Módulo opcional de salón" className="absolute inset-0 h-full w-full object-cover opacity-25" />
           <div className="absolute inset-0 bg-lago-950/75" />
           <div className="relative container mx-auto max-w-3xl text-center">
-            <p className="font-display italic text-lago-300 text-lg mb-3">Demo de eventos</p>
+            <p className="font-display italic text-lago-300 text-lg mb-3">Módulo opcional</p>
             <h1 className="font-display text-5xl md:text-6xl font-light mb-6">{settings?.nombre ?? 'Cotizador para salón de eventos'}</h1>
             <p className="text-lago-200 text-base leading-relaxed max-w-xl mx-auto">
-              {settings?.descripcion ?? `Flujo adaptable para matrimonios, cumpleaños, aniversarios, empresas y celebraciones de hasta ${capacity} invitados.`}
+              {settings?.descripcion ?? `Se suma solo si el cliente también vende eventos, matrimonios, cumpleaños o celebraciones de hasta ${capacity} invitados.`}
             </p>
           </div>
         </div>
@@ -47,7 +47,7 @@ export default async function SalonPage() {
               <Feature title={`${meters} m²`} desc="Espacio principal" />
               <Feature title={`${capacity} personas`} desc="Capacidad máxima" />
               <Feature title="Servicios" desc="Configurables" />
-              <Feature title="Panel" desc="Seguimiento comercial" />
+              <Feature title="Extra" desc="No obligatorio" />
             </div>
           </div>
         </section>
@@ -55,9 +55,9 @@ export default async function SalonPage() {
         <section className="bg-arena-50 py-20 px-6">
           <div className="container mx-auto max-w-2xl">
             <div className="text-center mb-10">
-              <p className="text-arena-600 font-display italic text-lg mb-2">¿Tienes una fecha en mente?</p>
-              <h2 className="font-display text-4xl text-lago-900 font-light">Cotiza tu evento</h2>
-              <p className="text-volcan-500 text-sm mt-2">Completa el formulario y revisa cómo llega una solicitud ordenada al negocio.</p>
+              <p className="text-arena-600 font-display italic text-lg mb-2">Cotización de eventos</p>
+              <h2 className="font-display text-4xl text-lago-900 font-light">Probar módulo salón</h2>
+              <p className="text-volcan-500 text-sm mt-2">Este módulo complementa al producto base de cabañas. Permite cotizar eventos y ordenar el seguimiento comercial.</p>
             </div>
             <SalonQuoteFormV2 settings={settings} services={services ?? []} />
           </div>

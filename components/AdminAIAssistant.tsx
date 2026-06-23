@@ -72,24 +72,24 @@ export default function AdminAIAssistant({
     <div className="rounded-lg border border-lago-100 bg-white p-5 print:hidden">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Asistente IA</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Asistente operativo</p>
           <h3 className="font-display text-xl text-lago-900">
-            {isOverview ? 'Analizar operaciones' : 'Decisión operativa'}
+            {isOverview ? 'Prioridades del negocio' : 'Decisión recomendada'}
           </h3>
         </div>
-        <Sparkles size={20} className="text-cobre-500" />
+        <Sparkles size={20} className="text-arena-500" />
       </div>
 
       <p className="mt-2 text-sm text-volcan-500">
         {isOverview
-          ? 'Revisa reservas próximas, salón, pagos y bloqueos para detectar prioridades.'
-          : 'Analiza choques de fecha, pagos, bloqueos y estado para sugerir la mejor acción.'}
+          ? 'Revisa reservas próximas, pagos, bloqueos y posibles choques para ordenar la operación diaria.'
+          : 'Analiza fechas, pagos, estado y bloqueos para sugerir la próxima acción comercial.'}
       </p>
 
       <button onClick={analyze} disabled={loading} className="btn-primary mt-4 w-full text-sm disabled:opacity-50">
         {loading
           ? <><Loader2 size={16} className="animate-spin" />Analizando</>
-          : <><Sparkles size={16} />{isOverview ? 'Analizar operaciones' : 'Analizar con Claude'}</>}
+          : <><Sparkles size={16} />{isOverview ? 'Analizar operación' : 'Generar recomendación'}</>}
       </button>
 
       {error && (
@@ -111,7 +111,7 @@ export default function AdminAIAssistant({
 
           {!advice.configured && (
             <p className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
-              Modo guía local activo. Para usar Claude real, agrega ANTHROPIC_API_KEY en Vercel.
+              Modo guía activo. La recomendación se genera con reglas operativas locales.
             </p>
           )}
 
@@ -125,7 +125,7 @@ export default function AdminAIAssistant({
 
           <div>
             <div className="mb-2 flex items-center justify-between gap-3">
-              <p className="text-xs uppercase tracking-[0.14em] text-volcan-400">{isOverview ? 'Mensaje sugerido' : 'WhatsApp sugerido'}</p>
+              <p className="text-xs uppercase tracking-[0.14em] text-volcan-400">Mensaje sugerido</p>
               <button onClick={copyMessage} className="inline-flex items-center gap-1 text-xs font-medium text-lago-700 hover:text-lago-900">
                 {copied ? <Check size={14} /> : <Copy size={14} />}
                 {copied ? 'Copiado' : 'Copiar'}
@@ -138,7 +138,6 @@ export default function AdminAIAssistant({
 
           <p className="text-xs text-volcan-400">
             Confianza: {Math.round((advice.confidence ?? 0) * 100)}%
-            {advice.model ? ` · Modelo: ${advice.model}` : ''}
           </p>
         </div>
       )}

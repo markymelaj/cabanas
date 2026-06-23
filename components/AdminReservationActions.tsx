@@ -23,17 +23,27 @@ export default function AdminReservationActions({
   checkOut?: string
 }) {
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   async function updateStatus(newStatus: string) {
+    if ((newStatus === 'cancelled' || newStatus === 'no_show') && !window.confirm('¿Confirmas cambiar esta reserva de estado?')) {
+      return
+    }
+
     setLoading(true)
+    setError(null)
     try {
-      await fetch('/api/admin/update-reservation', {
+      const res = await fetch('/api/admin/update-reservation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reservationId, status: newStatus }),
       })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.error || 'No se pudo actualizar la reserva.')
       router.refresh()
+    } catch (err: any) {
+      setError(err.message || 'No se pudo actualizar la reserva.')
     } finally {
       setLoading(false)
     }
@@ -95,6 +105,7 @@ export default function AdminReservationActions({
           Cancelar
         </button>
       )}
+      {error && <p className="text-[11px] text-red-600 bg-red-50 rounded p-2">{error}</p>}
     </div>
   )
 }

@@ -42,7 +42,7 @@ export default function AdminLoginForm() {
         router.refresh()
       }
     } catch {
-      setError('El acceso no respondió. Revisa /api/estado y vuelve a intentar.')
+      setError('El acceso no respondió. Revisa la configuración del proyecto y vuelve a intentar.')
       setLoading(false)
     }
   }
@@ -56,7 +56,7 @@ export default function AdminLoginForm() {
   return (
     <div className="space-y-4">
       <div className="rounded-lg border border-arena-100 bg-arena-50 p-3 text-xs text-volcan-600">
-        Acceso demo precargado. Si se borra, puedes restaurarlo con el botón inferior.
+        Acceso demo precargado para mostrar el panel como dueño. En producción se cambia por usuarios reales del cliente.
       </div>
       <div>
         <label className="label-text">Email</label>
@@ -65,7 +65,7 @@ export default function AdminLoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-          placeholder="contacto@altocauce.cl"
+          placeholder="contacto@tudominio.cl"
           className="input-field"
         />
       </div>
@@ -85,7 +85,7 @@ export default function AdminLoginForm() {
         </div>
       )}
       <button onClick={handleLogin} disabled={loading} className="btn-primary w-full mt-2 disabled:opacity-50">
-        {loading ? <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin" />Ingresando...</span> : 'Ingresar'}
+        {loading ? <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin" />Ingresando...</span> : 'Ingresar al panel'}
       </button>
       <button type="button" onClick={restoreDemoAccess} className="btn-outline w-full text-sm">
         Restaurar acceso demo

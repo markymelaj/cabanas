@@ -1,146 +1,91 @@
-# Cabañas Puerto Varas — Sistema de Reservas
+# Alto Cauce Reservas
 
-Sistema de reservas completo para cabañas y salón de eventos. Stack: **Next.js 14 + Supabase + Mercado Pago + Resend + Vercel**.
+Sistema comercial de reservas para negocios de cabañas. La demo está pensada para vender rápido: primero se prueba como huésped, después se muestra el panel del dueño.
 
----
+Producto base: **cabañas**.  
+Módulo opcional: **salón de eventos**.
 
-## Setup en 5 pasos
+## Qué resuelve
 
-### 1. Clonar y instalar
+- Consultas de WhatsApp incompletas o desordenadas.
+- Fechas que se pisan entre mensajes, llamadas y reservas manuales.
+- Anticipos y saldos sin seguimiento claro.
+- Dueños que necesitan operar desde el celular sin depender de planillas.
+- Falta de una demo simple para cerrar clientes de alojamientos.
+
+## Rutas principales
+
+| Ruta | Uso |
+| --- | --- |
+| `/` | Landing comercial del producto |
+| `/cabanas` | Flujo de reserva para huésped |
+| `/admin` | Panel del dueño / recepción |
+| `/admin/reservas` | Gestión de reservas de cabañas |
+| `/admin/reservas/nueva` | Crear reserva manual |
+| `/admin/disponibilidad` | Bloquear fechas |
+| `/salon` | Módulo opcional de cotización de eventos |
+
+## Recorrido recomendado para vender
+
+1. Abrir la home y explicar el problema: reservas perdidas por WhatsApp.
+2. Entrar a `/cabanas` y hacer una consulta como huésped.
+3. Entrar a `/admin` y mostrar cómo queda guardada.
+4. Abrir `/admin/reservas`, cambiar estado y contactar por WhatsApp.
+5. Mostrar que salón existe solo como módulo adicional.
+
+## Instalación local
 
 ```bash
-git clone https://github.com/TU_USUARIO/cpvaras-web.git
-cd cpvaras-web
 npm install
-```
-
-### 2. Configurar Supabase
-
-1. Crear proyecto en [supabase.com](https://supabase.com)
-2. Ir a **SQL Editor** → pegar y ejecutar `supabase/migrations/001_initial_schema.sql`
-3. Ir a **Authentication → Users** → crear usuario admin (email + contraseña)
-4. Copiar `Project URL` y `anon key` de **Settings → API**
-5. Copiar `service_role` key de la misma página
-
-### 3. Configurar Mercado Pago
-
-1. Crear cuenta en [mercadopago.cl](https://mercadopago.cl) (o Argentina para pruebas)
-2. Ir a **Developers → Mis aplicaciones → Crear aplicación**
-3. Copiar `Access Token` (producción o sandbox para pruebas)
-4. En producción, registrar webhook URL: `https://TU_DOMINIO/api/webhook-mp`
-
-### 4. Configurar Resend (emails)
-
-1. Crear cuenta en [resend.com](https://resend.com)
-2. Verificar dominio `cabanaspuertovaras.cl` en Resend
-3. Crear API Key
-4. Cambiar `FROM` en `.env.local` al email del dominio verificado
-
-### 5. Variables de entorno
-
-Copiar `.env.local.example` a `.env.local` y completar:
-
-```bash
 cp .env.local.example .env.local
+npm run dev
 ```
 
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-ADMIN_EMAIL=admin@cabanaspuertovaras.cl
+## Supabase
 
-MP_ACCESS_TOKEN=APP_USR-...
-NEXT_PUBLIC_MP_PUBLIC_KEY=APP_USR-...
-
-RESEND_API_KEY=re_...
-RESEND_FROM=reservas@cabanaspuertovaras.cl
-RESEND_ADMIN_EMAIL=contacto@cabanaspuertovaras.cl
-
-WHATSAPP_ADMIN_NUMBER=+56957845292
-NEXT_PUBLIC_BASE_URL=https://cabanaspuertovaras.cl
-```
-
-La contrasena del admin se crea en **Authentication -> Users**. La variable `ADMIN_EMAIL` solo define que email tiene permiso para entrar al panel.
-
----
-
-## Deploy en Vercel
-
-```bash
-# Instalar Vercel CLI (si no tienes)
-npm i -g vercel
-
-# Login
-vercel login
-
-# Deploy
-vercel --prod
-```
-
-O conectar el repo en [vercel.com](https://vercel.com) y agregar las variables de entorno en **Settings → Environment Variables**.
-
-**Importante:** Agregar todas las variables del `.env.local.example` en Vercel antes del primer deploy.
-
----
-
-## Rutas del sistema
-
-| Ruta | Descripción |
-|------|-------------|
-| `/` | Home público |
-| `/cabanas` | Listado de cabañas |
-| `/reservar/[slug]` | Flujo de reserva con calendario y pago |
-| `/confirmacion` | Página post-pago |
-| `/salon` | Cotizador salón de eventos |
-| `/admin` | Dashboard (requiere login) |
-| `/admin/reservas` | Gestión reservas cabañas |
-| `/admin/salon` | Gestión cotizaciones salón |
-| `/admin/disponibilidad` | Bloqueo de fechas |
-| `/admin/login` | Login administrador |
-| `/api/webhook-mp` | Webhook Mercado Pago |
-
----
-
-## Actualizar fotos de cabañas
-
-Las fotos se almacenan en la columna `fotos` (array de URLs) de la tabla `cabanas`.
-
-**Opción A:** Subir a Supabase Storage y usar las URLs.
-**Opción B:** Actualizar directamente en SQL Editor:
+Ejecutar las migraciones en este orden:
 
 ```sql
-UPDATE cabanas
-SET fotos = ARRAY[
-  'https://tu-bucket.supabase.co/storage/v1/object/public/cabanas/foto1.jpg',
-  'https://tu-bucket.supabase.co/storage/v1/object/public/cabanas/foto2.jpg'
-]
-WHERE slug = 'cabana-2-4';
+supabase/migrations/001_initial_schema.sql
+supabase/migrations/002_integrated_operations.sql
 ```
 
----
+La segunda migración agrega la operación real: estados extendidos, pagos, notas, configuración de salón, vista admin enriquecida y reglas de disponibilidad donde solo las reservas firmes bloquean calendario.
 
-## Precios del salón
+## Variables necesarias
 
-Editar en `lib/pricing.ts`:
+Ver `.env.local.example`.
 
-```ts
-export const SALON_BASE_PRICE = 800_000          // Arriendo base jornada completa
-export const SALON_BANQUETERIA_PER_PAX = 12_000  // Por persona
-export const ANTICIPO_PERCENT = 0.30             // 30% de anticipo para cabañas
+Mínimas para demo:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+ADMIN_EMAIL=demo@cabanas.cl
+WHATSAPP_ADMIN_NUMBER=+56957845292
+NEXT_PUBLIC_BASE_URL=https://cabanas-theta.vercel.app
 ```
 
----
+Opcionales:
 
-## Tecnologías
+- Mercado Pago para pago online.
+- Resend para emails transaccionales.
+- Anthropic para recomendaciones operativas avanzadas.
 
-- **Next.js 14** (App Router, TypeScript)
-- **Supabase** (PostgreSQL + Auth + RLS)
-- **Mercado Pago** Checkout Pro
-- **Resend** (emails transaccionales)
-- **Tailwind CSS** + Cormorant Garamond + DM Sans
-- **Vercel** (deploy automático)
+## Deploy
 
----
+El proyecto está preparado para Vercel.
 
-Desarrollado por [Luminart SpA](https://luminart.cl)
+```bash
+npm run build
+```
+
+Si el repo está conectado a Vercel, cada push a `main` debería generar nuevo deploy automático.
+
+## Nota comercial
+
+No venderlo como “una página web”. Venderlo como:
+
+> Sistema de reservas para cabañas que ordena WhatsApp, disponibilidad, pagos y seguimiento desde un panel simple.
+

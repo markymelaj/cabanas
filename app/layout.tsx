@@ -4,8 +4,8 @@ import { DEMO_CONFIG } from '@/lib/demo-config'
 
 export const metadata: Metadata = {
   title: `${DEMO_CONFIG.brandName} — ${DEMO_CONFIG.productName}`,
-  description: 'Demo comercial de sistema de reservas, cotizaciones, disponibilidad, pagos, WhatsApp y panel administrativo para cabañas, salones de eventos y complejos mixtos.',
-  keywords: 'sistema de reservas, cabañas, salón de eventos, turismo, cotizaciones WhatsApp, Alto Cauce',
+  description: 'Sistema comercial de reservas para cabañas: disponibilidad, WhatsApp ordenado, pagos, estados, clientes y panel administrativo. Salón de eventos como módulo opcional.',
+  keywords: 'sistema de reservas, cabañas, turismo, reservas WhatsApp, administración de cabañas, Alto Cauce',
   openGraph: {
     title: DEMO_CONFIG.brandName,
     description: DEMO_CONFIG.productName,
