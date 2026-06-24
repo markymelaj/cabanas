@@ -9,7 +9,7 @@ export default function AdminLoginPage() {
           <p className="font-display text-2xl text-lago-900 mb-1">
             Alto Cauce <span className="text-arena-600 italic">Reservas</span>
           </p>
-          <p className="text-xs text-volcan-500">Panel demo para dueño / recepción</p>
+          <p className="text-xs text-volcan-500">Panel de administración</p>
           <p className="text-[11px] text-volcan-400 mt-2">{DEMO_CONFIG.productName}</p>
         </div>
         <AdminLoginForm />

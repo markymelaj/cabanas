@@ -1,13 +1,13 @@
 export const DEMO_CONFIG = {
   brandName: 'Alto Cauce Reservas',
-  brandAccent: 'Producto para alojamientos',
+  brandAccent: 'Reservas para alojamientos',
   productName: 'Sistema de reservas para cabañas',
-  businessType: 'Cabañas · Hospedaje · Complejos turísticos',
+  businessType: 'Cabañas · Lodge · Complejos turísticos',
   phoneDisplay: '+56 9 5784 5292',
   phoneHref: '+56957845292',
   whatsappNumber: '56957845292',
   email: 'contacto@altocauce.cl',
-  locationShort: 'Demo adaptable para alojamientos turísticos',
+  locationShort: 'Implementable para alojamientos turísticos',
   locationLong: 'Implementable para cabañas, lodge, hosterías, parcelas turísticas, tinajas, camping o complejos mixtos.',
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://cabanas-theta.vercel.app',
   heroImage: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=85',
@@ -18,15 +18,15 @@ export const DEMO_CONFIG = {
 
 export const DEMO_MODES = [
   {
-    title: 'Producto base: cabañas',
-    description: 'Reserva por fechas, cálculo de noches, anticipo sugerido, disponibilidad, WhatsApp ordenado y panel de seguimiento.',
+    title: 'Reservas de alojamiento',
+    description: 'Consulta por fechas, cálculo de noches, disponibilidad, WhatsApp ordenado y panel de seguimiento.',
   },
   {
-    title: 'Módulo opcional: salón',
-    description: 'Cotizador para eventos, servicios adicionales, monto estimado y seguimiento comercial desde el mismo panel.',
+    title: 'Eventos y celebraciones',
+    description: 'Cotizador para salón, servicios adicionales, monto estimado y seguimiento comercial desde el mismo panel.',
   },
   {
-    title: 'Implementación a medida',
+    title: 'Implementación personalizada',
     description: 'Adaptación visual, carga inicial, dominio, capacitación y reglas propias de cada negocio.',
   },
 ]
@@ -35,19 +35,19 @@ export const SALES_PLANS = [
   {
     name: 'Reservas Base',
     price: '$490.000 CLP',
-    detail: 'Sitio + flujo de reservas + WhatsApp ordenado + panel básico para cabañas.',
-    badge: 'Para partir rápido',
+    detail: 'Sitio de presentación, flujo de consulta por fechas, WhatsApp ordenado y panel básico para cabañas.',
+    badge: 'Inicio ordenado',
   },
   {
     name: 'Reservas Pro',
     price: '$790.000 CLP',
-    detail: 'Panel completo, disponibilidad, estados, pagos, notas, correos y capacitación.',
-    badge: 'Más vendible',
+    detail: 'Panel completo, disponibilidad, estados, pagos, notas internas, correos y capacitación de uso.',
+    badge: 'Recomendado',
   },
   {
-    name: 'Módulo Salón',
+    name: 'Eventos',
     price: '+ desde $290.000 CLP',
-    detail: 'Cotizador de eventos, servicios, seguimiento comercial y control de fechas opcional.',
-    badge: 'Opcional',
+    detail: 'Cotizador de eventos, servicios adicionales, valor estimado, contacto ordenado y control de fechas.',
+    badge: 'Adicional',
   },
 ]

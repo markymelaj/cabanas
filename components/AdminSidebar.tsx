@@ -19,6 +19,7 @@ export default function AdminSidebar() {
   const router = useRouter()
 
   async function handleLogout() {
+    document.cookie = 'alto_cauce_demo_admin=; path=/; max-age=0; SameSite=Lax'
     await getSupabaseBrowser().auth.signOut()
     router.push('/admin/login')
     router.refresh()
@@ -28,8 +29,8 @@ export default function AdminSidebar() {
     <aside className="w-60 bg-lago-950 text-white flex flex-col min-h-screen flex-shrink-0 print:hidden">
       <div className="p-5 border-b border-lago-800">
         <p className="font-display text-sm text-white font-light">Alto Cauce</p>
-        <p className="font-display text-sm text-arena-300 italic">Reservas Demo</p>
-        <p className="text-xs text-lago-500 mt-1">Cabañas · Eventos · Mixto</p>
+        <p className="font-display text-sm text-arena-300 italic">Reservas</p>
+        <p className="text-xs text-lago-500 mt-1">Cabañas · Eventos · Operación</p>
       </div>
       <nav className="flex-1 p-3 space-y-0.5">
         {NAV.map(({ href, label, icon: Icon }) => {

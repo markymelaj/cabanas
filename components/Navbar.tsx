@@ -8,10 +8,10 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   const links = [
-    { href: '/cabanas', label: 'Probar reservas' },
+    { href: '/cabanas', label: 'Reservas' },
     { href: '/#como-funciona', label: 'Cómo funciona' },
-    { href: '/#modulos', label: 'Módulos' },
-    { href: '/admin', label: 'Panel demo' },
+    { href: '/#modulos', label: 'Eventos' },
+    { href: '/admin', label: 'Panel' },
   ]
 
   return (
@@ -30,7 +30,7 @@ export default function Navbar() {
             <Phone size={14} />{DEMO_CONFIG.phoneDisplay}
           </a>
           <Link href="/cabanas" className="btn-primary bg-arena-500 hover:bg-arena-600 text-sm py-2 px-4">
-            Ver demo
+            Consultar
           </Link>
         </nav>
         <button onClick={() => setOpen(!open)} className="md:hidden text-white p-1" aria-label="Abrir menú">
@@ -45,7 +45,7 @@ export default function Navbar() {
             </Link>
           ))}
           <a href={`tel:${DEMO_CONFIG.phoneHref}`} className="text-lago-200 text-sm">{DEMO_CONFIG.phoneDisplay}</a>
-          <Link href="/cabanas" className="btn-primary bg-arena-500 text-sm text-center" onClick={() => setOpen(false)}>Ver demo</Link>
+          <Link href="/cabanas" className="btn-primary bg-arena-500 text-sm text-center" onClick={() => setOpen(false)}>Consultar</Link>
         </div>
       )}
     </header>

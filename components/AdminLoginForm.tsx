@@ -20,8 +20,17 @@ export default function AdminLoginForm() {
   const [email, setEmail] = useState(DEMO_EMAIL)
   const [password, setPassword] = useState(DEMO_PASSWORD)
   const [loading, setLoading] = useState(false)
+  const [demoLoading, setDemoLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+
+  function enterDemoPanel() {
+    setDemoLoading(true)
+    setError(null)
+    document.cookie = 'alto_cauce_demo_admin=1; path=/; max-age=43200; SameSite=Lax'
+    router.replace('/admin')
+    router.refresh()
+  }
 
   async function handleLogin() {
     if (!email || !password) {
@@ -42,7 +51,7 @@ export default function AdminLoginForm() {
         router.refresh()
       }
     } catch {
-      setError('El acceso no respondió. Revisa la configuración del proyecto y vuelve a intentar.')
+      setError('El acceso no respondió. Puedes usar el acceso de prueba para revisar el panel.')
       setLoading(false)
     }
   }
@@ -55,9 +64,16 @@ export default function AdminLoginForm() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border border-arena-100 bg-arena-50 p-3 text-xs text-volcan-600">
-        Acceso demo precargado para mostrar el panel como dueño. En producción se cambia por usuarios reales del cliente.
+      <button onClick={enterDemoPanel} disabled={demoLoading} className="btn-primary w-full disabled:opacity-50">
+        {demoLoading ? <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin" />Ingresando...</span> : 'Entrar al panel de prueba'}
+      </button>
+
+      <div className="flex items-center gap-3 text-xs text-volcan-400">
+        <span className="h-px flex-1 bg-arena-100" />
+        <span>o usar credenciales</span>
+        <span className="h-px flex-1 bg-arena-100" />
       </div>
+
       <div>
         <label className="label-text">Email</label>
         <input
@@ -84,11 +100,11 @@ export default function AdminLoginForm() {
           <AlertCircle size={16} />{error}
         </div>
       )}
-      <button onClick={handleLogin} disabled={loading} className="btn-primary w-full mt-2 disabled:opacity-50">
-        {loading ? <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin" />Ingresando...</span> : 'Ingresar al panel'}
+      <button onClick={handleLogin} disabled={loading} className="btn-outline w-full disabled:opacity-50">
+        {loading ? <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin" />Ingresando...</span> : 'Ingresar con credenciales'}
       </button>
-      <button type="button" onClick={restoreDemoAccess} className="btn-outline w-full text-sm">
-        Restaurar acceso demo
+      <button type="button" onClick={restoreDemoAccess} className="text-xs text-volcan-500 hover:text-lago-700 w-full text-center">
+        Restaurar datos de acceso
       </button>
     </div>
   )

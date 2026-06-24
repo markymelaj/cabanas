@@ -12,20 +12,20 @@ export default function Footer() {
               Alto Cauce <span className="text-arena-300 italic">Reservas</span>
             </p>
             <p className="text-sm leading-relaxed text-lago-400">
-              Producto comercial para ordenar reservas de cabañas. Salón de eventos queda como módulo opcional.
+              Sistema de reservas y administración para cabañas, alojamientos turísticos y espacios de eventos.
             </p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-widest text-lago-500 mb-4 font-medium">Navegación</p>
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="hover:text-white transition-colors">Inicio</Link></li>
-              <li><Link href="/cabanas" className="hover:text-white transition-colors">Demo reservas</Link></li>
-              <li><Link href="/admin" className="hover:text-white transition-colors">Panel demo</Link></li>
-              <li><Link href="/salon" className="hover:text-white transition-colors">Módulo salón</Link></li>
+              <li><Link href="/cabanas" className="hover:text-white transition-colors">Reservas</Link></li>
+              <li><Link href="/salon" className="hover:text-white transition-colors">Eventos</Link></li>
+              <li><Link href="/admin" className="hover:text-white transition-colors">Panel</Link></li>
             </ul>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-widest text-lago-500 mb-4 font-medium">Contacto comercial</p>
+            <p className="text-xs uppercase tracking-widest text-lago-500 mb-4 font-medium">Contacto</p>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <MapPin size={14} className="mt-0.5 flex-shrink-0 text-lago-500" />
@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-lago-800 pt-6 text-xs text-lago-600 flex flex-col sm:flex-row justify-between gap-2">
-          <span>© {new Date().getFullYear()} Alto Cauce. Sistema comercial de reservas.</span>
+          <span>© {new Date().getFullYear()} Alto Cauce. Sistema de reservas para alojamientos.</span>
           <a href={DEMO_CONFIG.mapsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-lago-400 transition-colors">
             Conocer Alto Cauce →
           </a>

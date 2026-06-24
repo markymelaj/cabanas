@@ -9,10 +9,18 @@ type CookieToSet = {
   options: CookieOptions
 }
 
+function demoAdminEnabled() {
+  return process.env.NEXT_PUBLIC_DEMO_ADMIN_ENABLED === 'true' || process.env.DEMO_ADMIN_ENABLED === 'true'
+}
+
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
 
   if (pathname.startsWith('/admin/login')) {
+    return NextResponse.next()
+  }
+
+  if (demoAdminEnabled() && req.cookies.get('alto_cauce_demo_admin')?.value === '1') {
     return NextResponse.next()
   }
 
