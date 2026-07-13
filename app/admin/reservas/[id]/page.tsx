@@ -7,10 +7,11 @@ import type { Cabana } from '@/lib/supabase'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default function ReservationDetailPage({ params }: { params: { id: string } }) {
+export default async function ReservationDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   return (
     <AdminShell>
-      <ReservationDetailContent id={params.id} />
+      <ReservationDetailContent id={id} />
     </AdminShell>
   )
 }

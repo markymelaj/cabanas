@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation'
 import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
-import { logSupabaseError, normalizeRpcDates } from '@/lib/supabase-errors'
+import { logSupabaseError } from '@/lib/supabase-errors'
 import { getDefaultCabanaByIdOrSlug } from '@/lib/default-cabanas'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import DemoNavbar from '@/components/DemoNavbar'
+import DemoFooter from '@/components/DemoFooter'
 import ReservationCalendar from '@/components/ReservationCalendar'
 
 
@@ -24,39 +24,21 @@ async function getCabana(slug: string): Promise<Cabana | null> {
   return (data as Cabana | null) ?? getDefaultCabanaByIdOrSlug(slug)
 }
 
-async function getOccupiedDates(cabanaId: string): Promise<string[]> {
-  const supabaseAdmin = getSupabaseAdmin()
-  const { data, error } = await supabaseAdmin.rpc('get_occupied_dates', {
-    p_cabana_id: cabanaId,
-  })
-
-  if (error) {
-    logSupabaseError('get_occupied_dates', error)
-    return []
-  }
-
-  return normalizeRpcDates(data, 'get_occupied_dates')
-}
-
-export default async function ReservarPage({ params }: { params: { id: string } }) {
-  const cabana = await getCabana(params.id)
+export default async function ReservarPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const cabana = await getCabana(id)
   if (!cabana) notFound()
-
-  const occupiedDates = await getOccupiedDates(cabana.id)
 
   return (
     <>
-      <Navbar />
-      <main className="pt-16 min-h-screen bg-arena-50">
+      <DemoNavbar />
+      <main className="pt-[68px] min-h-screen bg-arena-50">
         <div className="container mx-auto px-6 md:px-12 py-12 max-w-5xl">
           <div className="grid lg:grid-cols-5 gap-10">
             <div className="lg:col-span-3">
               <p className="text-volcán-500 text-sm mb-1">Reservar</p>
               <h1 className="font-display text-4xl text-lago-900 mb-6">{cabana.nombre}</h1>
-              <ReservationCalendar
-                cabana={cabana}
-                occupiedDates={occupiedDates}
-              />
+              <ReservationCalendar cabana={cabana} />
             </div>
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl overflow-hidden card-shadow sticky top-24">
@@ -89,7 +71,7 @@ export default async function ReservarPage({ params }: { params: { id: string } 
           </div>
         </div>
       </main>
-      <Footer />
+      <DemoFooter />
     </>
   )
 }

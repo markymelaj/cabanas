@@ -6,10 +6,11 @@ import { getSupabaseAdmin } from '@/lib/supabase-server'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default function SalonDetailPage({ params }: { params: { id: string } }) {
+export default async function SalonDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   return (
     <AdminShell>
-      <SalonDetailContent id={params.id} />
+      <SalonDetailContent id={id} />
     </AdminShell>
   )
 }

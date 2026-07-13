@@ -134,8 +134,8 @@ export default function AdminSalonQuotesTable({ quotes }: Props) {
     <div className="space-y-5">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Salon</p>
-          <h1 className="font-display text-3xl text-lago-900">Cotizaciones salon</h1>
+          <p className="text-xs uppercase tracking-[0.18em] text-lago-600 font-medium">Salón</p>
+          <h1 className="font-display text-3xl text-lago-900">Cotizaciones de salón</h1>
         </div>
         <div className="flex items-center gap-3">
           <p className="text-sm text-volcan-500">{filtered.length} visibles de {quotes.length} solicitudes</p>
@@ -158,7 +158,7 @@ export default function AdminSalonQuotesTable({ quotes }: Props) {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar por nombre, telefono, email, codigo o evento"
+              placeholder="Buscar por nombre, teléfono, email, código o evento"
               className="input-field pl-9"
             />
           </label>
@@ -188,12 +188,12 @@ export default function AdminSalonQuotesTable({ quotes }: Props) {
           <select value={schedule} onChange={(event) => setSchedule(event.target.value)} className="input-field">
             <option value="">Todo horario</option>
             <option value="completo">Completo</option>
-            <option value="medio">Medio dia</option>
+            <option value="medio">Media jornada</option>
           </select>
           <select value={sort} onChange={(event) => setSort(event.target.value)} className="input-field">
             <option value="newest">Nuevas primero</option>
             <option value="eventDate">Fecha evento</option>
-            <option value="guests">Mas invitados</option>
+            <option value="guests">Más invitados</option>
             <option value="amount">Mayor monto</option>
             <option value="status">Estado</option>
           </select>
@@ -203,7 +203,39 @@ export default function AdminSalonQuotesTable({ quotes }: Props) {
         </div>
       </div>
 
-      <div className="bg-white border border-arena-100 rounded-lg overflow-hidden">
+      <div className="grid gap-3 lg:hidden">
+        {filtered.map((row) => {
+          const client = clientOf(row)
+          const st = STATUS_LABELS[row.status] ?? STATUS_LABELS.nueva
+          return (
+            <article key={row.id} className="admin-card">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <Link href={`/admin/salon/${row.id}`} className="block truncate font-semibold text-lago-950">{client.nombre ?? 'Sin nombre'}</Link>
+                  <p className="mt-1 font-mono text-[11px] text-volcan-500">#{shortId(row.id)}</p>
+                </div>
+                <span className={`shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold ${st.classes}`}>{st.label}</span>
+              </div>
+              <div className="mt-4 rounded-xl bg-arena-50 p-3 text-sm">
+                <p className="font-semibold text-lago-900">{row.tipo_evento}</p>
+                <p className="mt-1 text-volcan-600">{fmtDate(row.fecha_evento)} · {row.num_invitados} invitados</p>
+                <p className="mt-1 text-xs text-volcan-500">{row.horario === 'completo' ? 'Jornada completa' : 'Media jornada'}</p>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+                <div className="rounded-xl border border-arena-100 p-3"><p className="text-xs text-volcan-500">Estimado</p><p className="mt-1 font-semibold text-lago-950">{formatCLP(row.monto_estimado ?? 0)}</p></div>
+                <div className="rounded-xl border border-arena-100 p-3"><p className="text-xs text-volcan-500">Contacto</p><p className="mt-1 truncate font-semibold text-lago-950">{client.telefono ?? 'Sin teléfono'}</p></div>
+              </div>
+              <div className="mt-4 flex flex-col gap-2">
+                <Link href={`/admin/salon/${row.id}`} className="btn-outline py-2 text-xs">Abrir ficha</Link>
+                <AdminQuoteActions quoteId={row.id} status={row.status} telefono={client.telefono ?? ''} nombre={client.nombre ?? ''} />
+              </div>
+            </article>
+          )
+        })}
+        {filtered.length === 0 && <div className="admin-card text-center text-sm text-volcan-500">No hay cotizaciones con esos filtros.</div>}
+      </div>
+
+      <div className="hidden overflow-hidden rounded-2xl border border-arena-100 bg-white lg:block">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1080px] text-sm">
             <thead>

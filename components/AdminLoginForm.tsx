@@ -24,12 +24,19 @@ export default function AdminLoginForm() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  function enterDemoPanel() {
+  async function enterDemoPanel() {
     setDemoLoading(true)
     setError(null)
-    document.cookie = 'alto_cauce_demo_admin=1; path=/; max-age=43200; SameSite=Lax'
-    router.replace('/admin')
-    router.refresh()
+    try {
+      const response = await fetch('/api/demo-admin/session', { method: 'POST' })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'La demo no está disponible.')
+      router.replace('/admin')
+      router.refresh()
+    } catch (demoError) {
+      setError(demoError instanceof Error ? demoError.message : 'La demo no está disponible.')
+      setDemoLoading(false)
+    }
   }
 
   async function handleLogin() {

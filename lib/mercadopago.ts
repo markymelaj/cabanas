@@ -6,7 +6,9 @@ let paymentClient: Payment | null = null
 
 function getMercadoPagoClient() {
   if (!mercadoPagoClient) {
-    mercadoPagoClient = new MercadoPago({ accessToken: process.env.MP_ACCESS_TOKEN! })
+    const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN || process.env.MP_ACCESS_TOKEN
+    if (!accessToken) throw new Error('Falta MERCADOPAGO_ACCESS_TOKEN')
+    mercadoPagoClient = new MercadoPago({ accessToken })
   }
 
   return mercadoPagoClient

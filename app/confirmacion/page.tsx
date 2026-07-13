@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import DemoNavbar from '@/components/DemoNavbar'
+import DemoFooter from '@/components/DemoFooter'
 import { CheckCircle, XCircle, Clock } from 'lucide-react'
 import { formatCLP } from '@/lib/pricing'
 
@@ -10,9 +10,9 @@ export const dynamic = 'force-dynamic'
 export default async function ConfirmacionPage({
   searchParams,
 }: {
-  searchParams: { reserva?: string; status?: string }
+  searchParams: Promise<{ reserva?: string; status?: string }>
 }) {
-  const { reserva: reservaId, status } = searchParams
+  const { reserva: reservaId, status } = await searchParams
 
   let reservation: any = null
   if (reservaId) {
@@ -35,8 +35,8 @@ export default async function ConfirmacionPage({
 
   return (
     <>
-      <Navbar />
-      <main className="pt-16 min-h-screen bg-arena-50 flex items-center justify-center py-20 px-6">
+      <DemoNavbar />
+      <main className="pt-[68px] min-h-screen bg-arena-50 flex items-center justify-center py-20 px-6">
         <div className="bg-white rounded-2xl card-shadow p-10 max-w-lg w-full text-center">
           {isSuccess && (
             <>
@@ -101,7 +101,7 @@ export default async function ConfirmacionPage({
           </div>
         </div>
       </main>
-      <Footer />
+      <DemoFooter />
     </>
   )
 }

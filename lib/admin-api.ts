@@ -8,7 +8,7 @@ function demoAdminEnabled() {
 }
 
 export async function requireAdminApi() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const demoAccess = demoAdminEnabled() && cookieStore.get('alto_cauce_demo_admin')?.value === '1'
 
   if (demoAccess) {
@@ -19,7 +19,7 @@ export async function requireAdminApi() {
     }
   }
 
-  const supabase = createServerSupabase()
+  const supabase = await createServerSupabase()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!isConfiguredAdmin(user)) {

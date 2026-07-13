@@ -1,83 +1,43 @@
-import { getSupabaseAdmin, type Cabana } from '@/lib/supabase-server'
+import type { Metadata } from 'next'
+import { getSupabaseAdmin, hasSupabaseConfig, type Cabana } from '@/lib/supabase-server'
 import { logSupabaseError } from '@/lib/supabase-errors'
 import { DEFAULT_CABANAS } from '@/lib/default-cabanas'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import DemoNavbar from '@/components/DemoNavbar'
+import DemoFooter from '@/components/DemoFooter'
 import CabanaBookingExperience from '@/components/CabanaBookingExperience'
-import { DEMO_CONFIG } from '@/lib/demo-config'
-import { TreePine } from 'lucide-react'
+import { DEMO_LODGING } from '@/lib/demo-config'
+import { CalendarCheck, MapPin, MessageCircle, ShieldCheck } from 'lucide-react'
+
+export const metadata: Metadata = { title: 'Refugios del Salto — Cabañas cerca del Salto del Laja', description: 'Revisa cabañas, fechas y valores para una estadía cerca del Salto del Laja.' }
 
 export const dynamic = 'force-dynamic'
 
 async function getCabanas(): Promise<Cabana[]> {
+  if (!hasSupabaseConfig()) return DEFAULT_CABANAS
   try {
     const supabaseAdmin = getSupabaseAdmin()
-    const { data, error } = await supabaseAdmin
-      .from('cabanas')
-      .select('*')
-      .eq('activa', true)
-      .order('orden')
-
-    if (error) {
-      logSupabaseError('cabanas.list', error)
-      return DEFAULT_CABANAS
-    }
-
-    const cabanas = (data as Cabana[]) ?? []
-    return cabanas.length > 0 ? cabanas : DEFAULT_CABANAS
-  } catch (error) {
-    console.error('[cabanas.list]', error)
+    const { data, error } = await supabaseAdmin.from('cabanas').select('*').eq('activa', true).order('orden')
+    if (error) { logSupabaseError('cabanas.list', error); return DEFAULT_CABANAS }
+    const rows = (data as Cabana[]) ?? []
+    return rows.length > 0 ? rows : DEFAULT_CABANAS
+  } catch {
     return DEFAULT_CABANAS
   }
 }
 
 export default async function CabanasPage() {
   const cabanas = await getCabanas()
-
-  return (
-    <>
-      <Navbar />
-      <main className="pt-16">
-        <div className="bg-lago-900 text-white py-20 px-6 md:px-12">
-          <div className="container mx-auto max-w-3xl text-center">
-            <p className="eyebrow eyebrow-dark justify-center mb-4">Demo · Reservas online</p>
-            <h1 className="font-display text-5xl md:text-6xl mb-4">Consulta disponibilidad</h1>
-            <p className="text-lago-200 leading-relaxed">
-              Elige una cabaña, marca tus fechas, revisa el valor estimado y envía una solicitud con todos los datos necesarios para confirmar la estadía.
-            </p>
-          </div>
-        </div>
-
-        <section className="py-10 bg-white border-b border-arena-100">
-          <div className="container mx-auto px-6 md:px-12 max-w-5xl">
-            <div className="grid gap-3 md:grid-cols-3 text-sm">
-              <div className="rounded-2xl bg-arena-50 border border-arena-100 p-4"><strong className="text-lago-900">1. Elige cabaña</strong><p className="text-volcan-600 mt-1">Fotos, capacidad, precio y condiciones visibles.</p></div>
-              <div className="rounded-2xl bg-arena-50 border border-arena-100 p-4"><strong className="text-lago-900">2. Marca fechas</strong><p className="text-volcan-600 mt-1">Disponibilidad y total estimado antes de enviar.</p></div>
-              <div className="rounded-2xl bg-arena-50 border border-arena-100 p-4"><strong className="text-lago-900">3. Envía solicitud</strong><p className="text-volcan-600 mt-1">La información queda registrada para responder y confirmar.</p></div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 bg-arena-50">
-          <div className="container mx-auto px-6 md:px-12">
-            {cabanas.length === 0 ? (
-              <div className="max-w-xl mx-auto bg-white rounded-lg card-shadow p-8 text-center">
-                <TreePine size={40} className="mx-auto text-lago-400 mb-4" />
-                <h2 className="font-display text-3xl text-lago-900 mb-3">Reservas por WhatsApp</h2>
-                <p className="text-volcan-500 text-sm leading-relaxed mb-6">
-                  Las unidades disponibles se están cargando. También puedes consultar directamente por WhatsApp.
-                </p>
-                <a href={`https://wa.me/${DEMO_CONFIG.whatsappNumber}`} className="btn-primary inline-flex">
-                  Consultar disponibilidad
-                </a>
-              </div>
-            ) : (
-              <CabanaBookingExperience cabanas={cabanas} />
-            )}
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </>
-  )
+  return <><DemoNavbar /><main className="pt-[68px]">
+    <section className="relative min-h-[620px] overflow-hidden bg-lago-950 text-white sm:min-h-[680px]">
+      <img src={DEMO_LODGING.heroImage} alt="Cabaña rodeada de bosque" className="absolute inset-0 h-full w-full object-cover opacity-55" />
+      <div className="absolute inset-0 bg-gradient-to-r from-lago-950 via-lago-950/80 to-lago-950/20" />
+      <div className="relative mx-auto flex min-h-[620px] max-w-7xl items-end px-6 pb-20 sm:min-h-[680px] sm:px-8 sm:pb-24 lg:px-12">
+        <div className="max-w-3xl"><p className="eyebrow eyebrow-dark mb-5">{DEMO_LODGING.location}</p><h1 className="font-display text-5xl leading-[0.98] tracking-[-0.045em] sm:text-6xl lg:text-7xl">Descansa cerca del agua, sin apurar el viaje.</h1><p className="mt-6 max-w-2xl text-lg leading-relaxed text-lago-100">{DEMO_LODGING.tagline}. Revisa unidades, disponibilidad y valor antes de enviar tu solicitud.</p><a href="#reservas" className="btn-primary mt-8">Ver cabañas y fechas</a></div>
+      </div>
+    </section>
+    <section className="border-b border-arena-200 bg-white py-8"><div className="mx-auto grid max-w-7xl gap-5 px-6 sm:px-8 md:grid-cols-3 lg:px-12"><Trust icon={CalendarCheck} title="Fechas visibles" text="Consulta disponibilidad antes de escribir." /><Trust icon={MessageCircle} title="Confirmación personal" text="La reserva se termina de coordinar por WhatsApp." /><Trust icon={ShieldCheck} title="Total transparente" text="Noches, limpieza y extras se muestran antes de enviar." /></div></section>
+    <section id="reservas" className="bg-arena-50 py-20 sm:py-28"><div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12"><div className="mb-14 flex flex-col justify-between gap-5 lg:flex-row lg:items-end"><div className="max-w-3xl"><p className="eyebrow mb-4">Tu estadía</p><h2 className="section-title">Elige el espacio que calza contigo.</h2></div><p className="flex items-center gap-2 text-sm text-volcan-600"><MapPin size={16} className="text-arena-600" /> A minutos del Salto del Laja</p></div><CabanaBookingExperience cabanas={cabanas} /></div></section>
+  </main><DemoFooter /></>
 }
+
+function Trust({ icon: Icon, title, text }: { icon: typeof CalendarCheck; title: string; text: string }) { return <div className="flex gap-3"><Icon size={20} className="mt-1 shrink-0 text-arena-600" /><div><p className="font-semibold text-lago-950">{title}</p><p className="mt-1 text-sm text-volcan-600">{text}</p></div></div> }

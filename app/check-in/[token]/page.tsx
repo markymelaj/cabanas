@@ -5,12 +5,13 @@ import GuestCheckInForm from '@/components/GuestCheckInForm'
 
 export const dynamic = 'force-dynamic'
 
-export default async function CheckInPage({ params }: { params: { token: string } }) {
+export default async function CheckInPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params
   const supabaseAdmin = getSupabaseAdmin()
   const { data: reservation } = await supabaseAdmin
     .from('reservations_full')
     .select('*')
-    .eq('checkin_token', params.token)
+    .eq('checkin_token', token)
     .maybeSingle()
 
   if (!reservation) {
@@ -44,7 +45,7 @@ export default async function CheckInPage({ params }: { params: { token: string 
           </div>
         </div>
 
-        <GuestCheckInForm token={params.token} expectedGuests={reservation.guests ?? 1} />
+        <GuestCheckInForm token={token} expectedGuests={reservation.guests ?? 1} />
       </div>
     </main>
   )

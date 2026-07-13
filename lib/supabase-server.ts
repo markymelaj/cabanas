@@ -21,6 +21,10 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 let supabaseAdminClient: SupabaseClient | null = null
 
+export function hasSupabaseConfig() {
+  return Boolean(supabaseUrl && supabaseAnonKey)
+}
+
 function assertSupabasePublicEnv() {
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error('Faltan NEXT_PUBLIC_SUPABASE_URL o NEXT_PUBLIC_SUPABASE_ANON_KEY')
@@ -47,9 +51,9 @@ export function getSupabaseAdmin() {
 }
 
 // Cliente server-side con cookies (para auth del admin)
-export function createServerSupabase() {
+export async function createServerSupabase() {
   assertSupabasePublicEnv()
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   return createServerClient(supabaseUrl!, supabaseAnonKey!, {
     cookies: {
       getAll() { return cookieStore.getAll() },

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase-server'
 import { getPayment } from '@/lib/mercadopago'
 import { sendReservationConfirmation, sendAdminNotification } from '@/lib/resend'
-import { buildReservationMessage } from '@/lib/whatsapp'
 
 export async function POST(req: NextRequest) {
   try {
