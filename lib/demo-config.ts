@@ -7,8 +7,8 @@ export const DEMO_CONFIG = {
   phoneHref: '+56957845292',
   whatsappNumber: '56957845292',
   email: 'contacto@altocauce.cl',
-  locationShort: 'Implementable para alojamientos turísticos',
-  locationLong: 'Implementable para cabañas, lodge, hosterías, parcelas turísticas, tinajas, camping o complejos mixtos.',
+  locationShort: 'Salto del Laja y alrededores · Región del Biobío',
+  locationLong: 'Pensado para cabañas, lodge, hosterías, parcelas turísticas, tinajas y camping del Salto del Laja, Laja, Los Ángeles, Yumbel, Cabrero y alrededores.',
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://cabanas-theta.vercel.app',
   heroImage: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=85',
   cabanaImage: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=1600&q=85',
@@ -23,7 +23,7 @@ export const DEMO_MODES = [
   },
   {
     title: 'Eventos y celebraciones',
-    description: 'Cotizador para salón, servicios adicionales, monto estimado y seguimiento comercial desde el mismo panel.',
+    description: 'Cotizador para salón o restaurante, servicios adicionales, monto estimado y seguimiento comercial desde el mismo panel.',
   },
   {
     title: 'Implementación personalizada',
@@ -36,18 +36,18 @@ export const SALES_PLANS = [
     name: 'Reservas Base',
     price: '$490.000 CLP',
     detail: 'Sitio de presentación, flujo de consulta por fechas, WhatsApp ordenado y panel básico para cabañas.',
-    badge: 'Inicio ordenado',
+    badge: 'Incluido en la base',
   },
   {
     name: 'Reservas Pro',
     price: '$790.000 CLP',
-    detail: 'Panel completo, disponibilidad, estados, pagos, notas internas, correos y capacitación de uso.',
+    detail: 'Panel completo: disponibilidad, estados, pagos, notas internas, correos y capacitación de uso.',
     badge: 'Recomendado',
   },
   {
-    name: 'Eventos',
+    name: 'Salón / Restaurante',
     price: '+ desde $290.000 CLP',
-    detail: 'Cotizador de eventos, servicios adicionales, valor estimado, contacto ordenado y control de fechas.',
-    badge: 'Adicional',
+    detail: 'Módulo opcional. Cotizador de eventos, servicios adicionales, valor estimado y control de fechas. Se contrata solo si el negocio lo necesita.',
+    badge: 'Módulo opcional',
   },
 ]

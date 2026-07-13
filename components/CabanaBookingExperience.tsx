@@ -24,7 +24,7 @@ export default function CabanaBookingExperience({ cabanas }: { cabanas: Cabana[]
     <div className="space-y-14">
       <section>
         <div className="max-w-4xl mx-auto mb-8">
-          <p className="text-arena-600 font-display italic text-lg mb-2">Opciones disponibles</p>
+          <p className="eyebrow mb-3">Opciones disponibles</p>
           <h2 className="font-display text-4xl text-lago-900 font-light">Elige tu cabaña</h2>
           <p className="text-sm text-volcan-500 mt-2">Revisa fotos, capacidad y precio antes de solicitar la reserva.</p>
         </div>
@@ -91,7 +91,7 @@ export default function CabanaBookingExperience({ cabanas }: { cabanas: Cabana[]
 
       <section ref={formRef} className="max-w-2xl mx-auto scroll-mt-24">
         <div className="text-center mb-8">
-          <p className="text-arena-600 font-display italic text-lg mb-2">Reserva tu estadía</p>
+          <p className="eyebrow mb-3">Reserva tu estadía</p>
           <h2 className="font-display text-4xl text-lago-900 font-light">Solicita tu reserva</h2>
           <p className="text-volcan-500 text-sm mt-2">Elige fechas, revisa el total y envía la solicitud por WhatsApp.</p>
         </div>

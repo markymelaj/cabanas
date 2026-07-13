@@ -29,7 +29,7 @@ export default function AdminSidebar() {
     <aside className="w-60 bg-lago-950 text-white flex flex-col min-h-screen flex-shrink-0 print:hidden">
       <div className="p-5 border-b border-lago-800">
         <p className="font-display text-sm text-white font-light">Alto Cauce</p>
-        <p className="font-display text-sm text-arena-300 italic">Reservas</p>
+        <p className="font-display text-sm text-arena-300">Reservas</p>
         <p className="text-xs text-lago-500 mt-1">Cabañas · Eventos · Operación</p>
       </div>
       <nav className="flex-1 p-3 space-y-0.5">

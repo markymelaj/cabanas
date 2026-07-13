@@ -40,8 +40,8 @@ export default async function CabanasPage() {
       <main className="pt-16">
         <div className="bg-lago-900 text-white py-20 px-6 md:px-12">
           <div className="container mx-auto max-w-3xl text-center">
-            <p className="font-display italic text-lago-300 text-lg mb-3">Reservas online</p>
-            <h1 className="font-display text-5xl md:text-6xl font-light mb-4">Consulta disponibilidad</h1>
+            <p className="eyebrow eyebrow-dark justify-center mb-4">Demo · Reservas online</p>
+            <h1 className="font-display text-5xl md:text-6xl mb-4">Consulta disponibilidad</h1>
             <p className="text-lago-200 leading-relaxed">
               Elige una cabaña, marca tus fechas, revisa el valor estimado y envía una solicitud con todos los datos necesarios para confirmar la estadía.
             </p>

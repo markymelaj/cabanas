@@ -65,12 +65,12 @@ export default function AdminLoginForm() {
   return (
     <div className="space-y-4">
       <button onClick={enterDemoPanel} disabled={demoLoading} className="btn-primary w-full disabled:opacity-50">
-        {demoLoading ? <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin" />Ingresando...</span> : 'Entrar al panel de prueba'}
+        {demoLoading ? <span className="flex items-center justify-center gap-2"><Loader2 size={16} className="animate-spin" />Ingresando...</span> : 'Entrar a la demo del panel — sin registro'}
       </button>
 
       <div className="flex items-center gap-3 text-xs text-volcan-400">
         <span className="h-px flex-1 bg-arena-100" />
-        <span>o usar credenciales</span>
+        <span>o entrar con credenciales de administrador</span>
         <span className="h-px flex-1 bg-arena-100" />
       </div>
 

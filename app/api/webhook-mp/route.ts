@@ -29,10 +29,10 @@ export async function POST(req: NextRequest) {
       mpStatus === 'rejected' ? 'rejected' :
       'pending'
 
+    // Un intento de pago rechazado NO cancela la reserva: el huésped puede
+    // reintentar con otro medio. Solo un pago aprobado confirma.
     const reservationStatus =
-      mpStatus === 'approved' ? 'confirmed' :
-      mpStatus === 'rejected' ? 'cancelled' :
-      'pending'
+      mpStatus === 'approved' ? 'confirmed' : 'pending'
 
     // Actualizar reserva
     await supabaseAdmin

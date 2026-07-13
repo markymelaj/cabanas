@@ -3,7 +3,9 @@
 Sistema comercial de reservas para negocios de cabañas. La demo está pensada para vender rápido: primero se prueba como huésped, después se muestra el panel del dueño.
 
 Producto base: **cabañas**.  
-Módulo opcional: **salón de eventos**.
+Módulo opcional (no incluido en la base): **salón de eventos / restaurante**.
+
+Entrada a la demo: botón **“Probar la demo”** en la navbar, sección **Prueba la demo** en la home, o directo en `/admin` → “Entrar a la demo del panel — sin registro” (requiere `DEMO_ADMIN_ENABLED=true`).
 
 ## Qué resuelve
 
@@ -48,6 +50,7 @@ Ejecutar las migraciones en este orden:
 ```sql
 supabase/migrations/001_initial_schema.sql
 supabase/migrations/002_integrated_operations.sql
+supabase/migrations/003_no_double_booking.sql
 ```
 
 La segunda migración agrega la operación real: estados extendidos, pagos, notas, configuración de salón, vista admin enriquecida y reglas de disponibilidad donde solo las reservas firmes bloquean calendario.

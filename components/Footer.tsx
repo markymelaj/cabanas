@@ -9,10 +9,10 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           <div>
             <p className="font-display text-2xl text-white font-light mb-3">
-              Alto Cauce <span className="text-arena-300 italic">Reservas</span>
+              Alto Cauce <span className="text-arena-300">Reservas</span>
             </p>
             <p className="text-sm leading-relaxed text-lago-400">
-              Sistema de reservas y administración para cabañas, alojamientos turísticos y espacios de eventos.
+              Sistema de reservas y administración para cabañas y alojamientos turísticos del Salto del Laja y alrededores. Salón de eventos disponible como módulo opcional.
             </p>
           </div>
           <div>
@@ -20,7 +20,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="hover:text-white transition-colors">Inicio</Link></li>
               <li><Link href="/cabanas" className="hover:text-white transition-colors">Reservas</Link></li>
-              <li><Link href="/salon" className="hover:text-white transition-colors">Eventos</Link></li>
+              <li><Link href="/salon" className="hover:text-white transition-colors">Módulo eventos (opcional)</Link></li>
               <li><Link href="/admin" className="hover:text-white transition-colors">Panel</Link></li>
             </ul>
           </div>
