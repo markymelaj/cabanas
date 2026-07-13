@@ -1,41 +1,28 @@
-# Alto Cauce Reservas
+# Alto Cauce Reservas — versión mejorada
 
-Sistema comercial de reservas para negocios de cabañas. La demo está pensada para vender rápido: primero se prueba como huésped, después se muestra el panel del dueño.
+Sistema de reservas para cabañas con experiencia pública para huéspedes, panel operativo responsive y módulo opcional de salón de eventos.
 
-Producto base: **cabañas**.  
-Módulo opcional (no incluido en la base): **salón de eventos / restaurante**.
+La aplicación ahora separa dos contextos que antes estaban mezclados:
 
-Entrada a la demo: botón **“Probar la demo”** en la navbar, sección **Prueba la demo** en la home, o directo en `/admin` → “Entrar a la demo del panel — sin registro” (requiere `DEMO_ADMIN_ENABLED=true`).
+- `/`: presentación comercial de **Alto Cauce Reservas**.
+- `/cabanas` y `/salon`: demo realista de **Refugios del Salto**.
+- `/admin`: operación del dueño o recepción.
 
-## Qué resuelve
+## Mejoras principales
 
-- Consultas de WhatsApp incompletas o desordenadas.
-- Fechas que se pisan entre mensajes, llamadas y reservas manuales.
-- Anticipos y saldos sin seguimiento claro.
-- Dueños que necesitan operar desde el celular sin depender de planillas.
-- Falta de una demo simple para cerrar clientes de alojamientos.
+- Panel administrativo usable en escritorio y celular.
+- Menú móvil, navegación inferior y tablas adaptadas a tarjetas.
+- Check-out tratado como fecha exclusiva: una salida puede coincidir con la próxima entrada.
+- Estadía mínima, capacidad, fechas pasadas y cabañas activas validadas en servidor y base.
+- Protección de concurrencia contra reservas superpuestas.
+- Formularios públicos con validación Zod, honeypot, límites y rate limiting.
+- Cookie demo HttpOnly creada por el servidor.
+- Endpoint de diagnóstico desactivado por defecto.
+- Fuentes locales del sistema: el build ya no depende de Google Fonts.
+- Next.js/React actualizados, ESLint configurado y pruebas automáticas de fechas.
+- Cabeceras HTTP básicas de seguridad.
 
-## Rutas principales
-
-| Ruta | Uso |
-| --- | --- |
-| `/` | Landing comercial del producto |
-| `/cabanas` | Flujo de reserva para huésped |
-| `/admin` | Panel del dueño / recepción |
-| `/admin/reservas` | Gestión de reservas de cabañas |
-| `/admin/reservas/nueva` | Crear reserva manual |
-| `/admin/disponibilidad` | Bloquear fechas |
-| `/salon` | Módulo opcional de cotización de eventos |
-
-## Recorrido recomendado para vender
-
-1. Abrir la home y explicar el problema: reservas perdidas por WhatsApp.
-2. Entrar a `/cabanas` y hacer una consulta como huésped.
-3. Entrar a `/admin` y mostrar cómo queda guardada.
-4. Abrir `/admin/reservas`, cambiar estado y contactar por WhatsApp.
-5. Mostrar que salón existe solo como módulo adicional.
-
-## Instalación local
+## Instalación
 
 ```bash
 npm install
@@ -43,52 +30,67 @@ cp .env.local.example .env.local
 npm run dev
 ```
 
-## Supabase
+## Variables
 
-Ejecutar las migraciones en este orden:
+Completa `.env.local` a partir de `.env.local.example`.
 
-```sql
+Para una demo sin registro:
+
+```env
+NEXT_PUBLIC_DEMO_ADMIN_ENABLED=true
+DEMO_ADMIN_ENABLED=true
+```
+
+En una instalación real con datos de clientes, ambas deben quedar en `false` o eliminarse.
+
+## Base de datos
+
+Ejecutar en Supabase SQL Editor, en orden:
+
+```text
 supabase/migrations/001_initial_schema.sql
 supabase/migrations/002_integrated_operations.sql
 supabase/migrations/003_no_double_booking.sql
+supabase/migrations/004_hardening_rules.sql
 ```
 
-La segunda migración agrega la operación real: estados extendidos, pagos, notas, configuración de salón, vista admin enriquecida y reglas de disponibilidad donde solo las reservas firmes bloquean calendario.
+La migración `003` impide superposiciones firmes incluso con solicitudes simultáneas. La `004` agrega reglas de capacidad/estadía mínima, normalización de clientes y restricciones adicionales.
 
-## Variables necesarias
+Antes de aplicar `003`, corrige reservas históricas firmes que se superpongan. PostgreSQL informará el conflicto si existe.
 
-Ver `.env.local.example`.
+## Verificación
 
-Mínimas para demo:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-ADMIN_EMAIL=demo@cabanas.cl
-WHATSAPP_ADMIN_NUMBER=+56957845292
-NEXT_PUBLIC_BASE_URL=https://cabanas-theta.vercel.app
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
 ```
 
-Opcionales:
+O todo junto:
 
-- Mercado Pago para pago online.
-- Resend para emails transaccionales.
-- Anthropic para recomendaciones operativas avanzadas.
+```bash
+npm run check
+```
 
-## Deploy
+## Rutas
 
-El proyecto está preparado para Vercel.
+| Ruta | Uso |
+| --- | --- |
+| `/` | Landing comercial de Alto Cauce |
+| `/cabanas` | Demo de reserva del huésped |
+| `/salon` | Cotizador opcional de eventos |
+| `/admin` | Dashboard operativo |
+| `/admin/reservas` | Gestión de reservas |
+| `/admin/disponibilidad` | Calendario y bloqueos |
+| `/admin/configuracion` | Parámetros de cabañas y operación |
+
+## Despliegue
+
+El proyecto queda preparado para Vercel:
 
 ```bash
 npm run build
 ```
 
-Si el repo está conectado a Vercel, cada push a `main` debería generar nuevo deploy automático.
-
-## Nota comercial
-
-No venderlo como “una página web”. Venderlo como:
-
-> Sistema de reservas para cabañas que ordena WhatsApp, disponibilidad, pagos y seguimiento desde un panel simple.
-
+Configura las variables de entorno en el proyecto y aplica las cuatro migraciones antes de usar datos reales.
