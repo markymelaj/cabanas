@@ -13,11 +13,13 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 96px;
     background: #f7f5ef;
   }
 
   body {
     min-width: 320px;
+    overflow-x: hidden;
     font-size: 16px;
     line-height: 1.55;
     text-rendering: optimizeLegibility;
